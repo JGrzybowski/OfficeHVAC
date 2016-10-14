@@ -52,11 +52,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IParameterSimulator.cs" />
+    <Compile Include="ITemperatureSimulator.cs" />
     <Compile Include="TemperatureSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OfficeHVAC.Models\OfficeHVAC.Models.csproj">
+      <Project>{584598C9-E1CD-4592-9A88-24F34D23D282}</Project>
+      <Name>OfficeHVAC.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
