@@ -1,33 +1,28 @@
 ﻿using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace OfficeHVAC.Models
 {
     public class Device : IDevice
     {
-        public bool IsTurnedOn
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public bool IsTurnedOn => UsedPower != 0;
 
+        private byte usedPower = 0;
         public byte UsedPower
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return usedPower; }
 
             set
             {
-                throw new NotImplementedException();
+                if (value > 100)
+                    throw new ArgumentOutOfRangeException(nameof(value));
+                usedPower = value;
             }
         }
 
         public void TurnOff()
         {
-            throw new NotImplementedException();
+            usedPower = 0;
         }
     }
 }
