@@ -1,9 +1,9 @@
-﻿namespace OfficeHVAC.Models
+﻿namespace OfficeHVAC.Models.Devices
 {
     public interface IDevice
     {
         bool IsTurnedOn { get; }
-        byte UsedPower { get; set; }
+        double PowerConsumption { get; set; }
         void TurnOff();
     }
 }
