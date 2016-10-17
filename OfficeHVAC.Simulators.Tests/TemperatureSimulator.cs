@@ -91,7 +91,7 @@ namespace OfficeHVAC.Simulators.Tests
             temperatureAfter.ShouldBe(startingTemperature);
         }
 
-        [Fact]
+        [Theory]
         [InlineData(1)]
         [InlineData(0)]
         [InlineData(-1)]

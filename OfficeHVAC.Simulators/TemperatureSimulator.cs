@@ -13,18 +13,19 @@ namespace OfficeHVAC.Simulators
         private float lastTemperature;
         private readonly DateTime lastTime;
 
+        private const int WattsToChangeOneDegreeInOneHour = 20;
+
         private float CalculateChange()
         {
-            throw new NotImplementedException();
+            var hoursSinceLastUpdate = (TimeSource.Time - lastTime).TotalHours;
+            return (float)(this.Devices
+                            .Sum(device => device.MaxPower*device.TemperatureChange)
+                            / WattsToChangeOneDegreeInOneHour
+                            * hoursSinceLastUpdate);
         }
 
-        public TemperatureSimulator(
-            ITimeSource timeSource,
-            float initialTemperature = 25
-            )
+        public TemperatureSimulator(ITimeSource timeSource, float initialTemperature = 25)
         {
-            throw new NotImplementedException();
-
             this.TimeSource = timeSource;
             this.lastTime = timeSource.Time;
             this.lastTemperature = initialTemperature;
@@ -36,18 +37,14 @@ namespace OfficeHVAC.Simulators
         {
             get
             {
-                throw new NotImplementedException();
-                return CalculateChange();
+                lastTemperature += CalculateChange();
+                return lastTemperature;
             }
 
             set
             {
-                throw new NotImplementedException();
-
                 foreach (var device in Devices)
-                {
                     device.TurnOff();
-                }
                 lastTemperature = value;
             }
         }
