@@ -9,6 +9,10 @@ namespace OfficeHVAC.Simulators.Tests
 {
     public class TimeSourceFake : ITimeSource
     {
+        public TimeSourceFake(DateTime dateTime)
+        {
+            Time = dateTime;
+        }
         public DateTime Time { get; set; }
     }
 }
