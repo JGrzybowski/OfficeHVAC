@@ -21,7 +21,7 @@ namespace OfficeHVAC.Models.Tests
         {
             //Arrange
             ITemperatureDevice device = new Devices.TemperatureDevice();
-            device.TemperatureChage = 1;
+            device.TemperatureChange = 1;
 
             //Act
             device.TurnOff();
@@ -35,25 +35,25 @@ namespace OfficeHVAC.Models.Tests
         {
             //Arrange
             ITemperatureDevice device = new Devices.TemperatureDevice();
-            device.TemperatureChage = 1;
+            device.TemperatureChange = 1;
 
             //Act
             device.TurnOff();
 
             //Assert
-            device.TemperatureChage.ShouldBe(0);
+            device.TemperatureChange.ShouldBe(0);
         }
 
         [Theory]
         [InlineData(-1)]
         [InlineData(+1)]
-        public void power_consumption_is_max_when_using_device(byte temperatureChange)
+        public void power_consumption_is_max_when_using_device(float temperatureChange)
         {
             //Arrange
             ITemperatureDevice device = new Devices.TemperatureDevice();
 
             //Act
-            device.TemperatureChage = temperatureChange;
+            device.TemperatureChange = temperatureChange;
 
             //Assert
             device.PowerConsumption.ShouldBe(device.MaxPower);

@@ -10,6 +10,6 @@ namespace OfficeHVAC.Models.Devices
     public interface ITemperatureDevice : IDevice
     {
         int MaxPower { get; set; }
-        float TemperatureChage { get; set; }
+        float TemperatureChange { get; set; }
     }
 }

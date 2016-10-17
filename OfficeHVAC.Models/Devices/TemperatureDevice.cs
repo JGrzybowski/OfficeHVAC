@@ -4,33 +4,13 @@ namespace OfficeHVAC.Models.Devices
 {
     public class TemperatureDevice : ITemperatureDevice
     {
-        public bool IsTurnedOn
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public bool IsTurnedOn => TemperatureChange != 0;
 
-        public int MaxPower
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public int MaxPower { get; set; }
 
         public double PowerConsumption
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return MaxPower*Math.Abs(TemperatureChange); }
 
             set
             {
@@ -38,22 +18,11 @@ namespace OfficeHVAC.Models.Devices
             }
         }
 
-        public float TemperatureChage
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public float TemperatureChange { get; set; }
 
         public void TurnOff()
         {
-            throw new NotImplementedException();
+            TemperatureChange = 0;
         }
     }
 }

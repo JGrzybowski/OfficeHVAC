@@ -3,7 +3,7 @@
     public interface IDevice
     {
         bool IsTurnedOn { get; }
-        double PowerConsumption { get; set; }
+        double PowerConsumption { get; }
         void TurnOff();
     }
 }
