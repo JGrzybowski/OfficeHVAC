@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Text;
-using System.Threading.Tasks;
-using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
 using Shouldly;
 using Xunit;
@@ -19,7 +13,7 @@ namespace OfficeHVAC.Simulators.Tests
         private static readonly DateTime fiveMinutesLater = startDateTime.AddMinutes(5);
 
         [Fact]
-        public void does_not_change_value_when_devices_are_turned_off()
+        public void does_not_change_temperature_value_when_devices_are_turned_off()
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(startDateTime);
@@ -39,7 +33,7 @@ namespace OfficeHVAC.Simulators.Tests
         [Theory]
         [InlineData(1)]
         [InlineData(-1)]
-        public void change_value_when_devices_are_turned_on(float temperatureChange)
+        public void change_temperature_value_when_devices_are_turned_on(float temperatureChange)
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(startDateTime);
@@ -50,7 +44,7 @@ namespace OfficeHVAC.Simulators.Tests
                     new TemperatureDeviceFake()
                     {
                         MaxPower = 40,
-                        TemperatureChange = temperatureChange
+                        HeatingParameter = temperatureChange
                     }
                 }
             };
@@ -68,7 +62,7 @@ namespace OfficeHVAC.Simulators.Tests
         [InlineData(1)]
         [InlineData(0)]
         [InlineData(-1)]
-        public void does_not_change_value_when_time_does_not_change(float temperatureChange)
+        public void does_not_change_temperature_value_when_time_does_not_change(float temperatureChange)
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(startDateTime);
@@ -79,7 +73,7 @@ namespace OfficeHVAC.Simulators.Tests
                     new TemperatureDeviceFake()
                     {
                         MaxPower = 40,
-                        TemperatureChange = temperatureChange
+                        HeatingParameter = temperatureChange
                     }
                 }
             };
@@ -106,7 +100,7 @@ namespace OfficeHVAC.Simulators.Tests
                     new TemperatureDeviceFake()
                     {
                         MaxPower = 40,
-                        TemperatureChange = temperatureChange
+                        HeatingParameter = temperatureChange
                     }
                 }
             };

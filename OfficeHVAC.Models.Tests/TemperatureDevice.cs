@@ -21,7 +21,7 @@ namespace OfficeHVAC.Models.Tests
         {
             //Arrange
             ITemperatureDevice device = new Devices.TemperatureDevice();
-            device.TemperatureChange = 1;
+            device.HeatingParameter = 1;
 
             //Act
             device.TurnOff();
@@ -35,13 +35,13 @@ namespace OfficeHVAC.Models.Tests
         {
             //Arrange
             ITemperatureDevice device = new Devices.TemperatureDevice();
-            device.TemperatureChange = 1;
+            device.HeatingParameter = 1;
 
             //Act
             device.TurnOff();
 
             //Assert
-            device.TemperatureChange.ShouldBe(0);
+            device.HeatingParameter.ShouldBe(0);
         }
 
         [Theory]
@@ -53,7 +53,7 @@ namespace OfficeHVAC.Models.Tests
             ITemperatureDevice device = new Devices.TemperatureDevice();
 
             //Act
-            device.TemperatureChange = temperatureChange;
+            device.HeatingParameter = temperatureChange;
 
             //Assert
             device.PowerConsumption.ShouldBe(device.MaxPower);

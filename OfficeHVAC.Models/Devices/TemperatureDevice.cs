@@ -4,25 +4,24 @@ namespace OfficeHVAC.Models.Devices
 {
     public class TemperatureDevice : ITemperatureDevice
     {
-        public bool IsTurnedOn => TemperatureChange != 0;
+        public bool IsTurnedOn => this.HeatingParameter != 0;
 
         public int MaxPower { get; set; }
+        public float HeatingParameter { get; set; }
 
         public double PowerConsumption
         {
-            get { return MaxPower*Math.Abs(TemperatureChange); }
+            get { return this.MaxPower * Math.Abs(this.HeatingParameter); }
 
             set
             {
                 throw new NotImplementedException();
             }
         }
-
-        public float TemperatureChange { get; set; }
-
+        
         public void TurnOff()
         {
-            TemperatureChange = 0;
+            this.HeatingParameter = 0;
         }
     }
 }

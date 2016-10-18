@@ -11,7 +11,7 @@ namespace OfficeHVAC.Simulators.Tests
     {
         public TimeSourceFake(DateTime dateTime)
         {
-            Time = dateTime;
+            this.Time = dateTime;
         }
         public DateTime Time { get; set; }
     }
