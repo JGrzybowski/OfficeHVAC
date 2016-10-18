@@ -69,7 +69,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Device.cs" />
+    <Compile Include="TemperatureDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

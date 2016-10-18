@@ -4,41 +4,48 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OfficeHVAC.Models;
+using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Simulators
 {
     public class TemperatureSimulator : ITemperatureSimulator
     {
-        
-        private readonly Func<float, IEnumerable<IDevice>, TimeSpan, float> temperatureCalculationModel;
         private float lastTemperature;
         private readonly DateTime lastTime;
 
-        public TemperatureSimulator(
-            Func<float, IEnumerable<IDevice>, TimeSpan, float> temperatureCalculationModel, 
-            ITimeSource timeSource,
-            float initialTemperature = 25
-            )
+        private const int WattsToChangeOneDegreeInOneHour = 20;
+
+        private float CalculateChange()
         {
-            throw new NotImplementedException();
+            var hoursSinceLastUpdate = (this.TimeSource.Time - this.lastTime).TotalHours;
+            return (float)(this.Devices
+                            .Sum(device => device.MaxPower * device.HeatingParameter)
+                            / WattsToChangeOneDegreeInOneHour
+                            * hoursSinceLastUpdate);
+        }
+
+        public TemperatureSimulator(ITimeSource timeSource, float initialTemperature)
+        {
             this.TimeSource = timeSource;
             this.lastTime = timeSource.Time;
-            this.temperatureCalculationModel = temperatureCalculationModel;
             this.lastTemperature = initialTemperature;
         }
 
-        public IEnumerable<IDevice> Devices { get; set; } = new List<IDevice>();
+        public IEnumerable<ITemperatureDevice> Devices { get; set; } = new List<ITemperatureDevice>();
         public ITimeSource TimeSource { get; set; }
         public float Temperature 
         {
             get
             {
-                throw new NotImplementedException();
+                this.lastTemperature += CalculateChange();
+                return this.lastTemperature;
             }
 
             set
             {
-                throw new NotImplementedException();
+                foreach (var device in this.Devices)
+                    device.TurnOff();
+                this.lastTemperature = value;
             }
         }
 
