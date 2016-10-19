@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using OfficeHVAC.Models;
-
-namespace OfficeHVAC.Simulators
+﻿namespace OfficeHVAC.Simulators
 {
     public interface ITemperatureSimulator : IParameterSimulator
     {

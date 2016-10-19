@@ -1,7 +1,7 @@
-﻿using System;
-using OfficeHVAC.Models.Devices;
+﻿using OfficeHVAC.Models.Devices;
 using Shouldly;
 using Xunit;
+
 namespace OfficeHVAC.Models.Tests
 {
     public class TemperatureDevice
