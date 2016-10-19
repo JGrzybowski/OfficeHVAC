@@ -3,6 +3,7 @@ using NSubstitute;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Simulators;
 using Shouldly;
+using System;
 using Xunit;
 
 namespace OfficeHVAC.Actors.Tests
@@ -28,7 +29,7 @@ namespace OfficeHVAC.Actors.Tests
             );
             
             //Act
-            actor.Tell(new SubscribeMessage(actor));
+            actor.Tell(new SubscribeMessage(TestActor));
 
             //Assert
             ExpectMsg<RoomStatusMessage>((msg, sender) =>
@@ -36,7 +37,6 @@ namespace OfficeHVAC.Actors.Tests
                 msg.RoomName.ShouldBe(TestRoomName);
                 msg.Temperature.ShouldBe(TemperatureInRoom);
             });
-
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace OfficeHVAC.Actors.Tests
             var actor = ActorOfAsTestActorRef(() =>
                 new Actors.RoomSimulatorActor(TestRoomName, GenerateTemperatureSimulatorFake())
             );
-            actor.Tell(new SubscribeMessage(actor));
+            actor.Tell(new SubscribeMessage(TestActor));
             ExpectMsg<RoomStatusMessage>();
             
             //Act
@@ -57,7 +57,8 @@ namespace OfficeHVAC.Actors.Tests
             {
                 msg.RoomName.ShouldBe(TestRoomName);
                 msg.Temperature.ShouldBe(TemperatureInRoom);
-            });
+            },
+            timeout : TimeSpan.FromSeconds(10));
         }
 
         [Fact]
@@ -68,9 +69,9 @@ namespace OfficeHVAC.Actors.Tests
                 new Actors.RoomSimulatorActor(TestRoomName, GenerateTemperatureSimulatorFake())
             );
 
-            actor.Tell(new SubscribeMessage(actor));
+            actor.Tell(new SubscribeMessage(TestActor));
             ExpectMsg<RoomStatusMessage>();
-            actor.Tell(new UnsubscribeMessage(actor));
+            actor.Tell(new UnsubscribeMessage(TestActor));
 
             //Act
             actor.Tell(new RoomStatusRequest());
