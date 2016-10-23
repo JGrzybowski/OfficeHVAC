@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Messages;
@@ -21,13 +22,16 @@ namespace OfficeHVAC.Actors.Tests
             return fake;
         }
 
-        private Props ActorProps =>
-            Props.Create(() => new Actors.RoomSimulatorActor(TestRoomName, GenerateTemperatureSimulatorFake(), this.TestActor.Path));
+        private Props SimulatorActorProps(ActorPath companyActorPath) =>
+            Props.Create(() => new Actors.RoomSimulatorActor(TestRoomName, GenerateTemperatureSimulatorFake(), companyActorPath));
+
+
 
         [Fact]
         public void sends_avaliability_message_to_server()
         {
-            var actor = ActorOf(ActorProps);
+            var simulatorProps = SimulatorActorProps(this.TestActor.Path);
+            var actor = ActorOf(simulatorProps);
             ExpectMsg<RoomAvaliabilityMessage>(msg => msg.RoomActor.ShouldBe(actor));
         }
 
@@ -35,7 +39,8 @@ namespace OfficeHVAC.Actors.Tests
         public void sends_initial_room_info_when_some_actor_subscribes()
         {
             //Arrange
-            var actor = ActorOf(ActorProps);
+            var simulatorProps = SimulatorActorProps(ActorOf(BlackHoleActor.Props).Path);
+            var actor = ActorOf(simulatorProps);
             
             //Act
             actor.Tell(new SubscribeMessage(TestActor));
@@ -52,7 +57,8 @@ namespace OfficeHVAC.Actors.Tests
         public void sends_status_update_info_to_subscribes_when_recieving_update_request()
         {
             //Arrange
-            var actor = ActorOf(ActorProps);
+            var simulatorProps = SimulatorActorProps(ActorOf(BlackHoleActor.Props).Path);
+            var actor = ActorOf(simulatorProps);
             actor.Tell(new SubscribeMessage(TestActor));
             ExpectMsg<RoomStatusMessage>();
             
@@ -72,7 +78,8 @@ namespace OfficeHVAC.Actors.Tests
         public void does_not_send_status_update_info_to_unsubscribed_actors_when_recieving_update_request()
         {
             //Arrange
-            var actor = ActorOf(ActorProps);
+            var simulatorProps = SimulatorActorProps(ActorOf(BlackHoleActor.Props).Path);
+            var actor = ActorOf(simulatorProps);
             actor.Tell(new SubscribeMessage(TestActor));
             ExpectMsg<RoomStatusMessage>();
             actor.Tell(new UnsubscribeMessage(TestActor));

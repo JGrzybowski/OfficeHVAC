@@ -47,7 +47,6 @@ namespace OfficeHVAC.Actors
 
         protected override void PreStart()
         {
-            return;
             Context.System.ActorSelection(this.comparnySupervisorActorPath).Tell(new RoomAvaliabilityMessage(Self));
         }
     }
