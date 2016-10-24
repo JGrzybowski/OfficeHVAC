@@ -12,12 +12,27 @@ namespace OfficeHVAC.Actors
     public class ConnectionConfig : IConnectionConfig
     {
         public string ServerAddress { get; }
-        public string ServerPort { get; }
-        public string ListeningPort { get; }
+        public int? ServerPort { get; }
+        public int? ListeningPort { get; }
 
-        public ConnectionConfig(string serverAddress, string serverPort, string listeningPort, string CompanyActorName)
+        public ConnectionConfig(string serverAddress, int? serverPort, int? listeningPort, string companyActorName)
         {
-            throw  new NotImplementedException();
+            serverAddress = serverAddress?.Trim();
+            bool isLocalAddress = string.IsNullOrWhiteSpace(serverAddress) || 
+                                  serverAddress.Equals("localhost") ||
+                                  serverAddress.Equals("127.0.0.1");
+            CompanyActorPath = new ChildActorPath(
+                new RootActorPath(
+                    new Address(
+                        protocol:
+                        isLocalAddress ? "akka" : "akka.tcp",
+                        system: "HVACsystem",
+                        host: serverAddress,
+                        port: serverPort
+                    )
+                ),
+                $"user/{companyActorName}", 0);
+
             ServerAddress = serverAddress;
             ServerPort = serverPort;
             ListeningPort = listeningPort;
@@ -36,30 +51,30 @@ namespace OfficeHVAC.Actors
                 set { SetProperty(ref serverAddress, value); }
             }
 
-            private string serverPort;
+            private int? serverPort;
 
-            public string ServerPort
+            public int? ServerPort
             {
                 get { return serverPort; }
                 set { SetProperty(ref serverPort, value); }
             }
 
-            private string listeningPort;
+            private int? listeningPort;
 
-            public string ListeningPort
+            public int? ListeningPort
             {
                 get { return listeningPort; }
                 set { SetProperty(ref listeningPort, value); }
             }
 
             private string companyActorName;
-            public string ComapnyActorName
+            public string CompanyActorName
             {
                 get { return companyActorName; }
                 set { SetProperty(ref companyActorName, value); }
             }
 
-            public ConnectionConfig Build() => new ConnectionConfig(ServerAddress, ServerPort, ListeningPort, ComapnyActorName);
+            public ConnectionConfig Build() => new ConnectionConfig(ServerAddress, ServerPort, ListeningPort, CompanyActorName);
         }
     }
 }
