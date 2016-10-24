@@ -24,9 +24,7 @@ namespace OfficeHVAC.Actors.Tests
 
         private Props SimulatorActorProps(ActorPath companyActorPath) =>
             Props.Create(() => new Actors.RoomSimulatorActor(TestRoomName, GenerateTemperatureSimulatorFake(), companyActorPath));
-
-
-
+        
         [Fact]
         public void sends_avaliability_message_to_server()
         {
