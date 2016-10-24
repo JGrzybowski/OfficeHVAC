@@ -11,9 +11,10 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 {
     public class RoomViewModel : BindableBase
     {
+        public IActorRef RoomActor { get; set; }
         public Props RoomActorProps { get; set; }
+        public IActorRef BridgeActor { get; set; }
         public Props BridgeActorProps { get; set; }
-        
         
         private float temperature;
         public float Temperature
@@ -35,14 +36,30 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
         public bool IsConnected
         {
             get { return isConnected; }
-            set { SetProperty(ref isConnected, value); }
+            private set { SetProperty(ref isConnected, value); }
         }
 
-        public ActorSystem ActorSystem { get; set; }
+        public ActorSystem LocalActorSystem { get; set; }
 
         public void InitializeSimulator()
         {
-            throw new NotImplementedException();
+            IsConnected = true;
+            try
+            {
+                IConnectionConfig connectionConfig = this.ConnectionConfigBuilder.Build();
+
+                this.LocalActorSystem = ActorSystem.Create("OfficeHVAC", connectionConfig.Configuration);
+                this.BridgeActor = this.LocalActorSystem.ActorOf(BridgeActorProps, "bridge");
+                this.RoomActor = this.LocalActorSystem.ActorOf(RoomActorProps, "room");
+
+
+            }
+            catch (Exception)
+            {
+                LocalActorSystem?.Terminate();
+                IsConnected = false;
+            }
         }
+
     }
 }

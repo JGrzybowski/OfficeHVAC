@@ -69,7 +69,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             vm.InitializeSimulator();
 
             //Assert
-            vm.ActorSystem.ActorSelection("/user/bridge/room").ResolveOne(TimeSpan.FromSeconds(2)).ShouldNotBeNull();
+            var roomActor = vm.LocalActorSystem.ActorSelection("/user/room").ResolveOne(TimeSpan.FromSeconds(2)).Result;
+            roomActor.ShouldNotBeNull();
         }
 
         [Fact]
@@ -88,7 +89,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             vm.InitializeSimulator();
 
             //Assert
-            vm.ActorSystem.ActorSelection("/user/bridge").ResolveOne(TimeSpan.FromSeconds(2)).ShouldNotBeNull();
+            var bridgeActor = vm.LocalActorSystem.ActorSelection("/user/bridge").ResolveOne(TimeSpan.FromSeconds(2)).Result;
+            bridgeActor.ShouldNotBeNull();
         }
 
         [Fact]
@@ -119,7 +121,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             vm.InitializeSimulator();
 
             //Assert
-            vm.ActorSystem.Settings.Config.GetInt("akka.remote.helios.tcp.port").ShouldBe(8090);
+            vm.LocalActorSystem.Settings.Config.GetInt("akka.remote.helios.tcp.port").ShouldBe(8090);
         }
     }
 }
