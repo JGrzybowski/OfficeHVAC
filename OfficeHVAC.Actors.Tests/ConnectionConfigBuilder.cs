@@ -85,5 +85,37 @@ namespace OfficeHVAC.Actors.Tests
             //Assert
             config.CompanyActorPath.ToString().ShouldBe("akka://HVACsystem/user/company");
         }
+
+        [Fact]
+        public void should_use_akka_remote()
+        {
+            //Arrange
+            var builder = new ConnectionConfig.Builder()
+            {
+                ListeningPort = 8080
+            };
+
+            //Act
+            IConnectionConfig config = builder.Build();
+
+            //Assert
+            config.Configuration.GetString("akka.actor.provider").ShouldBe("Akka.Remote.RemoteActorRefProvider, Akka.Remote");
+        }
+
+        [Fact]
+        public void should_use_specified_port()
+        {
+            //Arrange
+            var builder = new ConnectionConfig.Builder()
+            {
+                ListeningPort = 8080
+            };
+
+            //Act
+            IConnectionConfig config = builder.Build();
+
+            //Assert
+            config.Configuration.GetInt("akka.remote.helios.tcp.port").ShouldBe(8080);
+        }
     }
 }

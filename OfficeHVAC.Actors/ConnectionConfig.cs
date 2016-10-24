@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 using Akka.Actor;
 using Prism.Mvvm;
 using Akka.Configuration;
+using Akka.Configuration.Hocon;
 
 namespace OfficeHVAC.Actors
 {
     public class ConnectionConfig : IConnectionConfig
     {
-        public string ServerAddress { get; }
-        public int? ServerPort { get; }
         public int? ListeningPort { get; }
 
         public ConnectionConfig(string serverAddress, int? serverPort, int? listeningPort, string companyActorName)
@@ -33,8 +32,17 @@ namespace OfficeHVAC.Actors
                 ),
                 $"user/{companyActorName}", 0);
 
-            ServerAddress = serverAddress;
-            ServerPort = serverPort;
+            Configuration = ConfigurationFactory.ParseString(
+                $"akka {{" +
+                    $"actor {{ provider = \"Akka.Remote.RemoteActorRefProvider, Akka.Remote\"}}" +
+                    $"remote {{" +
+                        $"helios.tcp {{" +
+                            $"port = {listeningPort}," +
+                            $"hostname = localhost" +
+                        $"}}" +
+                    $"}}" +
+                $"}}");
+
             ListeningPort = listeningPort;
         }
 
