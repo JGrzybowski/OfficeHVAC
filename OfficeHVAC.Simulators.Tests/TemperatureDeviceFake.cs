@@ -1,5 +1,4 @@
-﻿using System;
-using OfficeHVAC.Models.Devices;
+﻿using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Simulators.Tests
 {
