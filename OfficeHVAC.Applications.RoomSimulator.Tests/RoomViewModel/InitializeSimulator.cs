@@ -43,7 +43,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             {
                 ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
-                RoomActorProps = BlackHoleActor.Props
+                RoomActorProps = BlackHoleActor.Props,
+                RoomName = "room"
             };
 
             //Act
@@ -62,17 +63,64 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             {
                 ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
-                RoomActorProps = BlackHoleActor.Props
+                RoomActorProps = BlackHoleActor.Props,
+                RoomName = "room101"
             };
 
             //Act
             vm.InitializeSimulator();
 
             //Assert
-            var roomActor = vm.LocalActorSystem.ActorSelection("/user/room").ResolveOne(TimeSpan.FromSeconds(2)).Result;
+            var roomActor = vm.LocalActorSystem.ActorSelection("/user/room101").ResolveOne(TimeSpan.FromSeconds(2)).Result;
             roomActor.ShouldNotBeNull();
         }
 
+        [Theory]
+        [InlineData(null)]
+        [InlineData(" ")]
+        public void roomName_cannot_be_empty_when_initializing(string emptyRoomName)
+        {
+            //Arrange
+            SetupFakes(Config.Empty, blackHole.Path);
+            var vm = new ViewModels.RoomViewModel
+            {
+                ConnectionConfigBuilder = connectionConfigFake,
+                BridgeActorProps = BlackHoleActor.Props,
+                RoomActorProps = BlackHoleActor.Props,
+                RoomName = emptyRoomName
+            };
+
+            //Act
+            vm.InitializeSimulator();
+
+            //Assert
+            vm.IsConnected.ShouldBe(false);
+            vm.LocalActorSystem.ShouldBeNull();
+        }
+
+        [Fact]
+        public void stops_initialization_if_exception_is_thrown()
+        {
+            //Arrange
+            SetupFakes(Config.Empty, blackHole.Path);
+            this.connectionConfigFake
+                .WhenForAnyArgs(builder => builder.Build())
+                .Do(x => { throw new ArgumentException(); });
+            var vm = new ViewModels.RoomViewModel
+            {
+                ConnectionConfigBuilder = connectionConfigFake,
+                BridgeActorProps = BlackHoleActor.Props,
+                RoomActorProps = BlackHoleActor.Props,
+                RoomName = "room"
+            };
+
+            //Act
+            vm.InitializeSimulator();
+
+            //Assert
+            vm.IsConnected.ShouldBe(false);
+            vm.LocalActorSystem.ShouldBeNull();
+        }
         [Fact]
         public void creates_bridge_actor()
         {
@@ -82,7 +130,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             {
                 ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
-                RoomActorProps = BlackHoleActor.Props
+                RoomActorProps = BlackHoleActor.Props,
+                RoomName = "room"
             };
 
             //Act
@@ -114,7 +163,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             {
                 ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
-                RoomActorProps = BlackHoleActor.Props
+                RoomActorProps = BlackHoleActor.Props,
+                RoomName = "room"
             };
 
             //Act
