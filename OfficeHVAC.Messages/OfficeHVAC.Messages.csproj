@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoomAvaliabilityMessage.cs" />
+    <Compile Include="RoomClosedMessage.cs" />
     <Compile Include="RoomStatusMessage.cs" />
     <Compile Include="RoomStatusRequest.cs" />
     <Compile Include="SubscribeMessage.cs" />
