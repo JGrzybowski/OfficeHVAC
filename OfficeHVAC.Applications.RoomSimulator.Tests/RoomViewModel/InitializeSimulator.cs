@@ -12,14 +12,12 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
 {
     public class InitializeSimulator : TestKit
     {
-        private IActorRef blackHole;
-        private IActorRef echoActor;
+        private readonly IActorRef blackHole;
         private ConnectionConfig.Builder connectionConfigFake;
 
         public InitializeSimulator()
         {
             blackHole = ActorOf(BlackHoleActor.Props);
-            echoActor = ActorOf(EchoActor.Props(this, false));
         }
 
         private void SetupFakes(Config hostingConfig, ActorPath companyActorPath)
@@ -116,6 +114,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             vm.IsConnected.ShouldBe(false);
             vm.LocalActorSystem.ShouldBeNull();
         }
+
         [Fact]
         public void creates_bridge_actor()
         {
@@ -152,8 +151,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
                         hostname = localhost
                     }
                 }
-            }"
-            ), blackHole.Path);
+            }"), 
+            blackHole.Path);
             var vm = new ViewModels.RoomViewModel
             {
                 ConnectionConfigBuilder = connectionConfigFake,

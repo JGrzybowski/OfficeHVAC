@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Akka.Actor;
-using Prism.Mvvm;
+﻿using Akka.Actor;
 using Akka.Configuration;
-using Akka.Configuration.Hocon;
+using Prism.Mvvm;
 
 namespace OfficeHVAC.Actors
 {
     public class ConnectionConfig : IConnectionConfig
     {
-        public ConnectionConfig(Config configuration, ActorPath companActorPath)
+        public ConnectionConfig(Config configuration, ActorPath companyActorPath)
         {
             Configuration = configuration;
-            CompanyActorPath = companActorPath;
+            CompanyActorPath = companyActorPath;
         }
 
         public ConnectionConfig(string serverAddress, int? serverPort, int? listeningPort, string companyActorName)

@@ -1,31 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Akka.Actor;
+﻿using Akka.Actor;
 using Akka.Configuration;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Actors;
-using OfficeHVAC.Messages;
 using Shouldly;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
 {
     public class ShutdownSimulator :TestKit
     {
-        private IActorRef blackHole;
-        private IActorRef echoActor;
         private ConnectionConfig.Builder connectionConfigFake;
-
-        public ShutdownSimulator()
-        {
-            blackHole = ActorOf(BlackHoleActor.Props);
-            echoActor = ActorOf(EchoActor.Props(this, false));
-        }
 
         private void SetupFakes(Config hostingConfig, ActorPath companyActorPath)
         {
