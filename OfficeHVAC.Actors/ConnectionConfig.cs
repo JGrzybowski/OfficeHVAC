@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Akka.Actor;
-using Prism.Mvvm;
+﻿using Akka.Actor;
 using Akka.Configuration;
-using Akka.Configuration.Hocon;
+using Prism.Mvvm;
 
 namespace OfficeHVAC.Actors
 {
     public class ConnectionConfig : IConnectionConfig
     {
-        public int? ListeningPort { get; }
+        public ConnectionConfig(Config configuration, ActorPath companyActorPath)
+        {
+            Configuration = configuration;
+            CompanyActorPath = companyActorPath;
+        }
 
         public ConnectionConfig(string serverAddress, int? serverPort, int? listeningPort, string companyActorName)
         {
@@ -32,18 +30,18 @@ namespace OfficeHVAC.Actors
                 ),
                 $"user/{companyActorName}", 0);
 
-            Configuration = ConfigurationFactory.ParseString(
-                $"akka {{" +
-                    $"actor {{ provider = \"Akka.Remote.RemoteActorRefProvider, Akka.Remote\"}}" +
-                    $"remote {{" +
-                        $"helios.tcp {{" +
+            string configString =
+                @"akka {
+                    actor { provider = ""Akka.Remote.RemoteActorRefProvider, Akka.Remote"" }
+                    remote {
+                        helios.tcp {" +
                             $"port = {listeningPort}," +
-                            $"hostname = localhost" +
-                        $"}}" +
-                    $"}}" +
-                $"}}");
+                            @"hostname = localhost
+                        }
+                    }
+                }";
+            Configuration = ConfigurationFactory.ParseString(configString);
 
-            ListeningPort = listeningPort;
         }
 
         public ActorPath CompanyActorPath { get; }
@@ -79,7 +77,7 @@ namespace OfficeHVAC.Actors
                 set { SetProperty(ref companyActorName, value); }
             }
 
-            public ConnectionConfig Build() => new ConnectionConfig(
+            public virtual ConnectionConfig Build() => new ConnectionConfig(
                 this.ServerAddress,
                 this.ServerPort,
                 this.ListeningPort,
