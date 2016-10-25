@@ -52,7 +52,6 @@ namespace OfficeHVAC.Actors
         public class Builder : BindableBase
         {
             private string serverAddress;
-
             public string ServerAddress
             {
                 get { return serverAddress; }
@@ -60,7 +59,6 @@ namespace OfficeHVAC.Actors
             }
 
             private int? serverPort;
-
             public int? ServerPort
             {
                 get { return serverPort; }
@@ -68,7 +66,6 @@ namespace OfficeHVAC.Actors
             }
 
             private int? listeningPort;
-
             public int? ListeningPort
             {
                 get { return listeningPort; }
@@ -82,7 +79,12 @@ namespace OfficeHVAC.Actors
                 set { SetProperty(ref companyActorName, value); }
             }
 
-            public ConnectionConfig Build() => new ConnectionConfig(ServerAddress, ServerPort, ListeningPort, CompanyActorName);
+            public ConnectionConfig Build() => new ConnectionConfig(
+                this.ServerAddress,
+                this.ServerPort,
+                this.ListeningPort,
+                this.CompanyActorName
+            );
         }
     }
 }
