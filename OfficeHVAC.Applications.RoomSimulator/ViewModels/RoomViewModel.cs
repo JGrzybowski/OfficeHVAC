@@ -50,10 +50,9 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
                     throw new ArgumentException();
 
                 IConnectionConfig connectionConfig = this.ConnectionConfigBuilder.Build();
-
                 this.LocalActorSystem = ActorSystem.Create("OfficeHVAC", connectionConfig.Configuration);
-                this.BridgeActor = this.LocalActorSystem.ActorOf(this.BridgeActorProps, "bridge");
                 this.RoomActor =   this.LocalActorSystem.ActorOf(this.RoomActorProps, this.RoomName);
+                this.BridgeActor = this.LocalActorSystem.ActorOf(this.BridgeActorProps, "bridge");
             }
             catch (Exception)
             {
@@ -63,5 +62,13 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
             }
         }
 
+        public async Task ShutdownSimulator()
+        {
+            this.RoomActor = null;
+            this.BridgeActor = null;
+            await this.LocalActorSystem.Terminate();
+            this.LocalActorSystem = null;
+            this.IsConnected = false;
+        }
     }
 }

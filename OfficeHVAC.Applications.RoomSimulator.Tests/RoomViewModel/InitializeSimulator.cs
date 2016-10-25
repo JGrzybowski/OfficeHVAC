@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Akka.Actor;
+﻿using Akka.Actor;
 using Akka.Configuration;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Actors;
-using OfficeHVAC.Messages;
 using Shouldly;
+using System;
 using Xunit;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
