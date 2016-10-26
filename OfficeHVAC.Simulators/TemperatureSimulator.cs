@@ -17,7 +17,7 @@ namespace OfficeHVAC.Simulators
 
         private float CalculateChange()
         {
-            var hoursSinceLastUpdate = (this.TimeSource.Time - this.lastTime).TotalHours;
+            var hoursSinceLastUpdate = (this.TimeSource.Now - this.lastTime).TotalHours;
             return (float)(this.Devices
                             .Sum(device => device.MaxPower * device.HeatingParameter)
                             / WattsToChangeOneDegreeInOneHour
@@ -27,7 +27,7 @@ namespace OfficeHVAC.Simulators
         public TemperatureSimulator(ITimeSource timeSource, float initialTemperature)
         {
             this.TimeSource = timeSource;
-            this.lastTime = timeSource.Time;
+            this.lastTime = timeSource.Now;
             this.lastTemperature = initialTemperature;
         }
 
