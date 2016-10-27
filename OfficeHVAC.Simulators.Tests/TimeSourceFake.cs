@@ -7,8 +7,8 @@ namespace OfficeHVAC.Simulators.Tests
     {
         public TimeSourceFake(DateTime dateTime)
         {
-            this.Time = dateTime;
+            this.Now = dateTime;
         }
-        public DateTime Time { get; set; }
+        public DateTime Now { get; set; }
     }
 }

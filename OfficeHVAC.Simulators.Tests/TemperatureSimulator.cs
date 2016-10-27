@@ -23,7 +23,7 @@ namespace OfficeHVAC.Simulators.Tests
             };
 
             //Act
-            timeSourceFake.Time = fiveMinutesLater;
+            timeSourceFake.Now = fiveMinutesLater;
 
             //Assert
             var temperatureAfter = simulator.Temperature;
@@ -50,7 +50,7 @@ namespace OfficeHVAC.Simulators.Tests
             };
 
             //Act
-            timeSourceFake.Time = fiveMinutesLater;
+            timeSourceFake.Now = fiveMinutesLater;
 
             //Assert
             var temperatureAfter = simulator.Temperature;

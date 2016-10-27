@@ -116,6 +116,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Factories\RoomSimulatorActorPropsFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoomViewModel\Constructor.cs" />
     <Compile Include="RoomViewModel\InitializeSimulator.cs" />
@@ -133,11 +134,24 @@
       <Project>{689F64B8-BA6D-46EC-A7B1-8041ACC42EDA}</Project>
       <Name>OfficeHVAC.Applications.RoomSimulator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OfficeHVAC.Factories\OfficeHVAC.Factories.csproj">
+      <Project>{f678ee5a-b0c5-4314-af14-eed628c9f630}</Project>
+      <Name>OfficeHVAC.Factories</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OfficeHVAC.Messages\OfficeHVAC.Messages.csproj">
       <Project>{3ACF6AA9-1CB6-47E3-AEB7-1E5A95A2638B}</Project>
       <Name>OfficeHVAC.Messages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OfficeHVAC.Models\OfficeHVAC.Models.csproj">
+      <Project>{584598C9-E1CD-4592-9A88-24F34D23D282}</Project>
+      <Name>OfficeHVAC.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OfficeHVAC.Simulators\OfficeHVAC.Simulators.csproj">
+      <Project>{0B83EBD2-2C92-4B9B-B1CE-45C96F6C453B}</Project>
+      <Name>OfficeHVAC.Simulators</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

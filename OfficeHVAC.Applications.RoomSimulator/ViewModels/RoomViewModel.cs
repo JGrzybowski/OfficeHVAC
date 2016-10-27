@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Actors;
+using OfficeHVAC.Factories.Propses;
 using Prism.Mvvm;
 using System;
 using System.Threading.Tasks;
@@ -8,9 +9,15 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 {
     public class RoomViewModel : BindableBase
     {
-        public IActorRef RoomActor { get; private set; }
-        public Props RoomActorProps { get; set; }
+        // New fields 
+        public IPropsFactory RoomSimulatorActorPropsFactory { get; private set; }
 
+        public RoomViewModel(IPropsFactory roomSimulatorActorPropsFactory)
+        {
+            this.RoomSimulatorActorPropsFactory = roomSimulatorActorPropsFactory;
+        }
+
+        // Old Fields
         public IActorRef BridgeActor { get; private set; }
         public Props BridgeActorProps { get; set; }
 
@@ -52,7 +59,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 
                 IConnectionConfig connectionConfig = this.ConnectionConfigBuilder.Build();
                 this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, connectionConfig.Configuration);
-                this.RoomActor = this.LocalActorSystem.ActorOf(this.RoomActorProps, this.RoomName);
+                this.LocalActorSystem.ActorOf(this.RoomSimulatorActorPropsFactory.Props(), this.RoomName);
                 this.BridgeActor = this.LocalActorSystem.ActorOf(this.BridgeActorProps, "bridge");
             }
             catch (Exception)
@@ -66,7 +73,6 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 
         public async Task ShutdownSimulator()
         {
-            this.RoomActor = null;
             this.BridgeActor = null;
             await this.LocalActorSystem.Terminate();
             this.LocalActorSystem = null;

@@ -4,6 +4,7 @@ using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Actors;
+using OfficeHVAC.Factories.Propses;
 using Shouldly;
 using System;
 using Xunit;
@@ -13,11 +14,15 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
     public class InitializeSimulator : TestKit
     {
         private readonly IActorRef blackHole;
+        private readonly IPropsFactory _roomSimulatorActorPropsFactoryFake;
         private ConnectionConfig.Builder connectionConfigFake;
 
         public InitializeSimulator()
         {
             blackHole = ActorOf(BlackHoleActor.Props);
+
+            _roomSimulatorActorPropsFactoryFake = Substitute.For<IPropsFactory>();
+            _roomSimulatorActorPropsFactoryFake.Props().Returns(BlackHoleActor.Props);
         }
 
         private void SetupFakes(Config hostingConfig, ActorPath companyActorPath)
@@ -32,11 +37,10 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         {
             //Arrange
             SetupFakes(Config.Empty, blackHole.Path);
-            var vm = new ViewModels.RoomViewModel
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
             {
                 ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
-                RoomActorProps = BlackHoleActor.Props,
                 RoomName = "room"
             };
 
@@ -52,11 +56,10 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         {
             //Arrange
             SetupFakes(Config.Empty, blackHole.Path);
-            var vm = new ViewModels.RoomViewModel
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
             {
                 ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
-                RoomActorProps = BlackHoleActor.Props,
                 RoomName = "room101"
             };
 
@@ -75,11 +78,10 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         {
             //Arrange
             SetupFakes(Config.Empty, blackHole.Path);
-            var vm = new ViewModels.RoomViewModel
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
             {
                 ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
-                RoomActorProps = BlackHoleActor.Props,
                 RoomName = emptyRoomName
             };
 
@@ -99,11 +101,10 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             this.connectionConfigFake
                 .WhenForAnyArgs(builder => builder.Build())
                 .Do(x => { throw new ArgumentException(); });
-            var vm = new ViewModels.RoomViewModel
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
             {
                 ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
-                RoomActorProps = BlackHoleActor.Props,
                 RoomName = "room"
             };
 
@@ -120,11 +121,10 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         {
             //Arrange
             SetupFakes(Config.Empty, blackHole.Path);
-            var vm = new ViewModels.RoomViewModel
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
             {
                 ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
-                RoomActorProps = BlackHoleActor.Props,
                 RoomName = "room"
             };
 
@@ -153,11 +153,10 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
                 }
             }"), 
             blackHole.Path);
-            var vm = new ViewModels.RoomViewModel
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
             {
                 ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
-                RoomActorProps = BlackHoleActor.Props,
                 RoomName = "room"
             };
 

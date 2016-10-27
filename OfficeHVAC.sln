@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Applications.Roo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Models.Tests", "OfficeHVAC.Models.Tests\OfficeHVAC.Models.Tests.csproj", "{AF3DE0CB-3AC2-4D96-A0E2-AA5BA5433D39}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Factories", "OfficeHVAC.Factories\OfficeHVAC.Factories.csproj", "{F678EE5A-B0C5-4314-AF14-EED628C9F630}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{AF3DE0CB-3AC2-4D96-A0E2-AA5BA5433D39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF3DE0CB-3AC2-4D96-A0E2-AA5BA5433D39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF3DE0CB-3AC2-4D96-A0E2-AA5BA5433D39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F678EE5A-B0C5-4314-AF14-EED628C9F630}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F678EE5A-B0C5-4314-AF14-EED628C9F630}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F678EE5A-B0C5-4314-AF14-EED628C9F630}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F678EE5A-B0C5-4314-AF14-EED628C9F630}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
