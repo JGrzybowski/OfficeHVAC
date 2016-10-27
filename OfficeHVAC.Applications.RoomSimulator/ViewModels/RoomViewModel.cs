@@ -4,15 +4,16 @@ using OfficeHVAC.Factories.Propses;
 using Prism.Mvvm;
 using System;
 using System.Threading.Tasks;
+using OfficeHVAC.Applications.RoomSimulator.Factories;
 
 namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 {
     public class RoomViewModel : BindableBase
     {
         // New fields 
-        public IPropsFactory RoomSimulatorActorPropsFactory { get; private set; }
+        public IRoomSimulatorActorPropsFactory RoomSimulatorActorPropsFactory { get; private set; }
 
-        public RoomViewModel(IPropsFactory roomSimulatorActorPropsFactory)
+        public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory)
         {
             this.RoomSimulatorActorPropsFactory = roomSimulatorActorPropsFactory;
         }

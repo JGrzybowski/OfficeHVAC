@@ -71,6 +71,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Factories\IRoomSimulatorActorPropsFactory.cs" />
     <Compile Include="Factories\RoomSimulatorActorPropsFactory.cs" />
     <Compile Include="ViewModels\RoomViewModel.cs" />
     <Page Include="MainWindow.xaml">

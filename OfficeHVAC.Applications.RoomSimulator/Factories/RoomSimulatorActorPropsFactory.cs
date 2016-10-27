@@ -7,7 +7,7 @@ using Prism.Mvvm;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Factories
 {
-    public class RoomSimulatorActorPropsFactory : BindableBase, IPropsFactory
+    public class RoomSimulatorActorPropsFactory : BindableBase, IRoomSimulatorActorPropsFactory
     {
         public RoomSimulatorActorPropsFactory(IActorPathBuilder companyPathBuilder, ITemperatureSimulatorFactory temperatureSimulatorFactory)
         {
@@ -24,8 +24,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
             set { SetProperty(ref _roomName, value); }
         }
 
-        public IActorPathBuilder CompanyPathBuilder { get; private set; }
-        public ITemperatureSimulatorFactory TemperatureSimulatorFactory { get; private set; }
+        public IActorPathBuilder CompanyPathBuilder { get; }
+        public ITemperatureSimulatorFactory TemperatureSimulatorFactory { get; }
 
         public Props Props()
         {

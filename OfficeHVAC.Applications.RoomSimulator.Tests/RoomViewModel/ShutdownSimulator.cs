@@ -7,6 +7,7 @@ using OfficeHVAC.Actors;
 using OfficeHVAC.Factories.Propses;
 using Shouldly;
 using System.Threading.Tasks;
+using OfficeHVAC.Applications.RoomSimulator.Factories;
 using Xunit;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
@@ -14,11 +15,11 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
     public class ShutdownSimulator : TestKit
     {
         private ConnectionConfig.Builder connectionConfigFake;
-        private readonly IPropsFactory _roomSimulatorActorPropsFactoryFake;
+        private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake;
 
         public ShutdownSimulator()
         {
-            _roomSimulatorActorPropsFactoryFake = Substitute.For<IPropsFactory>();
+            _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
             _roomSimulatorActorPropsFactoryFake.Props().Returns(BlackHoleActor.Props);
         }
 

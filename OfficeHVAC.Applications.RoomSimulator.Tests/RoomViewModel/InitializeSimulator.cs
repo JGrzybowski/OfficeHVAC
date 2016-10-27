@@ -7,6 +7,7 @@ using OfficeHVAC.Actors;
 using OfficeHVAC.Factories.Propses;
 using Shouldly;
 using System;
+using OfficeHVAC.Applications.RoomSimulator.Factories;
 using Xunit;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
@@ -14,14 +15,14 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
     public class InitializeSimulator : TestKit
     {
         private readonly IActorRef blackHole;
-        private readonly IPropsFactory _roomSimulatorActorPropsFactoryFake;
+        private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake;
         private ConnectionConfig.Builder connectionConfigFake;
 
         public InitializeSimulator()
         {
             blackHole = ActorOf(BlackHoleActor.Props);
 
-            _roomSimulatorActorPropsFactoryFake = Substitute.For<IPropsFactory>();
+            _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
             _roomSimulatorActorPropsFactoryFake.Props().Returns(BlackHoleActor.Props);
         }
 
