@@ -27,12 +27,12 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
         public IActorPathBuilder CompanyPathBuilder { get; private set; }
         public ITemperatureSimulatorFactory TemperatureSimulatorFactory { get; private set; }
 
-        public Props Build()
+        public Props Props()
         {
-            return Props.Create(() => new RoomSimulatorActor(
-                RoomName,
-                TemperatureSimulatorFactory.TemperatureSimulator(),
-                CompanyPathBuilder.ActorPath()
+            return Akka.Actor.Props.Create(() => new RoomSimulatorActor(
+                this.RoomName,
+                this.TemperatureSimulatorFactory.TemperatureSimulator(),
+                this.CompanyPathBuilder.ActorPath()
             ));
         }
     }

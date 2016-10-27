@@ -4,6 +4,6 @@ namespace OfficeHVAC.Factories.Propses
 {
     public interface IPropsFactory
     {
-        Props Build();
+        Props Props();
     }
 }

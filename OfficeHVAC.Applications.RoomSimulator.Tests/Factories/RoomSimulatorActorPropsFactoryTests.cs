@@ -14,8 +14,9 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories
 {
     public class RoomSimulatorActorPropsFactoryTests : TestKit
     {
+        // Actor Fakes
         private readonly IActorRef _blackHoleActor;
-
+        // Factories Fakes
         private readonly IActorPathBuilder _pathBuilderFake;
         private readonly ITemperatureSimulatorFactory _temperatureSimulatorFactoryFake;
         private readonly ITemperatureSimulator _temperatureSimulatorFake;
@@ -41,7 +42,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories
             var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake) {RoomName = "Room 101"};
             
             //Act
-            var resultProps = propsBuilder.Build();
+            var resultProps = propsBuilder.Props();
 
             //Assert
             var roomActor = ActorOfAsTestActorRef<RoomSimulatorActor>(resultProps);
@@ -55,7 +56,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories
             var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake) { RoomName = "Room 101" };
 
             //Act
-            var resultProps = propsBuilder.Build();
+            var resultProps = propsBuilder.Props();
 
             //Assert
             _pathBuilderFake.Received().ActorPath();
@@ -68,7 +69,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories
             var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake) { RoomName = "Room 101" };
 
             //Act
-            var resultProps = propsBuilder.Build();
+            var resultProps = propsBuilder.Props();
 
             //Assert
             _temperatureSimulatorFactoryFake.Received().TemperatureSimulator();
