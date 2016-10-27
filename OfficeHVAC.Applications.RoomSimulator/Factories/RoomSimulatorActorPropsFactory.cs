@@ -4,6 +4,7 @@ using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Propses;
 using OfficeHVAC.Factories.Simulators.Temperature;
 using Prism.Mvvm;
+using System;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Factories
 {
@@ -29,6 +30,9 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
 
         public Props Props()
         {
+            if (string.IsNullOrWhiteSpace(this.RoomName))
+                throw new ArgumentException("Room name cannot be empty.", nameof(RoomName));
+
             return Akka.Actor.Props.Create(() => new RoomSimulatorActor(
                 this.RoomName,
                 this.TemperatureSimulatorFactory.TemperatureSimulator(),

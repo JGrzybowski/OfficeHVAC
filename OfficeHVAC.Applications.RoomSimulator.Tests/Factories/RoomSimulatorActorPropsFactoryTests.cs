@@ -1,4 +1,6 @@
-﻿using Akka.Actor;
+﻿using System;
+using Akka.Actor;
+using Akka.Configuration;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
@@ -73,6 +75,21 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories
 
             //Assert
             _temperatureSimulatorFactoryFake.Received().TemperatureSimulator();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(" ")]
+        public void throws_ArgumentException_when_RoomName_is_empty(string emptyRoomName)
+        {
+            //Arrange
+            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake){RoomName = emptyRoomName};
+
+            //Act
+            var ex = Should.Throw<ArgumentException>(() => propsBuilder.Props());
+
+            //Assert
+            ex.ParamName.ShouldBe(nameof(RoomSimulatorActorPropsFactory.RoomName));
         }
     }
 }

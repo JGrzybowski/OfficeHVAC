@@ -11,7 +11,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
     public class RoomViewModel : BindableBase
     {
         // New fields 
-        public IRoomSimulatorActorPropsFactory RoomSimulatorActorPropsFactory { get; private set; }
+        public const string RoomActorName = "room";
+        public IRoomSimulatorActorPropsFactory RoomSimulatorActorPropsFactory { get; }
 
         public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory)
         {
@@ -47,20 +48,16 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
         {
             get { return _isConnected; }
             private set { SetProperty(ref _isConnected, value); }
-        }
-
+        }     
 
         public void InitializeSimulator()
         {
             IsConnected = true;
             try
             {
-                if (string.IsNullOrWhiteSpace(this.RoomName))
-                    throw new ArgumentException();
-
                 IConnectionConfig connectionConfig = this.ConnectionConfigBuilder.Build();
                 this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, connectionConfig.Configuration);
-                this.LocalActorSystem.ActorOf(this.RoomSimulatorActorPropsFactory.Props(), this.RoomName);
+                this.LocalActorSystem.ActorOf(this.RoomSimulatorActorPropsFactory.Props(), RoomActorName);
                 this.BridgeActor = this.LocalActorSystem.ActorOf(this.BridgeActorProps, "bridge");
             }
             catch (Exception)
