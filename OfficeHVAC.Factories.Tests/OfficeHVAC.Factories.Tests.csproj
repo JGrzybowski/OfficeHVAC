@@ -79,6 +79,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActorPaths\RemoteActor.cs" />
     <Compile Include="Configs\Remote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

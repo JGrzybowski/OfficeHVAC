@@ -2,9 +2,8 @@
 using OfficeHVAC.Factories.Configs;
 using Shouldly;
 using Xunit;
-using Xunit.Sdk;
 
-namespace OfficeHVAC.Actors.Tests
+namespace OfficeHVAC.Factories.Tests.Configs
 {
     public class Remote
     {

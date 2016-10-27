@@ -1,16 +1,16 @@
-﻿using Shouldly;
+﻿using OfficeHVAC.Factories.ActorPaths;
+using Shouldly;
 using Xunit;
-using Xunit.Sdk;
 
-namespace OfficeHVAC.Actors.Tests
+namespace OfficeHVAC.Factories.Tests.ActorPaths
 {
-    public class ConnectionConfigBuilder
+    public class RemoteActor
     {
         [Fact]
         public void should_construct_proper_central_system_address()
         {
             //Arrange
-            var builder = new ConnectionConfig.Builder()
+            var builder = new RemoteActorPathBuilder()
             {
                 ServerAddress = "192.168.40.40",
                 ServerPort = 8080,
@@ -18,10 +18,10 @@ namespace OfficeHVAC.Actors.Tests
             };
 
             //Act
-            IConnectionConfig config = builder.Build();
+            var actorPath = builder.ActorPath();
 
             //Assert
-            config.CompanyActorPath.ToString().ShouldBe("akka.tcp://HVACsystem@192.168.40.40:8080/user/company");
+            actorPath.ToString().ShouldBe("akka.tcp://HVACsystem@192.168.40.40:8080/user/company");
         }
 
         [Theory]
@@ -30,7 +30,7 @@ namespace OfficeHVAC.Actors.Tests
         public void should_skip_tcp_when_server_address_is_localhost(string localAddress)
         {
             //Arrange
-            var builder = new ConnectionConfig.Builder()
+            var builder = new RemoteActorPathBuilder()
             {
                 ServerAddress = localAddress,
                 ServerPort = 8080,
@@ -38,17 +38,17 @@ namespace OfficeHVAC.Actors.Tests
             };
 
             //Act
-            IConnectionConfig config = builder.Build();
+            var actorPath = builder.ActorPath();
 
             //Assert
-            config.CompanyActorPath.ToString().ShouldBe($"akka://HVACsystem@{localAddress}:8080/user/company");
+            actorPath.ToString().ShouldBe($"akka://HVACsystem@{localAddress}:8080/user/company");
         }
 
         [Fact]
         public void should_skip_port_when_port_number_is_empty()
         {
             //Arrange
-            var builder = new ConnectionConfig.Builder()
+            var builder = new RemoteActorPathBuilder()
             {
                 ServerAddress = "192.168.40.40",
                 ServerPort = null,
@@ -56,10 +56,10 @@ namespace OfficeHVAC.Actors.Tests
             };
 
             //Act
-            IConnectionConfig config = builder.Build();
+            var actorPath = builder.ActorPath();
 
             //Assert
-            config.CompanyActorPath.ToString().ShouldBe("akka.tcp://HVACsystem@192.168.40.40/user/company");
+            actorPath.ToString().ShouldBe("akka.tcp://HVACsystem@192.168.40.40/user/company");
         }
 
         [Theory]
@@ -68,18 +68,18 @@ namespace OfficeHVAC.Actors.Tests
         public void should_skip_address_and_port_when_address_and_port_number_is_empty(string localAddress)
         {
             //Arrange
-            var builder = new ConnectionConfig.Builder
+            var builder = new RemoteActorPathBuilder()
             {
-                ServerAddress =  localAddress,
+                ServerAddress = localAddress,
                 ServerPort = null,
                 CompanyActorName = "company"
             };
 
             //Act
-            IConnectionConfig config = builder.Build();
+            var actorPath = builder.ActorPath();
 
             //Assert
-            config.CompanyActorPath.ToString().ShouldBe("akka://HVACsystem/user/company");
+            actorPath.ToString().ShouldBe("akka://HVACsystem/user/company");
         }
     }
 }
