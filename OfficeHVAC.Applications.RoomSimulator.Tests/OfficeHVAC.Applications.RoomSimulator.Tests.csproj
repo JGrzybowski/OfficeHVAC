@@ -120,7 +120,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Builders\RoomActorPropsBuilderTests.cs" />
+    <Compile Include="Factories\RoomSimulatorActorPropsFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoomViewModel\Constructor.cs" />
     <Compile Include="RoomViewModel\InitializeSimulator.cs" />
@@ -155,9 +155,7 @@
       <Name>OfficeHVAC.Simulators</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

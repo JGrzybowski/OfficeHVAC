@@ -1,19 +1,17 @@
-﻿using System;
-using Akka.Actor;
+﻿using Akka.Actor;
+using OfficeHVAC.Actors;
 using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Propses;
 using OfficeHVAC.Factories.Simulators.Temperature;
-using OfficeHVAC.Factories.TimeSources;
 using Prism.Mvvm;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Factories
 {
-    public class RoomActorPropsFactory : BindableBase, IPropsFactory
+    public class RoomSimulatorActorPropsFactory : BindableBase, IPropsFactory
     {
-        public RoomActorPropsFactory(IActorPathBuilder companyPathBuilder, ITimeSourceFactory timeSourceFactory, ITemperatureSimulatorFactory temperatureSimulatorFactory)
+        public RoomSimulatorActorPropsFactory(IActorPathBuilder companyPathBuilder, ITemperatureSimulatorFactory temperatureSimulatorFactory)
         {
             this.CompanyPathBuilder = companyPathBuilder;
-            this.TimeSourceFactory = timeSourceFactory;
             this.TemperatureSimulatorFactory = temperatureSimulatorFactory;
         }
 
@@ -27,12 +25,15 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
         }
 
         public IActorPathBuilder CompanyPathBuilder { get; private set; }
-        public ITimeSourceFactory TimeSourceFactory { get; private set; }
         public ITemperatureSimulatorFactory TemperatureSimulatorFactory { get; private set; }
 
         public Props Build()
         {
-            throw new NotImplementedException();
+            return Props.Create(() => new RoomSimulatorActor(
+                RoomName,
+                TemperatureSimulatorFactory.TemperatureSimulator(),
+                CompanyPathBuilder.ActorPath()
+            ));
         }
     }
 }
