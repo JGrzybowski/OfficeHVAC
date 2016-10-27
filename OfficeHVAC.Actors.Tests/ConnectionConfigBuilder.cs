@@ -12,7 +12,6 @@ namespace OfficeHVAC.Actors.Tests
             //Arrange
             var builder = new ConnectionConfig.Builder()
             {
-                ListeningPort = 8080,
                 ServerAddress = "192.168.40.40",
                 ServerPort = 8080,
                 CompanyActorName = "company"
@@ -34,7 +33,6 @@ namespace OfficeHVAC.Actors.Tests
             var builder = new ConnectionConfig.Builder()
             {
                 ServerAddress = localAddress,
-                ListeningPort = 8080,
                 ServerPort = 8080,
                 CompanyActorName = "company"
             };
@@ -54,7 +52,6 @@ namespace OfficeHVAC.Actors.Tests
             {
                 ServerAddress = "192.168.40.40",
                 ServerPort = null,
-                ListeningPort = 8080,
                 CompanyActorName = "company"
             };
 
@@ -75,7 +72,6 @@ namespace OfficeHVAC.Actors.Tests
             {
                 ServerAddress =  localAddress,
                 ServerPort = null,
-                ListeningPort = 8080,
                 CompanyActorName = "company"
             };
 
@@ -84,38 +80,6 @@ namespace OfficeHVAC.Actors.Tests
 
             //Assert
             config.CompanyActorPath.ToString().ShouldBe("akka://HVACsystem/user/company");
-        }
-
-        [Fact]
-        public void should_use_akka_remote()
-        {
-            //Arrange
-            var builder = new ConnectionConfig.Builder()
-            {
-                ListeningPort = 8080
-            };
-
-            //Act
-            IConnectionConfig config = builder.Build();
-
-            //Assert
-            config.Configuration.GetString("akka.actor.provider").ShouldBe("Akka.Remote.RemoteActorRefProvider, Akka.Remote");
-        }
-
-        [Fact]
-        public void should_use_specified_port()
-        {
-            //Arrange
-            var builder = new ConnectionConfig.Builder()
-            {
-                ListeningPort = 8080
-            };
-
-            //Act
-            IConnectionConfig config = builder.Build();
-
-            //Assert
-            config.Configuration.GetInt("akka.remote.helios.tcp.port").ShouldBe(8080);
         }
     }
 }

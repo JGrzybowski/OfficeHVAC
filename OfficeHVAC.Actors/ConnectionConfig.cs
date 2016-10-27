@@ -12,7 +12,7 @@ namespace OfficeHVAC.Actors
             CompanyActorPath = companyActorPath;
         }
 
-        public ConnectionConfig(string serverAddress, int? serverPort, int? listeningPort, string companyActorName)
+        public ConnectionConfig(string serverAddress, int? serverPort, string companyActorName)
         {
             serverAddress = serverAddress?.Trim();
             bool isLocalAddress = string.IsNullOrWhiteSpace(serverAddress) || 
@@ -29,19 +29,6 @@ namespace OfficeHVAC.Actors
                     )
                 ),
                 $"user/{companyActorName}", 0);
-
-            string configString =
-                @"akka {
-                    actor { provider = ""Akka.Remote.RemoteActorRefProvider, Akka.Remote"" }
-                    remote {
-                        helios.tcp {" +
-                            $"port = {listeningPort}," +
-                            @"hostname = localhost
-                        }
-                    }
-                }";
-            Configuration = ConfigurationFactory.ParseString(configString);
-
         }
 
         public ActorPath CompanyActorPath { get; }
@@ -63,13 +50,6 @@ namespace OfficeHVAC.Actors
                 set { SetProperty(ref serverPort, value); }
             }
 
-            private int? listeningPort;
-            public int? ListeningPort
-            {
-                get { return listeningPort; }
-                set { SetProperty(ref listeningPort, value); }
-            }
-
             private string companyActorName;
             public string CompanyActorName
             {
@@ -80,7 +60,6 @@ namespace OfficeHVAC.Actors
             public virtual ConnectionConfig Build() => new ConnectionConfig(
                 this.ServerAddress,
                 this.ServerPort,
-                this.ListeningPort,
                 this.CompanyActorName
             );
         }

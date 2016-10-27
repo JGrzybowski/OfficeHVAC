@@ -14,7 +14,17 @@ namespace OfficeHVAC.Factories.Configs
         
         public Config Config()
         {
-            throw new System.NotImplementedException();
+            string configString =
+                @"akka {
+                    actor { provider = ""Akka.Remote.RemoteActorRefProvider, Akka.Remote"" }
+                    remote {
+                        helios.tcp {" +
+                            $"port = {Port}," +
+                            @"hostname = localhost
+                        }
+                    }
+                }";
+            return ConfigurationFactory.ParseString(configString);
         }
     }
 }
