@@ -25,7 +25,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 
         public ConnectionConfig.Builder ConnectionConfigBuilder { get; set; } = new ConnectionConfig.Builder();
 
-        public string ActorSystemName { get; set; } = "OfficeHVAC";
+        public string ActorSystemName { get; } = "OfficeHVAC";
 
         public ActorSystem LocalActorSystem { get; set; }
         
@@ -36,13 +36,6 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
             set { SetProperty(ref _temperature, value); }
         }
 
-        private string _roomName;
-        public string RoomName
-        {
-            get { return _roomName; }
-            set { SetProperty(ref _roomName, value); }
-        }
-        
         private bool _isConnected;
         public bool IsConnected
         {

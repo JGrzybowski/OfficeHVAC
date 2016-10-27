@@ -39,8 +39,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             {
                 ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
-                RoomName = "room"
             };
+            vm.RoomSimulatorActorPropsFactory.RoomName = "Room 101";
             vm.InitializeSimulator();
             vm.IsConnected.ShouldBe(true);
 
