@@ -7,6 +7,8 @@ using OfficeHVAC.Actors;
 using OfficeHVAC.Applications.RoomSimulator.Factories;
 using Shouldly;
 using System;
+using OfficeHVAC.Factories.ActorPaths;
+using OfficeHVAC.Factories.Configs;
 using Xunit;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
@@ -15,6 +17,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
     {
         private readonly IActorRef blackHole;
         private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake;
+        private readonly IRemoteActorPathBuilder _remoteActorPathBuilderFake;
+        private readonly IConfigBuilder _configBuilderFake;
         private ConnectionConfig.Builder connectionConfigFake;
 
         public InitializeSimulator()
@@ -23,11 +27,17 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
 
             _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
             _roomSimulatorActorPropsFactoryFake.Props().Returns(BlackHoleActor.Props);
+
+            _remoteActorPathBuilderFake = Substitute.For<IRemoteActorPathBuilder>();
+            _remoteActorPathBuilderFake.ActorPath().Returns(blackHole.Path);
+
+            _configBuilderFake = Substitute.For<IConfigBuilder>();
+            _configBuilderFake.Config().Returns(Config.Empty);
         }
 
-        private void SetupFakes(Config hostingConfig, ActorPath companyActorPath)
+        private void SetupFakes(ActorPath companyActorPath)
         {
-            var configStub = new ConnectionConfig(hostingConfig,companyActorPath);
+            var configStub = new ConnectionConfig(companyActorPath);
             connectionConfigFake = Substitute.For<ConnectionConfig.Builder>();
             connectionConfigFake.Build().Returns(configStub);
         }
@@ -36,10 +46,9 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public void sets_is_running_property()
         {
             //Arrange
-            SetupFakes(Config.Empty, blackHole.Path);
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
+            SetupFakes(blackHole.Path);
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _remoteActorPathBuilderFake, _configBuilderFake)
             {
-                ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
             };
 
@@ -54,10 +63,9 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public void creates_room_actor()
         {
             //Arrange
-            SetupFakes(Config.Empty, blackHole.Path);
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
+            SetupFakes(blackHole.Path);
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _remoteActorPathBuilderFake, _configBuilderFake)
             {
-                ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
             };
 
@@ -73,13 +81,12 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public void stops_initialization_if_exception_is_thrown()
         {
             //Arrange
-            SetupFakes(Config.Empty, blackHole.Path);
-            this.connectionConfigFake
-                .WhenForAnyArgs(builder => builder.Build())
+            SetupFakes(blackHole.Path);
+            this._configBuilderFake
+                .WhenForAnyArgs(builder => builder.Config())
                 .Do(x => { throw new ArgumentException(); });
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _remoteActorPathBuilderFake, _configBuilderFake)
             {
-                ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
             };
 
@@ -95,10 +102,9 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public void creates_bridge_actor()
         {
             //Arrange
-            SetupFakes(Config.Empty, blackHole.Path);
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
+            SetupFakes(blackHole.Path);
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _remoteActorPathBuilderFake, _configBuilderFake)
             {
-                ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
             };
 
@@ -114,7 +120,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public void starts_actor_system_on_selected_port()
         {
             //Arrange
-            SetupFakes(ConfigurationFactory.ParseString(
+            _configBuilderFake.Config().Returns(ConfigurationFactory.ParseString(
             @"akka {
                 actor {
                     provider = ""Akka.Remote.RemoteActorRefProvider, Akka.Remote""
@@ -125,11 +131,9 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
                         hostname = localhost
                     }
                 }
-            }"), 
-            blackHole.Path);
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
+            }"));
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _remoteActorPathBuilderFake, _configBuilderFake)
             {
-                ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
             };
 

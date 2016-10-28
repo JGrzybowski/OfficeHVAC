@@ -4,7 +4,10 @@ using OfficeHVAC.Factories.Propses;
 using Prism.Mvvm;
 using System;
 using System.Threading.Tasks;
+using Akka.Configuration;
 using OfficeHVAC.Applications.RoomSimulator.Factories;
+using OfficeHVAC.Factories.ActorPaths;
+using OfficeHVAC.Factories.Configs;
 
 namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 {
@@ -12,11 +15,19 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
     {
         // New fields 
         public const string RoomActorName = "room";
+
         public IRoomSimulatorActorPropsFactory RoomSimulatorActorPropsFactory { get; }
 
-        public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory)
+        public IRemoteActorPathBuilder CompanyActorPathBuilder { get; }
+
+        public IConfigBuilder ConfigBuilder { get; }
+
+        public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, IRemoteActorPathBuilder companyActorPathBuilder,
+            IConfigBuilder configBuilder)
         {
             this.RoomSimulatorActorPropsFactory = roomSimulatorActorPropsFactory;
+            this.CompanyActorPathBuilder = companyActorPathBuilder;
+            this.ConfigBuilder = configBuilder;
         }
 
         // Old Fields
@@ -48,8 +59,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
             IsConnected = true;
             try
             {
-                IConnectionConfig connectionConfig = this.ConnectionConfigBuilder.Build();
-                this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, connectionConfig.Configuration);
+                Config actorSystemConfig = this.ConfigBuilder.Config();
+                this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, actorSystemConfig);
                 this.LocalActorSystem.ActorOf(this.RoomSimulatorActorPropsFactory.Props(), RoomActorName);
                 this.BridgeActor = this.LocalActorSystem.ActorOf(this.BridgeActorProps, "bridge");
             }

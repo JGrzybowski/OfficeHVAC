@@ -6,7 +6,5 @@ namespace OfficeHVAC.Actors
     public interface IConnectionConfig
     {
         ActorPath CompanyActorPath { get; }
-
-        Config Configuration { get; }
     }
 }

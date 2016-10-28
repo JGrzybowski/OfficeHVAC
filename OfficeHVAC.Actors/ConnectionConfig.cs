@@ -6,9 +6,8 @@ namespace OfficeHVAC.Actors
 {
     public class ConnectionConfig : IConnectionConfig
     {
-        public ConnectionConfig(Config configuration, ActorPath companyActorPath)
+        public ConnectionConfig(ActorPath companyActorPath)
         {
-            Configuration = configuration;
             CompanyActorPath = companyActorPath;
         }
 
@@ -32,7 +31,6 @@ namespace OfficeHVAC.Actors
         }
 
         public ActorPath CompanyActorPath { get; }
-        public Config Configuration { get; }
 
         public class Builder : BindableBase
         {

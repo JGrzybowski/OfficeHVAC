@@ -8,36 +8,38 @@ using OfficeHVAC.Factories.Propses;
 using Shouldly;
 using System.Threading.Tasks;
 using OfficeHVAC.Applications.RoomSimulator.Factories;
+using OfficeHVAC.Factories.ActorPaths;
+using OfficeHVAC.Factories.Configs;
 using Xunit;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
 {
     public class ShutdownSimulator : TestKit
     {
-        private ConnectionConfig.Builder connectionConfigFake;
         private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake;
+        private readonly IRemoteActorPathBuilder _remoteActorPathBuilderFake;
+        private readonly IConfigBuilder _configBuilderFake;
 
         public ShutdownSimulator()
         {
-            _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
-            _roomSimulatorActorPropsFactoryFake.Props().Returns(BlackHoleActor.Props);
-        }
+            var blackHole = ActorOf(BlackHoleActor.Props);
 
-        private void SetupFakes(Config hostingConfig, ActorPath companyActorPath)
-        {
-            var configStub = new ConnectionConfig(hostingConfig, companyActorPath);
-            connectionConfigFake = Substitute.For<ConnectionConfig.Builder>();
-            connectionConfigFake.Build().Returns(configStub);
+            _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
+            _roomSimulatorActorPropsFactoryFake.Props().Returns(EchoActor.Props(this,false));
+
+            _remoteActorPathBuilderFake = Substitute.For<IRemoteActorPathBuilder>();
+            _remoteActorPathBuilderFake.ActorPath().Returns(blackHole.Path);
+
+            _configBuilderFake = Substitute.For<IConfigBuilder>();
+            _configBuilderFake.Config().Returns(Config.Empty);
         }
 
         [Fact]
         public async Task cleans_up_viewModel()
         {
             //Arrange
-            SetupFakes(Config.Empty, TestActor.Path);
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake)
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _remoteActorPathBuilderFake, _configBuilderFake)
             {
-                ConnectionConfigBuilder = connectionConfigFake,
                 BridgeActorProps = BlackHoleActor.Props,
             };
             vm.RoomSimulatorActorPropsFactory.RoomName = "Room 101";
