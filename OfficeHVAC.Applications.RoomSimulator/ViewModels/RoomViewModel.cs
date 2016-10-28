@@ -34,8 +34,6 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
         public IActorRef BridgeActor { get; private set; }
         public Props BridgeActorProps { get; set; }
 
-        public ConnectionConfig.Builder ConnectionConfigBuilder { get; set; } = new ConnectionConfig.Builder();
-
         public string ActorSystemName { get; } = "OfficeHVAC";
 
         public ActorSystem LocalActorSystem { get; set; }
