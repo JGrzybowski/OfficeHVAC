@@ -27,9 +27,6 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
             _roomSimulatorActorPropsFactoryFake.Props().Returns(EchoActor.Props(this,false));
 
-            _remoteActorPathBuilderFake = Substitute.For<IRemoteActorPathBuilder>();
-            _remoteActorPathBuilderFake.ActorPath().Returns(blackHole.Path);
-
             _configBuilderFake = Substitute.For<IConfigBuilder>();
             _configBuilderFake.Config().Returns(Config.Empty);
         }
@@ -38,7 +35,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public async Task cleans_up_viewModel()
         {
             //Arrange
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _remoteActorPathBuilderFake, _configBuilderFake)
+            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _configBuilderFake)
             {
                 BridgeActorProps = BlackHoleActor.Props,
             };

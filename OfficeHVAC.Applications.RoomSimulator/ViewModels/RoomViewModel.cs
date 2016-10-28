@@ -1,13 +1,10 @@
 ﻿using Akka.Actor;
-using OfficeHVAC.Actors;
-using OfficeHVAC.Factories.Propses;
+using Akka.Configuration;
+using OfficeHVAC.Applications.RoomSimulator.Factories;
+using OfficeHVAC.Factories.Configs;
 using Prism.Mvvm;
 using System;
 using System.Threading.Tasks;
-using Akka.Configuration;
-using OfficeHVAC.Applications.RoomSimulator.Factories;
-using OfficeHVAC.Factories.ActorPaths;
-using OfficeHVAC.Factories.Configs;
 
 namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 {
@@ -18,15 +15,11 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 
         public IRoomSimulatorActorPropsFactory RoomSimulatorActorPropsFactory { get; }
 
-        public IRemoteActorPathBuilder CompanyActorPathBuilder { get; }
-
         public IConfigBuilder ConfigBuilder { get; }
 
-        public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, IRemoteActorPathBuilder companyActorPathBuilder,
-            IConfigBuilder configBuilder)
+        public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, IConfigBuilder configBuilder)
         {
             this.RoomSimulatorActorPropsFactory = roomSimulatorActorPropsFactory;
-            this.CompanyActorPathBuilder = companyActorPathBuilder;
             this.ConfigBuilder = configBuilder;
         }
 
