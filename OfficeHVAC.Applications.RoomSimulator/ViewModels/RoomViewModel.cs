@@ -1,5 +1,7 @@
 ﻿using Akka.Actor;
-using OfficeHVAC.Actors;
+using Akka.Configuration;
+using OfficeHVAC.Applications.RoomSimulator.Factories;
+using OfficeHVAC.Factories.Configs;
 using Prism.Mvvm;
 using System;
 using System.Threading.Tasks;
@@ -8,51 +10,42 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 {
     public class RoomViewModel : BindableBase
     {
-        public IActorRef RoomActor { get; private set; }
-        public Props RoomActorProps { get; set; }
+        // New fields 
+        public const string RoomActorName = "room";
 
+        public IRoomSimulatorActorPropsFactory RoomSimulatorActorPropsFactory { get; }
+
+        public IConfigBuilder ConfigBuilder { get; }
+
+        public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, IConfigBuilder configBuilder)
+        {
+            this.RoomSimulatorActorPropsFactory = roomSimulatorActorPropsFactory;
+            this.ConfigBuilder = configBuilder;
+        }
+
+        // Old Fields
         public IActorRef BridgeActor { get; private set; }
         public Props BridgeActorProps { get; set; }
 
-        public ConnectionConfig.Builder ConnectionConfigBuilder { get; set; } = new ConnectionConfig.Builder();
-
-        public string ActorSystemName { get; set; } = "OfficeHVAC";
+        public string ActorSystemName { get; } = "OfficeHVAC";
 
         public ActorSystem LocalActorSystem { get; set; }
-        
-        private float _temperature;
-        public float Temperature
-        {
-            get { return _temperature; }
-            set { SetProperty(ref _temperature, value); }
-        }
-
-        private string _roomName;
-        public string RoomName
-        {
-            get { return _roomName; }
-            set { SetProperty(ref _roomName, value); }
-        }
         
         private bool _isConnected;
         public bool IsConnected
         {
             get { return _isConnected; }
             private set { SetProperty(ref _isConnected, value); }
-        }
-
+        }     
 
         public void InitializeSimulator()
         {
             IsConnected = true;
             try
             {
-                if (string.IsNullOrWhiteSpace(this.RoomName))
-                    throw new ArgumentException();
-
-                IConnectionConfig connectionConfig = this.ConnectionConfigBuilder.Build();
-                this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, connectionConfig.Configuration);
-                this.RoomActor = this.LocalActorSystem.ActorOf(this.RoomActorProps, this.RoomName);
+                Config actorSystemConfig = this.ConfigBuilder.Config();
+                this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, actorSystemConfig);
+                this.LocalActorSystem.ActorOf(this.RoomSimulatorActorPropsFactory.Props(), RoomActorName);
                 this.BridgeActor = this.LocalActorSystem.ActorOf(this.BridgeActorProps, "bridge");
             }
             catch (Exception)
@@ -66,7 +59,6 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 
         public async Task ShutdownSimulator()
         {
-            this.RoomActor = null;
             this.BridgeActor = null;
             await this.LocalActorSystem.Terminate();
             this.LocalActorSystem = null;

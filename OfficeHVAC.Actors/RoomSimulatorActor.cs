@@ -7,19 +7,19 @@ namespace OfficeHVAC.Actors
 {
     public class RoomSimulatorActor : ReceiveActor
     {
-        private string RoomName { get; set; }
+        private string RoomName { get; }
 
-        private ITemperatureSimulator TemperatureSimulator { get; set; }
+        private ITemperatureSimulator TemperatureSimulator { get; }
 
-        private HashSet<IActorRef> Subscribers { get; set; } = new HashSet<IActorRef>();
+        private HashSet<IActorRef> Subscribers { get; } = new HashSet<IActorRef>();
 
-        private ActorPath comparnySupervisorActorPath { get; set; }
+        private ActorPath ComparnySupervisorActorPath { get; }
 
         public RoomSimulatorActor(string roomName, ITemperatureSimulator temperatureSimulator, ActorPath companySupervisorActorPath)
         {
             this.RoomName = roomName;
             this.TemperatureSimulator = temperatureSimulator;
-            this.comparnySupervisorActorPath = companySupervisorActorPath;
+            this.ComparnySupervisorActorPath = companySupervisorActorPath;
 
             this.Receive<SubscribeMessage>(message =>
             {
@@ -47,7 +47,7 @@ namespace OfficeHVAC.Actors
 
         protected override void PreStart()
         {
-            Context.System.ActorSelection(this.comparnySupervisorActorPath).Tell(new RoomAvaliabilityMessage(Self));
+            Context.System.ActorSelection(this.ComparnySupervisorActorPath).Tell(new RoomAvaliabilityMessage(Self));
         }
     }
 }

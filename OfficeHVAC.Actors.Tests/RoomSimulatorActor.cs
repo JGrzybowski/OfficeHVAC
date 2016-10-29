@@ -28,7 +28,7 @@ namespace OfficeHVAC.Actors.Tests
         [Fact]
         public void sends_avaliability_message_to_server()
         {
-            var simulatorProps = SimulatorActorProps(this.TestActor.Path);
+            var simulatorProps = SimulatorActorProps(TestActor.Path);
             var actor = ActorOf(simulatorProps);
             ExpectMsg<RoomAvaliabilityMessage>(msg => msg.RoomActor.ShouldBe(actor));
         }

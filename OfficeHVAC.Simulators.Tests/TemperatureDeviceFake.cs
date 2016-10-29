@@ -4,7 +4,7 @@ namespace OfficeHVAC.Simulators.Tests
 {
     public class TemperatureDeviceFake : ITemperatureDevice
     {
-        public bool IsTurnedOn => this.HeatingParameter != 0.0f;
+        public bool IsTurnedOn => HeatingParameter != 0.0f;
         
         public int MaxPower { get; set; }
 
@@ -14,7 +14,7 @@ namespace OfficeHVAC.Simulators.Tests
 
         public void TurnOff()
         {
-            this.HeatingParameter = 0;
+            HeatingParameter = 0;
         }
     }
 }

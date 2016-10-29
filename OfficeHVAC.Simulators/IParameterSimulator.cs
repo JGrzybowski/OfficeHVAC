@@ -7,6 +7,6 @@ namespace OfficeHVAC.Simulators
     public interface IParameterSimulator
     {
         IEnumerable<ITemperatureDevice> Devices { get; set; }
-        ITimeSource TimeSource { get; set; }
+        ITimeSource TimeSource { get; }
     }
 }
