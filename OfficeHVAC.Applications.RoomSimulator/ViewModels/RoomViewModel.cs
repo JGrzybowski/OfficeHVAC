@@ -23,6 +23,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
             get { return _temperature; }
             set { SetProperty(ref _temperature, value); }
         }
+        public IBridgeRoomActorPropsFactory BridgeRoomActorPropsFactory { get; }
+        public IActorRef BridgeActor { get; private set; }
 
         public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, IConfigBuilder configBuilder)
         {
@@ -30,10 +32,14 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
             this.ConfigBuilder = configBuilder;
         }
 
-        // Old Fields
-        public IActorRef BridgeActor { get; private set; }
-        public Props BridgeActorProps { get; set; }
+        public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, IConfigBuilder configBuilder, IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory)
+        {
+            this.RoomSimulatorActorPropsFactory = roomSimulatorActorPropsFactory;
+            this.ConfigBuilder = configBuilder;
+            this.BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
+        }
 
+        // Old Fields
         public string ActorSystemName { get; } = "OfficeHVAC";
 
         public ActorSystem LocalActorSystem { get; set; }
@@ -51,9 +57,10 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
             try
             {
                 Config actorSystemConfig = this.ConfigBuilder.Config();
+                var bridgeProps = this.BridgeRoomActorPropsFactory.Props();
+
                 this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, actorSystemConfig);
-                this.LocalActorSystem.ActorOf(this.RoomSimulatorActorPropsFactory.Props(), RoomActorName);
-                this.BridgeActor = this.LocalActorSystem.ActorOf(this.BridgeActorProps, "bridge");
+                this.BridgeActor = this.LocalActorSystem.ActorOf(bridgeProps, "bridge");
             }
             catch (Exception)
             {

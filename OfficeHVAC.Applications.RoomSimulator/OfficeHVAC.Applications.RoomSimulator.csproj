@@ -80,6 +80,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Actors\RoomBridgeActor.cs" />
+    <Compile Include="Factories\BridgeRoomActorPropsFactory.cs" />
+    <Compile Include="Factories\IBridgeRoomActorPropsFactory.cs" />
     <Compile Include="Factories\IRoomSimulatorActorPropsFactory.cs" />
     <Compile Include="Factories\RoomSimulatorActorPropsFactory.cs" />
     <Compile Include="ViewModels\RoomViewModel.cs" />

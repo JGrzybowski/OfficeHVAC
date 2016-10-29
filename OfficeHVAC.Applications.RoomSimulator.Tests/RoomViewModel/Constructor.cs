@@ -14,7 +14,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             //Arrange & Act
             var vm = new ViewModels.RoomViewModel(
                 Substitute.For<IRoomSimulatorActorPropsFactory>(), 
-                Substitute.For<IConfigBuilder>()
+                Substitute.For<IConfigBuilder>(),
+                Substitute.For<IBridgeRoomActorPropsFactory>()
             );
 
             //Assert
