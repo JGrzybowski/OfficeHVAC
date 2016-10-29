@@ -84,6 +84,7 @@
     <Compile Include="Factories\IBridgeRoomActorPropsFactory.cs" />
     <Compile Include="Factories\IRoomSimulatorActorPropsFactory.cs" />
     <Compile Include="Factories\RoomSimulatorActorPropsFactory.cs" />
+    <Compile Include="ViewModels\IRoomViewModel.cs" />
     <Compile Include="ViewModels\RoomViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

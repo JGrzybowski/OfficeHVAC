@@ -8,39 +8,41 @@ using System.Threading.Tasks;
 
 namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 {
-    public class RoomViewModel : BindableBase
+    public class RoomViewModel : BindableBase, IRoomViewModel
     {
-        // New fields 
+        //Constants 
         public const string RoomActorName = "room";
+        public string ActorSystemName { get; } = "OfficeHVAC";
 
+        // Dependencies
         public IConfigBuilder ConfigBuilder { get; }
+        public IBridgeRoomActorPropsFactory BridgeRoomActorPropsFactory { get; }
 
+        // Actor System fields
+        public IActorRef BridgeActor { get; private set; }
+        public ActorSystem LocalActorSystem { get; set; }
+
+        // Notifiable Properties 
         private float _temperature;
         public float Temperature
         {
             get { return _temperature; }
             set { SetProperty(ref _temperature, value); }
         }
-        public IBridgeRoomActorPropsFactory BridgeRoomActorPropsFactory { get; }
-        public IActorRef BridgeActor { get; private set; }
 
-        public RoomViewModel(IConfigBuilder configBuilder, IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory)
-        {
-            this.ConfigBuilder = configBuilder;
-            this.BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
-        }
-
-        // Old Fields
-        public string ActorSystemName { get; } = "OfficeHVAC";
-
-        public ActorSystem LocalActorSystem { get; set; }
-        
         private bool _isConnected;
         public bool IsConnected
         {
             get { return _isConnected; }
             private set { SetProperty(ref _isConnected, value); }
         }     
+
+        // Constructor
+        public RoomViewModel(IConfigBuilder configBuilder, IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory)
+        {
+            this.ConfigBuilder = configBuilder;
+            this.BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
+        }
 
         public void InitializeSimulator()
         {

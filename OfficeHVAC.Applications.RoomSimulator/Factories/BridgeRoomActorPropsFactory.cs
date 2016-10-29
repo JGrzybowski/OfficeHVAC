@@ -11,9 +11,9 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
     public class BridgeRoomActorPropsFactory: IBridgeRoomActorPropsFactory
     {
         public IRoomSimulatorActorPropsFactory RoomSimulatorActorPropsFactory { get; }
-        public RoomViewModel ViewModel { get; set; }
+        public IRoomViewModel ViewModel { get; }
 
-        public BridgeRoomActorPropsFactory(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, RoomViewModel viewModel)
+        public BridgeRoomActorPropsFactory(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, IRoomViewModel viewModel)
         {
             RoomSimulatorActorPropsFactory = roomSimulatorActorPropsFactory;
             ViewModel = viewModel;
