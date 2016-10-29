@@ -57,6 +57,8 @@
     <Compile Include="RoomClosedMessage.cs" />
     <Compile Include="RoomStatusMessage.cs" />
     <Compile Include="RoomStatusRequest.cs" />
+    <Compile Include="ChangeTemperature.cs" />
+    <Compile Include="SetTemperature.cs" />
     <Compile Include="SubscribeMessage.cs" />
     <Compile Include="UnsubscribeMessage.cs" />
   </ItemGroup>

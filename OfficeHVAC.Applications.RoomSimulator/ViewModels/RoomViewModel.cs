@@ -17,6 +17,13 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 
         public IConfigBuilder ConfigBuilder { get; }
 
+        private float _temperature;
+        public float Temperature
+        {
+            get { return _temperature; }
+            set { SetProperty(ref _temperature, value); }
+        }
+
         public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, IConfigBuilder configBuilder)
         {
             this.RoomSimulatorActorPropsFactory = roomSimulatorActorPropsFactory;
