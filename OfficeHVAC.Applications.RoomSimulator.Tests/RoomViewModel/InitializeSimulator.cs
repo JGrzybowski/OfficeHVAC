@@ -1,28 +1,22 @@
-﻿using Akka.Actor;
-using Akka.Configuration;
+﻿using Akka.Configuration;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
-using OfficeHVAC.Actors;
 using OfficeHVAC.Applications.RoomSimulator.Factories;
+using OfficeHVAC.Factories.Configs;
 using Shouldly;
 using System;
-using OfficeHVAC.Factories.ActorPaths;
-using OfficeHVAC.Factories.Configs;
 using Xunit;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
 {
     public class InitializeSimulator : TestKit
     {
-        private readonly IActorRef blackHole;
         private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake;
         private readonly IConfigBuilder _configBuilderFake;
 
         public InitializeSimulator()
         {
-            blackHole = ActorOf(BlackHoleActor.Props);
-
             _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
             _roomSimulatorActorPropsFactoryFake.Props().Returns(BlackHoleActor.Props);
 

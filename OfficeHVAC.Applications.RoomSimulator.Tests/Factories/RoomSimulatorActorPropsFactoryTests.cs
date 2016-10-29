@@ -1,6 +1,4 @@
-﻿using System;
-using Akka.Actor;
-using Akka.Configuration;
+﻿using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
@@ -10,6 +8,7 @@ using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Simulators.Temperature;
 using OfficeHVAC.Simulators;
 using Shouldly;
+using System;
 using Xunit;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories

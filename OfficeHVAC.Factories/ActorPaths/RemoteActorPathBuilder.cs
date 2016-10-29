@@ -1,48 +1,47 @@
-﻿using System;
-using Akka.Actor;
+﻿using Akka.Actor;
 using Prism.Mvvm;
 
 namespace OfficeHVAC.Factories.ActorPaths
 {
     public class RemoteActorPathBuilder : BindableBase, IRemoteActorPathBuilder
     {
-        private string serverAddress;
+        private string _serverAddress;
         public string ServerAddress
         {
-            get { return serverAddress; }
-            set { SetProperty(ref serverAddress, value); }
+            get { return _serverAddress; }
+            set { SetProperty(ref _serverAddress, value); }
         }
 
-        private int? serverPort;
+        private int? _serverPort;
         public int? ServerPort
         {
-            get { return serverPort; }
-            set { SetProperty(ref serverPort, value); }
+            get { return _serverPort; }
+            set { SetProperty(ref _serverPort, value); }
         }
 
-        private string companyActorName;
+        private string _companyActorName;
         public string CompanyActorName
         {
-            get { return companyActorName; }
-            set { SetProperty(ref companyActorName, value); }
+            get { return _companyActorName; }
+            set { SetProperty(ref _companyActorName, value); }
         }
 
         public virtual ActorPath ActorPath()
         {
-            serverAddress = serverAddress?.Trim();
-            bool isLocalAddress = string.IsNullOrWhiteSpace(serverAddress) ||
-                                  serverAddress.Equals("localhost") ||
-                                  serverAddress.Equals("127.0.0.1");
+            ServerAddress = ServerAddress?.Trim();
+            bool isLocalAddress = string.IsNullOrWhiteSpace(ServerAddress) ||
+                                  ServerAddress.Equals("localhost") ||
+                                  ServerAddress.Equals("127.0.0.1");
             return new ChildActorPath(
                 new RootActorPath(
                     new Address(
                         protocol: isLocalAddress ? "akka" : "akka.tcp",
                         system: "HVACsystem",
-                        host: serverAddress,
-                        port: serverPort
+                        host: ServerAddress,
+                        port: ServerPort
                     )
                 ),
-                $"user/{companyActorName}", 0);
+                $"user/{CompanyActorName}", 0);
         }
     }
 }

@@ -31,13 +31,6 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 
         public ActorSystem LocalActorSystem { get; set; }
         
-        private float _temperature;
-        public float Temperature
-        {
-            get { return _temperature; }
-            set { SetProperty(ref _temperature, value); }
-        }
-
         private bool _isConnected;
         public bool IsConnected
         {

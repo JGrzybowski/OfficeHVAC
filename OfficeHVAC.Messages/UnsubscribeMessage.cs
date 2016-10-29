@@ -8,7 +8,7 @@ namespace OfficeHVAC.Messages
 
         public UnsubscribeMessage(IActorRef subscriber)
         {
-            this.Subscriber = subscriber;
+            Subscriber = subscriber;
         }
     }
 }

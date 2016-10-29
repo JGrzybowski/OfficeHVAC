@@ -1,8 +1,6 @@
 ﻿using NSubstitute;
 using OfficeHVAC.Applications.RoomSimulator.Factories;
-using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Configs;
-using OfficeHVAC.Factories.Propses;
 using Shouldly;
 using Xunit;
 

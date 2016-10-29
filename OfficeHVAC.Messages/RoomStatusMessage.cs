@@ -8,8 +8,8 @@
 
         public RoomStatusMessage(string roomName, float temperature)
         {
-            this.RoomName = roomName;
-            this.Temperature = temperature;
+            RoomName = roomName;
+            Temperature = temperature;
         }
     }
 }

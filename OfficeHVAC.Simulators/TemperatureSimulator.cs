@@ -1,27 +1,28 @@
-﻿using System;
+﻿using OfficeHVAC.Models;
+using OfficeHVAC.Models.Devices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OfficeHVAC.Models;
-using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Simulators
 {
     public class TemperatureSimulator : ITemperatureSimulator
     {
         private float lastTemperature;
-        private readonly DateTime lastTime;
+        private DateTime lastTime;
 
         private const int WattsToChangeOneDegreeInOneHour = 20;
 
         private float CalculateChange()
         {
-            var hoursSinceLastUpdate = (this.TimeSource.Now - this.lastTime).TotalHours;
+            var now = this.TimeSource.Now;
+            var hoursSinceLastUpdate = (now - this.lastTime).TotalHours;
+            this.lastTime = now;
             return (float)(this.Devices
                             .Sum(device => device.MaxPower * device.HeatingParameter)
                             / WattsToChangeOneDegreeInOneHour
                             * hoursSinceLastUpdate);
+
         }
 
         public TemperatureSimulator(ITimeSource timeSource, float initialTemperature)
@@ -32,7 +33,7 @@ namespace OfficeHVAC.Simulators
         }
 
         public IEnumerable<ITemperatureDevice> Devices { get; set; } = new List<ITemperatureDevice>();
-        public ITimeSource TimeSource { get; set; }
+        public ITimeSource TimeSource { get; }
         public float Temperature 
         {
             get

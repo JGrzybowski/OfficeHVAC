@@ -1,15 +1,11 @@
-﻿using Akka.Actor;
-using Akka.Configuration;
+﻿using Akka.Configuration;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
-using OfficeHVAC.Actors;
-using OfficeHVAC.Factories.Propses;
+using OfficeHVAC.Applications.RoomSimulator.Factories;
+using OfficeHVAC.Factories.Configs;
 using Shouldly;
 using System.Threading.Tasks;
-using OfficeHVAC.Applications.RoomSimulator.Factories;
-using OfficeHVAC.Factories.ActorPaths;
-using OfficeHVAC.Factories.Configs;
 using Xunit;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
@@ -17,7 +13,6 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
     public class ShutdownSimulator : TestKit
     {
         private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake;
-        private readonly IRemoteActorPathBuilder _remoteActorPathBuilderFake;
         private readonly IConfigBuilder _configBuilderFake;
 
         public ShutdownSimulator()

@@ -1,7 +1,6 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Actors;
 using OfficeHVAC.Factories.ActorPaths;
-using OfficeHVAC.Factories.Propses;
 using OfficeHVAC.Factories.Simulators.Temperature;
 using Prism.Mvvm;
 using System;
@@ -10,6 +9,10 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
 {
     public class RoomSimulatorActorPropsFactory : BindableBase, IRoomSimulatorActorPropsFactory
     {
+        public IActorPathBuilder CompanyPathBuilder { get; }
+
+        public ITemperatureSimulatorFactory TemperatureSimulatorFactory { get; }
+
         public RoomSimulatorActorPropsFactory(IActorPathBuilder companyPathBuilder, ITemperatureSimulatorFactory temperatureSimulatorFactory)
         {
             this.CompanyPathBuilder = companyPathBuilder;
@@ -25,8 +28,6 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
             set { SetProperty(ref _roomName, value); }
         }
 
-        public IActorPathBuilder CompanyPathBuilder { get; }
-        public ITemperatureSimulatorFactory TemperatureSimulatorFactory { get; }
 
         public Props Props()
         {
