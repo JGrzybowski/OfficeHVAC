@@ -12,9 +12,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public void creates_disconnected_viewModel()
         {
             //Arrange & Act
-            var vm = new ViewModels.RoomViewModel(
-                Substitute.For<IRoomSimulatorActorPropsFactory>(), 
-                Substitute.For<IConfigBuilder>(),
+            var vm = new ViewModels.RoomViewModel(Substitute.For<IConfigBuilder>(),
                 Substitute.For<IBridgeRoomActorPropsFactory>()
             );
 

@@ -32,7 +32,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public void sets_is_running_property_to_true()
         {
             //Arrange
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _configBuilderFake, _bridgeRoomActorPropsFactoryFake);
+            var vm = new ViewModels.RoomViewModel(_configBuilderFake, _bridgeRoomActorPropsFactoryFake);
 
             //Act
             vm.InitializeSimulator();
@@ -48,7 +48,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
             this._configBuilderFake
                 .WhenForAnyArgs(builder => builder.Config())
                 .Do(x => { throw new ArgumentException(); });
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _configBuilderFake, _bridgeRoomActorPropsFactoryFake);
+            var vm = new ViewModels.RoomViewModel(_configBuilderFake, _bridgeRoomActorPropsFactoryFake);
 
             //Act
             vm.InitializeSimulator();
@@ -62,7 +62,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public void creates_bridge_actor()
         {
             //Arrange
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _configBuilderFake, _bridgeRoomActorPropsFactoryFake);
+            var vm = new ViewModels.RoomViewModel(_configBuilderFake, _bridgeRoomActorPropsFactoryFake);
 
             //Act
             vm.InitializeSimulator();
@@ -88,7 +88,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
                     }
                 }
             }"));
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _configBuilderFake, _bridgeRoomActorPropsFactoryFake);
+            var vm = new ViewModels.RoomViewModel(_configBuilderFake, _bridgeRoomActorPropsFactoryFake);
 
             //Act
             vm.InitializeSimulator();

@@ -13,8 +13,6 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
         // New fields 
         public const string RoomActorName = "room";
 
-        public IRoomSimulatorActorPropsFactory RoomSimulatorActorPropsFactory { get; }
-
         public IConfigBuilder ConfigBuilder { get; }
 
         private float _temperature;
@@ -26,15 +24,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
         public IBridgeRoomActorPropsFactory BridgeRoomActorPropsFactory { get; }
         public IActorRef BridgeActor { get; private set; }
 
-        public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, IConfigBuilder configBuilder)
+        public RoomViewModel(IConfigBuilder configBuilder, IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory)
         {
-            this.RoomSimulatorActorPropsFactory = roomSimulatorActorPropsFactory;
-            this.ConfigBuilder = configBuilder;
-        }
-
-        public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, IConfigBuilder configBuilder, IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory)
-        {
-            this.RoomSimulatorActorPropsFactory = roomSimulatorActorPropsFactory;
             this.ConfigBuilder = configBuilder;
             this.BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
         }

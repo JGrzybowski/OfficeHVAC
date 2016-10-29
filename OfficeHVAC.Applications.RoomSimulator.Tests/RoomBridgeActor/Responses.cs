@@ -16,8 +16,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
 
         private readonly ViewModels.RoomViewModel _viewModel = 
             Substitute.For<ViewModels.RoomViewModel>(
-                Substitute.For<IRoomSimulatorActorPropsFactory>(), 
-                Substitute.For<IConfigBuilder>()
+                Substitute.For<IConfigBuilder>(),
+                Substitute.For<IBridgeRoomActorPropsFactory>()
             );
 
         private readonly Props _echoActorProps;
