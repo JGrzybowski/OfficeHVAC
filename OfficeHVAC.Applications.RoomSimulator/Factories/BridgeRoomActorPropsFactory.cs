@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Akka.Actor;
+using OfficeHVAC.Applications.RoomSimulator.Actors;
 using OfficeHVAC.Applications.RoomSimulator.ViewModels;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Factories
@@ -21,7 +22,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
 
         public Props Props()
         {
-            throw new NotImplementedException();
+            return Akka.Actor.Props.Create<RoomBridgeActor>(() => new RoomBridgeActor(ViewModel, RoomSimulatorActorPropsFactory.Props()));
         }
     }
 }

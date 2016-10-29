@@ -5,14 +5,14 @@ using OfficeHVAC.Messages;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Actors
 {
-    public class RoomBridgeActor : BridgeActor<RoomViewModel>
+    public class RoomBridgeActor : BridgeActor<IRoomViewModel>
     {
         public const string RoomActorName = "room";
 
         private readonly Props _roomActorProps;
         private IActorRef roomActorRef;
         
-        public RoomBridgeActor(RoomViewModel viewModel, Props roomActorProps) : base(viewModel)
+        public RoomBridgeActor(IRoomViewModel viewModel, Props roomActorProps) : base(viewModel)
         {
             this._roomActorProps = roomActorProps;
             this.roomActorRef = Context.ActorOf(_roomActorProps, RoomActorName);

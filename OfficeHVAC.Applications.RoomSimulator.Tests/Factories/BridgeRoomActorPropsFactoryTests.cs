@@ -1,4 +1,5 @@
-﻿using Akka.TestKit.Xunit2;
+﻿using Akka.TestKit.TestActors;
+using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Applications.RoomSimulator.Factories;
 using Shouldly;
@@ -8,8 +9,16 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories
 {
     public class BridgeRoomActorPropsFactoryTests :TestKit
     {
-        private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
-        private readonly ViewModels.IRoomViewModel _viewModelFake = Substitute.For<ViewModels.IRoomViewModel>();
+        private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake;
+        private readonly ViewModels.IRoomViewModel _viewModelFake;
+
+        public BridgeRoomActorPropsFactoryTests()
+        {
+            _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
+            _roomSimulatorActorPropsFactoryFake.Props().Returns(BlackHoleActor.Props);
+
+            _viewModelFake = Substitute.For<ViewModels.IRoomViewModel>();
+        }
 
         [Fact]
         public void uses_RoomActorPropsFactory()
