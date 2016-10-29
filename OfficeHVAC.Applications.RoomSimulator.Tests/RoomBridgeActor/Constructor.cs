@@ -1,4 +1,5 @@
-﻿using Akka.Actor;
+﻿using System;
+using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
@@ -16,11 +17,23 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
                 Substitute.For<IConfigBuilder>()
             );
 
-        private readonly IActorRef _echoActor;
+        private readonly Props _echoActorProps;
 
         public Constructor()
         {
-            _echoActor = ActorOf(EchoActor.Props(this, false));
+            _echoActorProps = EchoActor.Props(this, false);
+        }
+        
+        [Fact]
+        public void creates_room_actor()
+        {
+            //Arrange & Act
+            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps));
+
+            //Assert
+            var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
+            roomActor.Tell("Hello");
+            ExpectMsg<string>();
         }
     }
 }
