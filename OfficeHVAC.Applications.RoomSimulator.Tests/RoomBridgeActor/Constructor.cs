@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Applications.RoomSimulator.Factories;
 using OfficeHVAC.Factories.Configs;
+using Shouldly;
 using Xunit;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
@@ -28,12 +31,13 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
         public void creates_room_actor()
         {
             //Arrange & Act
-            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps));
+            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
+            Thread.Sleep(500);
 
             //Assert
-            var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
+            var roomActor = Sys.ActorSelection(bridge.Path.Child(Actors.RoomBridgeActor.RoomActorName));
             roomActor.Tell("Hello");
-            ExpectMsg<string>();
+            ExpectMsg<string>(msg => msg.ShouldBe("Hello"));
         }
     }
 }

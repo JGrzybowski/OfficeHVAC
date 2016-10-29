@@ -1,4 +1,5 @@
-﻿using Akka.Actor;
+﻿using System.Threading;
+using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
@@ -30,7 +31,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
         public void forwards_SetTemperature_message_to_RoomActor()
         {
             //Arrange
-            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel,_echoActorProps));
+            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel,_echoActorProps), "bridge");
             var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
 
             //Act
@@ -50,7 +51,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
         public void forwards_ChangeTemperature_message_to_RoomActor(float deltaT)
         {
             //Arrange
-            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps));
+            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
             var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
 
             //Act
@@ -69,14 +70,15 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
         public void updates_ViewModel_Temperature_when_recieved_RoomStatusMessage()
         {
             //Arrange
-            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps));
+            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
             var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
 
             //Act
             bridge.Tell(new RoomStatusMessage("Room 101", 26f));
 
             //Assert
-            _viewModel.Temperature.ShouldBe(26f);
+            Thread.Sleep(1000);
+            _viewModel.Received().Temperature = 26f;
         }
     }
 }
