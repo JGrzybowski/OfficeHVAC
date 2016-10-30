@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Akka.Actor;
+﻿using Akka.Actor;
 using OfficeHVAC.Applications.RoomSimulator.Actors;
 using OfficeHVAC.Applications.RoomSimulator.ViewModels;
 
@@ -22,7 +17,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
 
         public Props Props()
         {
-            return Akka.Actor.Props.Create<RoomBridgeActor>(() => new RoomBridgeActor(ViewModel, RoomSimulatorActorPropsFactory.Props()));
+            return Akka.Actor.Props.Create(() => new RoomBridgeActor(ViewModel, RoomSimulatorActorPropsFactory.Props()));
         }
     }
 }

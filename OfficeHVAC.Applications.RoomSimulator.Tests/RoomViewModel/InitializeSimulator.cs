@@ -12,15 +12,11 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
 {
     public class InitializeSimulator : TestKit
     {
-        private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake;
         private readonly IConfigBuilder _configBuilderFake;
         private readonly IBridgeRoomActorPropsFactory _bridgeRoomActorPropsFactoryFake;
 
         public InitializeSimulator()
         {
-            _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
-            _roomSimulatorActorPropsFactoryFake.Props().Returns(BlackHoleActor.Props);
-
             _configBuilderFake = Substitute.For<IConfigBuilder>();
             _configBuilderFake.Config().Returns(Config.Empty);
 
@@ -45,7 +41,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public void stops_initialization_if_exception_is_thrown()
         {
             //Arrange
-            this._configBuilderFake
+            _configBuilderFake
                 .WhenForAnyArgs(builder => builder.Config())
                 .Do(x => { throw new ArgumentException(); });
             var vm = new ViewModels.RoomViewModel(_configBuilderFake, _bridgeRoomActorPropsFactoryFake);

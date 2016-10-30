@@ -8,7 +8,7 @@ namespace OfficeHVAC.Actors
 
         protected BridgeActor(TViewModel viewModel)
         {
-            this.ViewModel = viewModel;
+            ViewModel = viewModel;
         }
     }
 }

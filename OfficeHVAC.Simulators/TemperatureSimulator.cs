@@ -8,8 +8,8 @@ namespace OfficeHVAC.Simulators
 {
     public class TemperatureSimulator : ITemperatureSimulator
     {
-        private float lastTemperature;
-        private DateTime lastTime;
+        private float lastTemperature { get; set; }
+        private DateTime lastTime { get; set; }
 
         private const int WattsToChangeOneDegreeInOneHour = 20;
 

@@ -15,8 +15,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
 
         public RoomSimulatorActorPropsFactory(IActorPathBuilder companyPathBuilder, ITemperatureSimulatorFactory temperatureSimulatorFactory)
         {
-            this.CompanyPathBuilder = companyPathBuilder;
-            this.TemperatureSimulatorFactory = temperatureSimulatorFactory;
+            CompanyPathBuilder = companyPathBuilder;
+            TemperatureSimulatorFactory = temperatureSimulatorFactory;
         }
 
         public float Temperature { get; set; }
@@ -31,13 +31,13 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
 
         public Props Props()
         {
-            if (string.IsNullOrWhiteSpace(this.RoomName))
+            if (string.IsNullOrWhiteSpace(RoomName))
                 throw new ArgumentException("Room name cannot be empty.", nameof(RoomName));
 
             return Akka.Actor.Props.Create(() => new RoomSimulatorActor(
-                this.RoomName,
-                this.TemperatureSimulatorFactory.TemperatureSimulator(),
-                this.CompanyPathBuilder.ActorPath()
+                RoomName,
+                TemperatureSimulatorFactory.TemperatureSimulator(),
+                CompanyPathBuilder.ActorPath()
             ));
         }
     }

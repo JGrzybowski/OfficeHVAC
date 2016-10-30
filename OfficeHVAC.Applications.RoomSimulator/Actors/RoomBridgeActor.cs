@@ -10,18 +10,16 @@ namespace OfficeHVAC.Applications.RoomSimulator.Actors
         public const string RoomActorName = "room";
 
         private readonly Props _roomActorProps;
-        private IActorRef roomActorRef;
+        private IActorRef _roomActorRef;
         
         public RoomBridgeActor(IRoomViewModel viewModel, Props roomActorProps) : base(viewModel)
         {
-            this._roomActorProps = roomActorProps;
-            this.roomActorRef = Context.ActorOf(_roomActorProps, RoomActorName);
+            _roomActorProps = roomActorProps;
+            _roomActorRef = Context.ActorOf(_roomActorProps, RoomActorName);
             
-            Receive<SetTemperature>(msg => roomActorRef.Tell(msg));
-            Receive<ChangeTemperature>(msg => roomActorRef.Tell(msg));
+            Receive<SetTemperature>(msg => _roomActorRef.Tell(msg));
+            Receive<ChangeTemperature>(msg => _roomActorRef.Tell(msg));
             Receive<RoomStatusMessage>(msg => ViewModel.Temperature = msg.Temperature);
         }
-
-
     }
 }

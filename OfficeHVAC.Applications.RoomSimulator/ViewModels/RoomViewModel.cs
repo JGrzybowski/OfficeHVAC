@@ -11,7 +11,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
     public class RoomViewModel : BindableBase, IRoomViewModel
     {
         //Constants 
-        public const string RoomActorName = "room";
+        public const string BridgeActorName = "bridge";
         public string ActorSystemName { get; } = "OfficeHVAC";
 
         // Dependencies
@@ -53,14 +53,14 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
                 var bridgeProps = this.BridgeRoomActorPropsFactory.Props();
 
                 this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, actorSystemConfig);
-                this.BridgeActor = this.LocalActorSystem.ActorOf(bridgeProps, "bridge");
+                this.BridgeActor = this.LocalActorSystem.ActorOf(bridgeProps, BridgeActorName);
             }
             catch (Exception)
             {
                 // TODO Log exception
-                LocalActorSystem?.Terminate();
-                IsConnected = false;
-                LocalActorSystem = null;
+                this.LocalActorSystem?.Terminate();
+                this.IsConnected = false;
+                this.LocalActorSystem = null;
             }
         }
 

@@ -15,25 +15,21 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories
 {
     public class RoomSimulatorActorPropsFactoryTests : TestKit
     {
-        // Actor Fakes
-        private readonly IActorRef _blackHoleActor;
-        // Factories Fakes
         private readonly IActorPathBuilder _pathBuilderFake;
         private readonly ITemperatureSimulatorFactory _temperatureSimulatorFactoryFake;
-        private readonly ITemperatureSimulator _temperatureSimulatorFake;
 
         public RoomSimulatorActorPropsFactoryTests()
         {
-            _blackHoleActor = ActorOfAsTestActorRef<BlackHoleActor>(BlackHoleActor.Props);
+            IActorRef blackHoleActor = ActorOfAsTestActorRef<BlackHoleActor>(BlackHoleActor.Props);
 
             _pathBuilderFake = Substitute.For<IActorPathBuilder>();
-            _pathBuilderFake.ActorPath().Returns(_blackHoleActor.Path);
+            _pathBuilderFake.ActorPath().Returns(blackHoleActor.Path);
 
-            _temperatureSimulatorFake = Substitute.For<ITemperatureSimulator>();
-            _temperatureSimulatorFake.Temperature.Returns(28f);
+            ITemperatureSimulator temperatureSimulatorFake = Substitute.For<ITemperatureSimulator>();
+            temperatureSimulatorFake.Temperature.Returns(28f);
 
             _temperatureSimulatorFactoryFake = Substitute.For<ITemperatureSimulatorFactory>();
-            _temperatureSimulatorFactoryFake.TemperatureSimulator().Returns(_temperatureSimulatorFake);
+            _temperatureSimulatorFactoryFake.TemperatureSimulator().Returns(temperatureSimulatorFake);
         }
         
         [Fact]
