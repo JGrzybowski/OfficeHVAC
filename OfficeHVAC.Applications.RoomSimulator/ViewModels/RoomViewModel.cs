@@ -8,29 +8,28 @@ using System.Threading.Tasks;
 
 namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 {
-    public class RoomViewModel : BindableBase
+    public class RoomViewModel : BindableBase, IRoomViewModel
     {
-        // New fields 
-        public const string RoomActorName = "room";
-
-        public IRoomSimulatorActorPropsFactory RoomSimulatorActorPropsFactory { get; }
-
-        public IConfigBuilder ConfigBuilder { get; }
-
-        public RoomViewModel(IRoomSimulatorActorPropsFactory roomSimulatorActorPropsFactory, IConfigBuilder configBuilder)
-        {
-            this.RoomSimulatorActorPropsFactory = roomSimulatorActorPropsFactory;
-            this.ConfigBuilder = configBuilder;
-        }
-
-        // Old Fields
-        public IActorRef BridgeActor { get; private set; }
-        public Props BridgeActorProps { get; set; }
-
+        //Constants 
+        public const string BridgeActorName = "bridge";
         public string ActorSystemName { get; } = "OfficeHVAC";
 
+        // Dependencies
+        public IConfigBuilder ConfigBuilder { get; }
+        public IBridgeRoomActorPropsFactory BridgeRoomActorPropsFactory { get; }
+
+        // Actor System fields
+        public IActorRef BridgeActor { get; private set; }
         public ActorSystem LocalActorSystem { get; set; }
-        
+
+        // Notifiable Properties 
+        private float _temperature;
+        public float Temperature
+        {
+            get { return _temperature; }
+            set { SetProperty(ref _temperature, value); }
+        }
+
         private bool _isConnected;
         public bool IsConnected
         {
@@ -38,22 +37,30 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
             private set { SetProperty(ref _isConnected, value); }
         }     
 
+        // Constructor
+        public RoomViewModel(IConfigBuilder configBuilder, IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory)
+        {
+            this.ConfigBuilder = configBuilder;
+            this.BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
+        }
+
         public void InitializeSimulator()
         {
             IsConnected = true;
             try
             {
                 Config actorSystemConfig = this.ConfigBuilder.Config();
+                var bridgeProps = this.BridgeRoomActorPropsFactory.Props();
+
                 this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, actorSystemConfig);
-                this.LocalActorSystem.ActorOf(this.RoomSimulatorActorPropsFactory.Props(), RoomActorName);
-                this.BridgeActor = this.LocalActorSystem.ActorOf(this.BridgeActorProps, "bridge");
+                this.BridgeActor = this.LocalActorSystem.ActorOf(bridgeProps, BridgeActorName);
             }
             catch (Exception)
             {
                 // TODO Log exception
-                LocalActorSystem?.Terminate();
-                IsConnected = false;
-                LocalActorSystem = null;
+                this.LocalActorSystem?.Terminate();
+                this.IsConnected = false;
+                this.LocalActorSystem = null;
             }
         }
 

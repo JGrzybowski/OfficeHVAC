@@ -5,10 +5,11 @@ namespace OfficeHVAC.Simulators.Tests
 {
     public class TimeSourceFake : ITimeSource
     {
+        public DateTime Now { get; set; }
+
         public TimeSourceFake(DateTime dateTime)
         {
-            this.Now = dateTime;
+            Now = dateTime;
         }
-        public DateTime Now { get; set; }
     }
 }

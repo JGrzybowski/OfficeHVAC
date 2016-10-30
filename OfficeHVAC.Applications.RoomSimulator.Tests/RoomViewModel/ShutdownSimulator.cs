@@ -14,27 +14,25 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
     {
         private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake;
         private readonly IConfigBuilder _configBuilderFake;
+        private readonly IBridgeRoomActorPropsFactory _bridgeRoomActorPropsFactoryFake;
 
         public ShutdownSimulator()
         {
-            var blackHole = ActorOf(BlackHoleActor.Props);
-
             _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
             _roomSimulatorActorPropsFactoryFake.Props().Returns(EchoActor.Props(this,false));
 
             _configBuilderFake = Substitute.For<IConfigBuilder>();
             _configBuilderFake.Config().Returns(Config.Empty);
+
+            _bridgeRoomActorPropsFactoryFake = Substitute.For<IBridgeRoomActorPropsFactory>();
+            _bridgeRoomActorPropsFactoryFake.Props().Returns(BlackHoleActor.Props);
         }
 
         [Fact]
         public async Task cleans_up_viewModel()
         {
             //Arrange
-            var vm = new ViewModels.RoomViewModel(_roomSimulatorActorPropsFactoryFake, _configBuilderFake)
-            {
-                BridgeActorProps = BlackHoleActor.Props,
-            };
-            vm.RoomSimulatorActorPropsFactory.RoomName = "Room 101";
+            var vm = new ViewModels.RoomViewModel(_configBuilderFake, _bridgeRoomActorPropsFactoryFake);
             vm.InitializeSimulator();
             vm.IsConnected.ShouldBe(true);
 
