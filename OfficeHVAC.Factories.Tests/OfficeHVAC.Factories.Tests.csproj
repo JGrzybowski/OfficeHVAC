@@ -41,6 +41,9 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.10.0.0\lib\net45\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="Prism, Version=6.2.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.2.0\lib\net45\Prism.dll</HintPath>
       <Private>True</Private>
@@ -82,6 +85,7 @@
     <Compile Include="ActorPaths\RemoteActor.cs" />
     <Compile Include="Configs\Remote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Simulators\Temperature\TemperatureSimulatorFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -94,6 +98,14 @@
     <ProjectReference Include="..\OfficeHVAC.Factories\OfficeHVAC.Factories.csproj">
       <Project>{F678EE5A-B0C5-4314-AF14-EED628C9F630}</Project>
       <Name>OfficeHVAC.Factories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OfficeHVAC.Models\OfficeHVAC.Models.csproj">
+      <Project>{584598C9-E1CD-4592-9A88-24F34D23D282}</Project>
+      <Name>OfficeHVAC.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OfficeHVAC.Simulators\OfficeHVAC.Simulators.csproj">
+      <Project>{0B83EBD2-2C92-4B9B-B1CE-45C96F6C453B}</Project>
+      <Name>OfficeHVAC.Simulators</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
