@@ -5,6 +5,13 @@ namespace OfficeHVAC.Factories.ActorPaths
 {
     public class RemoteActorPathBuilder : BindableBase, IRemoteActorPathBuilder
     {
+        private string _systemName = "HVACsystem";
+        public string SystemName
+        {
+            get { return _systemName; }
+            set { SetProperty(ref _systemName, value); }
+        }
+
         private string _serverAddress;
         public string ServerAddress
         {
@@ -29,14 +36,12 @@ namespace OfficeHVAC.Factories.ActorPaths
         public virtual ActorPath ActorPath()
         {
             ServerAddress = ServerAddress?.Trim();
-            bool isLocalAddress = string.IsNullOrWhiteSpace(ServerAddress) ||
-                                  ServerAddress.Equals("localhost") ||
-                                  ServerAddress.Equals("127.0.0.1");
+            
             return new ChildActorPath(
                 new RootActorPath(
                     new Address(
-                        protocol: isLocalAddress ? "akka" : "akka.tcp",
-                        system: "HVACsystem",
+                        protocol: "akka.tcp",
+                        system: SystemName,
                         host: ServerAddress,
                         port: ServerPort
                     )
