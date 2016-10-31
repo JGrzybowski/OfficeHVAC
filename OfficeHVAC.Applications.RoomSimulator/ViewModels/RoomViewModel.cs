@@ -42,6 +42,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
         {
             this.ConfigBuilder = configBuilder;
             this.BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
+            this.BridgeRoomActorPropsFactory.ViewModel = this;
         }
 
         public void InitializeSimulator()
@@ -51,7 +52,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
             {
                 Config actorSystemConfig = this.ConfigBuilder.Config();
                 var bridgeProps = this.BridgeRoomActorPropsFactory.Props();
-
+                
                 this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, actorSystemConfig);
                 this.BridgeActor = this.LocalActorSystem.ActorOf(bridgeProps, BridgeActorName);
             }

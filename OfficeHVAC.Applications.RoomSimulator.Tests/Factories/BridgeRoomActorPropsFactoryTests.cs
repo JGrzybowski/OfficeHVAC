@@ -10,21 +10,18 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories
     public class BridgeRoomActorPropsFactoryTests :TestKit
     {
         private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake;
-        private readonly ViewModels.IRoomViewModel _viewModelFake;
 
         public BridgeRoomActorPropsFactoryTests()
         {
             _roomSimulatorActorPropsFactoryFake = Substitute.For<IRoomSimulatorActorPropsFactory>();
             _roomSimulatorActorPropsFactoryFake.Props().Returns(BlackHoleActor.Props);
-
-            _viewModelFake = Substitute.For<ViewModels.IRoomViewModel>();
         }
 
         [Fact]
         public void uses_RoomActorPropsFactory()
         {
             //Arrange
-            var factory = new BridgeRoomActorPropsFactory(_roomSimulatorActorPropsFactoryFake, _viewModelFake);
+            var factory = new BridgeRoomActorPropsFactory(_roomSimulatorActorPropsFactoryFake);
 
             //Act
             var bridgeProps = factory.Props();
@@ -38,7 +35,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories
         public void returns_RoomBridgeActor_props()
         {
             //Arrange
-            var factory = new BridgeRoomActorPropsFactory(_roomSimulatorActorPropsFactoryFake, _viewModelFake);
+            var factory = new BridgeRoomActorPropsFactory(_roomSimulatorActorPropsFactoryFake);
 
             //Act
             var resultProps = factory.Props();
