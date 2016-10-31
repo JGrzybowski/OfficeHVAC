@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
 {
-    public class RoomViewModel : BindableBase, IRoomViewModel
+    public class RoomSimulatorViewModel : BindableBase, IRoomViewModel
     {
         //Constants 
         public const string BridgeActorName = "bridge";
@@ -38,7 +38,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
         }     
 
         // Constructor
-        public RoomViewModel(IConfigBuilder configBuilder, IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory)
+        public RoomSimulatorViewModel(IConfigBuilder configBuilder, IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory)
         {
             this.ConfigBuilder = configBuilder;
             this.BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
@@ -52,7 +52,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
             {
                 Config actorSystemConfig = this.ConfigBuilder.Config();
                 var bridgeProps = this.BridgeRoomActorPropsFactory.Props();
-                
+
                 this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, actorSystemConfig);
                 this.BridgeActor = this.LocalActorSystem.ActorOf(bridgeProps, BridgeActorName);
             }

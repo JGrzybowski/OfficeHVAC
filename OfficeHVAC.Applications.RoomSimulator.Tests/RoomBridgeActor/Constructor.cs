@@ -13,8 +13,8 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
 {
     public class Constructor : TestKit
     {
-        private readonly ViewModels.RoomViewModel _viewModel =
-            Substitute.For<ViewModels.RoomViewModel>(
+        private readonly ViewModels.RoomSimulatorViewModel _viewModel =
+            Substitute.For<ViewModels.RoomSimulatorViewModel>(
                 Substitute.For<IConfigBuilder>(),
                 Substitute.For<IBridgeRoomActorPropsFactory>()
             );

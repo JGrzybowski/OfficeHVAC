@@ -32,7 +32,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public async Task cleans_up_viewModel()
         {
             //Arrange
-            var vm = new ViewModels.RoomViewModel(_configBuilderFake, _bridgeRoomActorPropsFactoryFake);
+            var vm = new ViewModels.RoomSimulatorViewModel(_configBuilderFake, _bridgeRoomActorPropsFactoryFake);
             vm.InitializeSimulator();
             vm.IsConnected.ShouldBe(true);
 
