@@ -19,7 +19,14 @@ namespace OfficeHVAC.Applications.RoomSimulator.Actors
             
             Receive<SetTemperature>(msg => _roomActorRef.Tell(msg));
             Receive<ChangeTemperature>(msg => _roomActorRef.Tell(msg));
-            Receive<RoomStatusMessage>(msg => ViewModel.Temperature = msg.Temperature);
+            Receive<RoomStatusMessage>(msg => UpdateViewModel(msg));
+
+            _roomActorRef.Tell(new SubscribeMessage(Self));
+        }
+
+        private void UpdateViewModel(RoomStatusMessage msg)
+        {
+            ViewModel.Temperature = msg.Temperature;
         }
     }
 }

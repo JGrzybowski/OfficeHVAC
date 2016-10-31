@@ -32,6 +32,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
         {
             //Arrange
             var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel,_echoActorProps), "bridge");
+            ExpectMsg<SubscribeMessage>();
             var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
 
             //Act
@@ -52,6 +53,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
         {
             //Arrange
             var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
+            ExpectMsg<SubscribeMessage>();
             var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
 
             //Act
@@ -70,6 +72,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
         {
             //Arrange
             var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
+            ExpectMsg<SubscribeMessage>();
 
             //Act
             bridge.Tell(new RoomStatusMessage("Room 101", 26f));
