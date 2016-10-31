@@ -1,4 +1,5 @@
-﻿using Akka.Actor;
+﻿using System;
+using Akka.Actor;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Simulators;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ namespace OfficeHVAC.Actors
     public class RoomSimulatorActor : ReceiveActor
     {
         private string RoomName { get; }
+
+        private ICancelable Scheduler { get; set; }
 
         private ITemperatureSimulator TemperatureSimulator { get; }
 
@@ -48,6 +51,14 @@ namespace OfficeHVAC.Actors
         protected override void PreStart()
         {
             Context.System.ActorSelection(this.ComparnySupervisorActorPath).Tell(new RoomAvaliabilityMessage(Self));
+            Scheduler = Context.System
+                .Scheduler
+                .ScheduleTellRepeatedlyCancelable(
+                    TimeSpan.FromMilliseconds(1000),
+                    TimeSpan.FromMilliseconds(1000),
+                    Self,
+                    new RoomStatusRequest(), 
+                    Self);
         }
     }
 }
