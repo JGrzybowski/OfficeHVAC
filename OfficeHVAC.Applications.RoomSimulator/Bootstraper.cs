@@ -1,8 +1,8 @@
 ﻿using Autofac;
+using OfficeHVAC.Modules.RoomSimulator;
 using Prism.Autofac;
 using Prism.Modularity;
 using System.Windows;
-using OfficeHVAC.Modules.RoomSimulator;
 
 namespace OfficeHVAC.Applications.RoomSimulator
 {
