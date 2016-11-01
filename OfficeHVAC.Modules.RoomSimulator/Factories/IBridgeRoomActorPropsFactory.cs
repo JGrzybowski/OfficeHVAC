@@ -1,7 +1,7 @@
-﻿using OfficeHVAC.Applications.RoomSimulator.ViewModels;
-using OfficeHVAC.Factories.Propses;
+﻿using OfficeHVAC.Factories.Propses;
+using OfficeHVAC.Modules.RoomSimulator.ViewModels;
 
-namespace OfficeHVAC.Applications.RoomSimulator.Factories
+namespace OfficeHVAC.Modules.RoomSimulator.Factories
 {
     public interface IBridgeRoomActorPropsFactory : IPropsFactory
     {

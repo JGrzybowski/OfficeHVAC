@@ -1,8 +1,8 @@
 ﻿using Akka.Actor;
-using OfficeHVAC.Applications.RoomSimulator.Actors;
-using OfficeHVAC.Applications.RoomSimulator.ViewModels;
+using OfficeHVAC.Modules.RoomSimulator.Actors;
+using OfficeHVAC.Modules.RoomSimulator.ViewModels;
 
-namespace OfficeHVAC.Applications.RoomSimulator.Factories
+namespace OfficeHVAC.Modules.RoomSimulator.Factories
 {
     public class BridgeRoomActorPropsFactory: IBridgeRoomActorPropsFactory
     {

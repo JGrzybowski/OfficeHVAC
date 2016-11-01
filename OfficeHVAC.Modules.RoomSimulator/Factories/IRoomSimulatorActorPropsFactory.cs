@@ -1,7 +1,7 @@
 ﻿using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Propses;
 
-namespace OfficeHVAC.Applications.RoomSimulator.Factories
+namespace OfficeHVAC.Modules.RoomSimulator.Factories
 {
     public interface IRoomSimulatorActorPropsFactory : IPropsFactory
     {

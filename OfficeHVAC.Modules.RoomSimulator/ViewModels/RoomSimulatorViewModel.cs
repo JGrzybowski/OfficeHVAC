@@ -1,12 +1,12 @@
 ﻿using Akka.Actor;
 using Akka.Configuration;
-using OfficeHVAC.Applications.RoomSimulator.Factories;
 using OfficeHVAC.Factories.Configs;
+using OfficeHVAC.Modules.RoomSimulator.Factories;
 using Prism.Mvvm;
 using System;
 using System.Threading.Tasks;
 
-namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
+namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
 {
     public class RoomSimulatorViewModel : BindableBase, IRoomViewModel
     {
@@ -41,8 +41,10 @@ namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
         public RoomSimulatorViewModel(IConfigBuilder configBuilder, IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory)
         {
             this.ConfigBuilder = configBuilder;
+            this.ConfigBuilder.Port = 8080;
             this.BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
             this.BridgeRoomActorPropsFactory.ViewModel = this;
+            this.BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.RoomName = "Room 101";
         }
 
         public void InitializeSimulator()

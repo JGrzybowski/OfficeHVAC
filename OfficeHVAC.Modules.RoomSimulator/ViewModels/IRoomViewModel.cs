@@ -1,4 +1,4 @@
-﻿namespace OfficeHVAC.Applications.RoomSimulator.ViewModels
+﻿namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
 {
     public interface IRoomViewModel
     {

@@ -1,10 +1,11 @@
 ﻿using NSubstitute;
-using OfficeHVAC.Applications.RoomSimulator.Factories;
 using OfficeHVAC.Factories.Configs;
+using OfficeHVAC.Modules.RoomSimulator.Factories;
+using OfficeHVAC.Modules.RoomSimulator.ViewModels;
 using Shouldly;
 using Xunit;
 
-namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
+namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomViewModel
 {
     public class Constructor
     {
@@ -12,7 +13,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
         public void creates_disconnected_viewModel()
         {
             //Arrange & Act
-            var vm = new ViewModels.RoomSimulatorViewModel(
+            var vm = new RoomSimulatorViewModel(
                 Substitute.For<IConfigBuilder>(),
                 Substitute.For<IBridgeRoomActorPropsFactory>()
             );

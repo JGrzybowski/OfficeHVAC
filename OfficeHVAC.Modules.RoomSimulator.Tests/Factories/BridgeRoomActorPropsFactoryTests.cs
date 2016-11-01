@@ -1,13 +1,13 @@
 ﻿using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
-using OfficeHVAC.Applications.RoomSimulator.Factories;
+using OfficeHVAC.Modules.RoomSimulator.Factories;
 using Shouldly;
 using Xunit;
 
-namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories
+namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
 {
-    public class BridgeRoomActorPropsFactoryTests :TestKit
+    public class BridgeRoomActorPropsFactoryTests : TestKit
     {
         private readonly IRoomSimulatorActorPropsFactory _roomSimulatorActorPropsFactoryFake;
 

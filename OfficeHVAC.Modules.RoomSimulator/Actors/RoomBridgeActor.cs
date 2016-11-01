@@ -1,9 +1,9 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Actors;
-using OfficeHVAC.Applications.RoomSimulator.ViewModels;
 using OfficeHVAC.Messages;
+using OfficeHVAC.Modules.RoomSimulator.ViewModels;
 
-namespace OfficeHVAC.Applications.RoomSimulator.Actors
+namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
     public class RoomBridgeActor : BridgeActor<IRoomViewModel>
     {

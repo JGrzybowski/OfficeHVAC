@@ -1,15 +1,15 @@
-﻿using Akka.Actor;
+﻿using System.Threading;
+using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
-using OfficeHVAC.Applications.RoomSimulator.Factories;
 using OfficeHVAC.Factories.Configs;
 using OfficeHVAC.Messages;
+using OfficeHVAC.Modules.RoomSimulator.Factories;
 using Shouldly;
-using System.Threading;
 using Xunit;
 
-namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
+namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
 {
     public class Responses :TestKit
     {

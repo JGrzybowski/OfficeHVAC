@@ -5,7 +5,7 @@ using OfficeHVAC.Factories.Simulators.Temperature;
 using Prism.Mvvm;
 using System;
 
-namespace OfficeHVAC.Applications.RoomSimulator.Factories
+namespace OfficeHVAC.Modules.RoomSimulator.Factories
 {
     public class RoomSimulatorActorPropsFactory : BindableBase, IRoomSimulatorActorPropsFactory
     {

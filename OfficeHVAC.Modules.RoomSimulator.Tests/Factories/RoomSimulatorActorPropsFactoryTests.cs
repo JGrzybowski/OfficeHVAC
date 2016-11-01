@@ -1,17 +1,17 @@
-﻿using Akka.Actor;
+﻿using System;
+using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Actors;
-using OfficeHVAC.Applications.RoomSimulator.Factories;
 using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Simulators.Temperature;
+using OfficeHVAC.Modules.RoomSimulator.Factories;
 using OfficeHVAC.Simulators;
 using Shouldly;
-using System;
 using Xunit;
 
-namespace OfficeHVAC.Applications.RoomSimulator.Tests.Factories
+namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
 {
     public class RoomSimulatorActorPropsFactoryTests : TestKit
     {

@@ -1,14 +1,14 @@
-﻿using Akka.Configuration;
+﻿using System.Threading.Tasks;
+using Akka.Configuration;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
-using OfficeHVAC.Applications.RoomSimulator.Factories;
 using OfficeHVAC.Factories.Configs;
+using OfficeHVAC.Modules.RoomSimulator.Factories;
 using Shouldly;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomViewModel
+namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomViewModel
 {
     public class ShutdownSimulator : TestKit
     {
