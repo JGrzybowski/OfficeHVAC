@@ -6,6 +6,6 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
     public interface IBridgeRoomActorPropsFactory : IPropsFactory
     {
         IRoomSimulatorActorPropsFactory RoomSimulatorActorPropsFactory { get; }
-        IRoomViewModel ViewModel { get; }
+        IRoomViewModel ViewModel { get; set; }
     }
 }

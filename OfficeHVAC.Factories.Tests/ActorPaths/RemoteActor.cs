@@ -6,12 +6,15 @@ namespace OfficeHVAC.Factories.Tests.ActorPaths
 {
     public class RemoteActor
     {
+        private const string TestSystemName = "ActorSystem";
+
         [Fact]
         public void should_construct_proper_central_system_address()
         {
             //Arrange
             var builder = new RemoteActorPathBuilder()
             {
+                SystemName = TestSystemName,
                 ServerAddress = "192.168.40.40",
                 ServerPort = 8080,
                 CompanyActorName = "company"
@@ -21,18 +24,20 @@ namespace OfficeHVAC.Factories.Tests.ActorPaths
             var actorPath = builder.ActorPath();
 
             //Assert
-            actorPath.ToString().ShouldBe("akka.tcp://HVACsystem@192.168.40.40:8080/user/company");
+            actorPath.ToString().ShouldBe($"akka.tcp://{TestSystemName}@192.168.40.40:8080/user/company");
         }
 
         [Theory]
         [InlineData("localhost")]
         [InlineData("127.0.0.1")]
-        public void should_skip_tcp_when_server_address_is_localhost(string localAddress)
+        [InlineData("some.web.address")]
+        public void should_always_use_tcp(string address)
         {
             //Arrange
             var builder = new RemoteActorPathBuilder()
             {
-                ServerAddress = localAddress,
+                SystemName = TestSystemName,
+                ServerAddress = address,
                 ServerPort = 8080,
                 CompanyActorName = "company"
             };
@@ -41,7 +46,7 @@ namespace OfficeHVAC.Factories.Tests.ActorPaths
             var actorPath = builder.ActorPath();
 
             //Assert
-            actorPath.ToString().ShouldBe($"akka://HVACsystem@{localAddress}:8080/user/company");
+            actorPath.ToString().ShouldBe($"akka.tcp://{TestSystemName}@{address}:8080/user/company");
         }
 
         [Fact]
@@ -50,6 +55,7 @@ namespace OfficeHVAC.Factories.Tests.ActorPaths
             //Arrange
             var builder = new RemoteActorPathBuilder()
             {
+                SystemName = TestSystemName,
                 ServerAddress = "192.168.40.40",
                 ServerPort = null,
                 CompanyActorName = "company"
@@ -59,7 +65,7 @@ namespace OfficeHVAC.Factories.Tests.ActorPaths
             var actorPath = builder.ActorPath();
 
             //Assert
-            actorPath.ToString().ShouldBe("akka.tcp://HVACsystem@192.168.40.40/user/company");
+            actorPath.ToString().ShouldBe($"akka.tcp://{TestSystemName}@192.168.40.40/user/company");
         }
 
         [Theory]
@@ -70,6 +76,7 @@ namespace OfficeHVAC.Factories.Tests.ActorPaths
             //Arrange
             var builder = new RemoteActorPathBuilder()
             {
+                SystemName = TestSystemName,
                 ServerAddress = localAddress,
                 ServerPort = null,
                 CompanyActorName = "company"
@@ -79,7 +86,7 @@ namespace OfficeHVAC.Factories.Tests.ActorPaths
             var actorPath = builder.ActorPath();
 
             //Assert
-            actorPath.ToString().ShouldBe("akka://HVACsystem/user/company");
+            actorPath.ToString().ShouldBe($"akka.tcp://{TestSystemName}/user/company");
         }
     }
 }

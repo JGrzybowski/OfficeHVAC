@@ -21,7 +21,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Factories
 
         public float Temperature { get; set; }
 
-        private string _roomName;
+        private string _roomName = "Room";
         public string RoomName
         {
             get { return _roomName; }

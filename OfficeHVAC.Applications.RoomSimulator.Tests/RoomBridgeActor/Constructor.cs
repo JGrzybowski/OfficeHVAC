@@ -6,14 +6,15 @@ using OfficeHVAC.Applications.RoomSimulator.Factories;
 using OfficeHVAC.Factories.Configs;
 using Shouldly;
 using System.Threading;
+using OfficeHVAC.Messages;
 using Xunit;
 
 namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
 {
     public class Constructor : TestKit
     {
-        private readonly ViewModels.RoomViewModel _viewModel =
-            Substitute.For<ViewModels.RoomViewModel>(
+        private readonly ViewModels.RoomSimulatorViewModel _viewModel =
+            Substitute.For<ViewModels.RoomSimulatorViewModel>(
                 Substitute.For<IConfigBuilder>(),
                 Substitute.For<IBridgeRoomActorPropsFactory>()
             );
@@ -30,6 +31,7 @@ namespace OfficeHVAC.Applications.RoomSimulator.Tests.RoomBridgeActor
         {
             //Arrange & Act
             var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
+            ExpectMsg<SubscribeMessage>();
             Thread.Sleep(500);
 
             //Assert

@@ -73,6 +73,33 @@ namespace OfficeHVAC.Actors.Tests
         }
 
         [Fact]
+        public void sends_status_update_info_to_subscribes_from_scheduler()
+        {
+            //Arrange
+            var simulatorProps = SimulatorActorProps(ActorOf(BlackHoleActor.Props).Path);
+            var actor = ActorOf(simulatorProps);
+            actor.Tell(new SubscribeMessage(TestActor));
+            ExpectMsg<RoomStatusMessage>();
+
+            //Act
+            actor.Tell(new RoomStatusRequest());
+
+            //Assert
+            ExpectMsg<RoomStatusMessage>(msg =>
+            {
+                msg.RoomName.ShouldBe(TestRoomName);
+                msg.Temperature.ShouldBe(TemperatureInRoom);
+            },
+            timeout: TimeSpan.FromSeconds(1));
+            ExpectMsg<RoomStatusMessage>(msg =>
+            {
+                msg.RoomName.ShouldBe(TestRoomName);
+                msg.Temperature.ShouldBe(TemperatureInRoom);
+            },
+            timeout: TimeSpan.FromSeconds(2));
+        }
+
+        [Fact]
         public void does_not_send_status_update_info_to_unsubscribed_actors_when_recieving_update_request()
         {
             //Arrange
