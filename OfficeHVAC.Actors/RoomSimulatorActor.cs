@@ -41,6 +41,11 @@ namespace OfficeHVAC.Actors
                 foreach (var subscriber in this.Subscribers)
                     subscriber.Tell(status, Self);
             });
+
+            this.Receive<ChangeTemperature>(message =>
+            {
+                TemperatureSimulator.Temperature += message.DeltaT;
+            });
         }
 
         public RoomStatusMessage GenerateRoomStatus()

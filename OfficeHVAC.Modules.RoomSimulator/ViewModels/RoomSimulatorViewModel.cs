@@ -5,6 +5,9 @@ using OfficeHVAC.Modules.RoomSimulator.Factories;
 using Prism.Mvvm;
 using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using OfficeHVAC.Messages;
+using Prism.Commands;
 
 namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
 {
@@ -35,7 +38,11 @@ namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
         {
             get { return _isConnected; }
             private set { SetProperty(ref _isConnected, value); }
-        }     
+        }
+
+        public ICommand IncreaseCommand { get; }
+        public ICommand DecreaseCommand { get; }
+        public ICommand InitializeCommand { get; }
 
         // Constructor
         public RoomSimulatorViewModel(IConfigBuilder configBuilder, IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory)
@@ -45,6 +52,19 @@ namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
             this.BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
             this.BridgeRoomActorPropsFactory.ViewModel = this;
             this.BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.RoomName = "Room 101";
+
+            IncreaseCommand = new DelegateCommand(
+                    () => BridgeActor.Tell(new ChangeTemperature(1)),
+                    () => this.IsConnected)
+                .ObservesProperty(() => IsConnected);
+
+            DecreaseCommand = new DelegateCommand(
+                    () => BridgeActor.Tell(new ChangeTemperature(-1)),
+                    () => this.IsConnected)
+                .ObservesProperty(() => IsConnected);
+
+            InitializeCommand = new DelegateCommand(InitializeSimulator, () => !IsConnected).ObservesProperty(() => IsConnected);
+
         }
 
         public void InitializeSimulator()
