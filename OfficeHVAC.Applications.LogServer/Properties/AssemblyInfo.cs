@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OfficeHVAC.Applications.RoomSimulator.Tests")]
+[assembly: AssemblyTitle("OfficeHVAC.Applications.LogServer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OfficeHVAC.Applications.RoomSimulator.Tests")]
+[assembly: AssemblyProduct("OfficeHVAC.Applications.LogServer")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("798e41b5-54d7-40ac-aade-68d113978d51")]
+[assembly: Guid("47bce15c-ef7e-40cc-bed3-261ff79197cd")]
 
 // Version information for an assembly consists of the following four values:
 //

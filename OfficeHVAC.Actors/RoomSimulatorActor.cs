@@ -26,13 +26,13 @@ namespace OfficeHVAC.Actors
 
             this.Receive<SubscribeMessage>(message =>
             {
-                this.Subscribers.Add(message.Subscriber);
-                message.Subscriber.Tell(GenerateRoomStatus());
+                this.Subscribers.Add(Sender);
+                Sender.Tell(GenerateRoomStatus());
             });
 
             this.Receive<UnsubscribeMessage>(message =>
             {
-                this.Subscribers.Remove(message.Subscriber);
+                this.Subscribers.Remove(Sender);
             });
 
             this.Receive<RoomStatusRequest>(message =>
@@ -55,7 +55,9 @@ namespace OfficeHVAC.Actors
 
         protected override void PreStart()
         {
-            Context.System.ActorSelection(this.ComparnySupervisorActorPath).Tell(new RoomAvaliabilityMessage(Self));
+            var selection = Context.System.ActorSelection(this.ComparnySupervisorActorPath.ToString());
+            selection.Tell(new RoomAvaliabilityMessage(Self));
+
             Scheduler = Context.System
                 .Scheduler
                 .ScheduleTellRepeatedlyCancelable(

@@ -56,6 +56,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Modules.RoomSimu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Modules.RoomSimulator.Tests", "OfficeHVAC.Modules.RoomSimulator.Tests\OfficeHVAC.Modules.RoomSimulator.Tests.csproj", "{1FB5D144-1DE7-44CC-96B2-1B4FAAAFDE6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Applications.LogServer", "OfficeHVAC.Applications.LogServer\OfficeHVAC.Applications.LogServer.csproj", "{47BCE15C-EF7E-40CC-BED3-261FF79197CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +112,10 @@ Global
 		{1FB5D144-1DE7-44CC-96B2-1B4FAAAFDE6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FB5D144-1DE7-44CC-96B2-1B4FAAAFDE6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FB5D144-1DE7-44CC-96B2-1B4FAAAFDE6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47BCE15C-EF7E-40CC-BED3-261FF79197CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47BCE15C-EF7E-40CC-BED3-261FF79197CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47BCE15C-EF7E-40CC-BED3-261FF79197CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47BCE15C-EF7E-40CC-BED3-261FF79197CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,5 +123,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6FCADE50-DBCE-4B84-AA05-55AC373B93EF} = {794AA963-4C54-46F7-8191-F03A303355E3}
 		{1FB5D144-1DE7-44CC-96B2-1B4FAAAFDE6F} = {794AA963-4C54-46F7-8191-F03A303355E3}
+		{47BCE15C-EF7E-40CC-BED3-261FF79197CD} = {2E0A7F95-5F26-40DE-81A5-79FE112AAC85}
 	EndGlobalSection
 EndGlobal

@@ -8,16 +8,9 @@ namespace OfficeHVAC.Modules.RoomSimulator.Views
     /// </summary>
     public partial class RoomSimulator : UserControl
     {
-        private RoomSimulatorViewModel  ViewModel => this.DataContext as RoomSimulatorViewModel;
-
         public RoomSimulator()
         {
             InitializeComponent();
-        }
-
-        private void InitializationButton_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            ViewModel.InitializeSimulator();
         }
     }
 }

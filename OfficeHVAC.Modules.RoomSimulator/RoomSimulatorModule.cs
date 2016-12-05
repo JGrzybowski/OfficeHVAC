@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Core;
 using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Configs;
 using OfficeHVAC.Factories.Simulators.Temperature;
@@ -37,7 +38,16 @@ namespace OfficeHVAC.Modules.RoomSimulator
             containerBuilder.RegisterType<RealTimeSource>().As<ITimeSource>();
             containerBuilder.RegisterType<RoomSimulatorModule>();
             containerBuilder.RegisterType<RemoteConfigBuilder>().As<IConfigBuilder>();
-            containerBuilder.RegisterType<RemoteActorPathBuilder>().As<IRemoteActorPathBuilder>().As<IActorPathBuilder>();
+            containerBuilder.RegisterType<RemoteActorPathBuilder>()
+                .WithProperties(new Parameter[]
+                {
+                    new NamedPropertyParameter(nameof(RemoteActorPathBuilder.CompanyActorName), "Logger"),
+                    new NamedPropertyParameter(nameof(RemoteActorPathBuilder.ServerAddress), "localhost"),
+                    new NamedPropertyParameter(nameof(RemoteActorPathBuilder.ServerPort), 8000)
+                })
+                .As<IRemoteActorPathBuilder>()
+                .As<IActorPathBuilder>();
+
             containerBuilder.RegisterType<TemperatureSimulatorFactory>().As<ITemperatureSimulatorFactory>();
 
             containerBuilder.RegisterType<RoomSimulatorActorPropsFactory>().As<IRoomSimulatorActorPropsFactory>();
