@@ -7,7 +7,7 @@ using Xunit;
 
 namespace OfficeHVAC.Simulators.Tests
 {
-    public class TemperatureSimulator
+    public class TemperatureSimulatorTests
     {
         private static readonly float StartingTemperature = 36.6f;
         private static readonly DateTime StartDateTime = new DateTime(2016, 10, 16, 16, 45, 00);
@@ -21,7 +21,7 @@ namespace OfficeHVAC.Simulators.Tests
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(StartDateTime);
-            var simulator = new Simulators.TemperatureSimulator(timeSourceFake, StartingTemperature)
+            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature)
             {
                 Devices = new List<ITemperatureDevice> { new TemperatureDeviceFake() { MaxPower = 40 } }
             };
@@ -41,7 +41,7 @@ namespace OfficeHVAC.Simulators.Tests
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(StartDateTime);
-            var simulator = new Simulators.TemperatureSimulator(timeSourceFake, StartingTemperature)
+            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature)
             {
                 Devices = new List<ITemperatureDevice>
                 {
@@ -97,7 +97,7 @@ namespace OfficeHVAC.Simulators.Tests
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(StartDateTime);
-            var simulator = new Simulators.TemperatureSimulator(timeSourceFake, StartingTemperature)
+            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature)
             {
                 Devices = new List<ITemperatureDevice>
                 {
@@ -124,7 +124,7 @@ namespace OfficeHVAC.Simulators.Tests
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(StartDateTime);
-            var simulator = new Simulators.TemperatureSimulator(timeSourceFake, StartingTemperature)
+            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature)
             {
                 Devices = new List<ITemperatureDevice>
                 {

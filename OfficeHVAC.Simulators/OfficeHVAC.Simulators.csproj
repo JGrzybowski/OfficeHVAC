@@ -54,7 +54,6 @@
   <ItemGroup>
     <Compile Include="IParameterSimulator.cs" />
     <Compile Include="ITemperatureSimulator.cs" />
-    <Compile Include="RandomTemperatureSimulator.cs" />
     <Compile Include="TemperatureSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

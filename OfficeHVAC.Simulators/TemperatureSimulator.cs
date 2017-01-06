@@ -8,16 +8,16 @@ namespace OfficeHVAC.Simulators
 {
     public class TemperatureSimulator : ITemperatureSimulator
     {
-        private float lastTemperature { get; set; }
-        private DateTime lastTime { get; set; }
+        protected float LastTemperature { get; set; }
+        protected DateTime LastTime { get; set; }
 
-        private const int WattsToChangeOneDegreeInOneHour = 20;
+        protected const int WattsToChangeOneDegreeInOneHour = 20;
 
-        private float CalculateChange()
+        protected virtual float CalculateChange()
         {
             var now = this.TimeSource.Now;
-            var hoursSinceLastUpdate = (now - this.lastTime).TotalHours;
-            this.lastTime = now;
+            var hoursSinceLastUpdate = (now - this.LastTime).TotalHours;
+            this.LastTime = now;
             return (float)(this.Devices
                             .Sum(device => device.MaxPower * device.HeatingParameter)
                             / WattsToChangeOneDegreeInOneHour
@@ -28,8 +28,8 @@ namespace OfficeHVAC.Simulators
         public TemperatureSimulator(ITimeSource timeSource, float initialTemperature)
         {
             this.TimeSource = timeSource;
-            this.lastTime = timeSource.Now;
-            this.lastTemperature = initialTemperature;
+            this.LastTime = timeSource.Now;
+            this.LastTemperature = initialTemperature;
         }
 
         public IEnumerable<ITemperatureDevice> Devices { get; set; } = new List<ITemperatureDevice>();
@@ -38,15 +38,15 @@ namespace OfficeHVAC.Simulators
         {
             get
             {
-                this.lastTemperature += CalculateChange();
-                return this.lastTemperature;
+                this.LastTemperature += CalculateChange();
+                return this.LastTemperature;
             }
 
             set
             {
                 foreach (var device in this.Devices)
                     device.TurnOff();
-                this.lastTemperature = value;
+                this.LastTemperature = value;
             }
         }
 

@@ -44,9 +44,11 @@
   <ItemGroup>
     <Compile Include="Devices\ITemperatureDevice.cs" />
     <Compile Include="Devices\TemperatureDevice.cs" />
+    <Compile Include="IRandomValueGenerator.cs" />
     <Compile Include="ITimeSource.cs" />
     <Compile Include="Devices\IDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomValueGenerator.cs" />
     <Compile Include="RealTimeSource.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="Sensor.cs" />
