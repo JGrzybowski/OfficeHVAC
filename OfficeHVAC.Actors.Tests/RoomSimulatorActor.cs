@@ -3,9 +3,13 @@ using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Messages;
+using OfficeHVAC.Models;
+using OfficeHVAC.Models.Devices;
 using OfficeHVAC.Simulators;
 using Shouldly;
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using Xunit;
 
 namespace OfficeHVAC.Actors.Tests
@@ -14,6 +18,13 @@ namespace OfficeHVAC.Actors.Tests
     {
         private const string TestRoomName = "Room 101";
         private const float TemperatureInRoom = 20f;
+
+        private class TemperatureSimulatorFake : ITemperatureSimulator
+        {
+            public float Temperature { get; set; }
+            public IEnumerable<ITemperatureDevice> Devices { get; set; }
+            public ITimeSource TimeSource { get; }
+        }
 
         private static ITemperatureSimulator GenerateTemperatureSimulatorFake()
         {
@@ -31,6 +42,25 @@ namespace OfficeHVAC.Actors.Tests
             var simulatorProps = SimulatorActorProps(TestActor.Path);
             var actor = ActorOf(simulatorProps);
             ExpectMsg<RoomAvaliabilityMessage>(msg => msg.RoomActor.ShouldBe(actor));
+        }
+
+        [Theory]
+        [InlineData(+1)]
+        [InlineData(-1)]
+        public void changes_temperature_in_simulator_accoding_to_message(float deltaT)
+        {
+            //Arrange
+            var temperatureSimulatorFake = new TemperatureSimulatorFake();
+            var roomActor = ActorOfAsTestActorRef(() => new Actors.RoomSimulatorActor(TestRoomName, temperatureSimulatorFake, ActorOf(BlackHoleActor.Props).Path));
+            var temperatureBefore = temperatureSimulatorFake.Temperature;
+
+            //Act
+            roomActor.Tell(new ChangeTemperature(deltaT));
+
+            //Assert
+            Thread.Sleep(500);
+            var temperatureAfter = temperatureSimulatorFake.Temperature;
+            temperatureAfter.ShouldBe(temperatureBefore + deltaT);
         }
 
         [Fact]
