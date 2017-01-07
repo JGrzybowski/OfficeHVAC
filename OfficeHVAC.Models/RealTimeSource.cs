@@ -1,9 +1,9 @@
-﻿using System;
+﻿using NodaTime;
 
 namespace OfficeHVAC.Models
 {
     public class RealTimeSource : ITimeSource
     {
-        public DateTime Now => DateTime.Now;
+        public Instant Now => SystemClock.Instance.Now;
     }
 }

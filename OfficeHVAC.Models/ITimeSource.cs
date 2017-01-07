@@ -1,9 +1,8 @@
-﻿using System;
+﻿using NodaTime;
 
 namespace OfficeHVAC.Models
 {
-    public interface ITimeSource
+    public interface ITimeSource : IClock
     {
-        DateTime Now { get; }
     }
 }

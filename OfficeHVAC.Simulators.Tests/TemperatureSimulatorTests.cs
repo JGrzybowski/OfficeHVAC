@@ -1,6 +1,6 @@
-﻿using OfficeHVAC.Models.Devices;
+﻿using NodaTime;
+using OfficeHVAC.Models.Devices;
 using Shouldly;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -10,11 +10,11 @@ namespace OfficeHVAC.Simulators.Tests
     public class TemperatureSimulatorTests
     {
         private static readonly float StartingTemperature = 36.6f;
-        private static readonly DateTime StartDateTime = new DateTime(2016, 10, 16, 16, 45, 00);
+        private static readonly Instant StartDateTime = new Instant();
 
-        private static readonly DateTime FiveMinutesLater = StartDateTime.AddMinutes(5);
-        private static readonly DateTime TenMinutesLater = StartDateTime.AddMinutes(10);
-        private static readonly DateTime FifteenMinutesLater = StartDateTime.AddMinutes(15);
+        private static readonly Instant FiveMinutesLater = StartDateTime + Duration.FromMinutes(5);
+        private static readonly Instant TenMinutesLater = StartDateTime + Duration.FromMinutes(10);
+        private static readonly Instant FifteenMinutesLater = StartDateTime + Duration.FromMinutes(15);
 
         [Fact]
         public void does_not_change_temperature_value_when_devices_are_turned_off()
