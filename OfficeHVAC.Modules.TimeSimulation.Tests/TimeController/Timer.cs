@@ -55,31 +55,6 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeController
         public class Tick
         {
             [Fact]
-            public void notifies_UI()
-            {
-                //Arrange
-                bool UI_notified = false;
-                PropertyChangedEventArgs notificationArgs = null;
-
-                var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControllerViewModel(timeSourceMock);
-
-                vm.PropertyChanged += (sender, args) =>
-                {
-                    UI_notified = true;
-                    notificationArgs = args;
-                };
-
-                //Act
-                vm.TimerTick(null, null);
-
-                //Assert
-                UI_notified.ShouldBe(true);
-                notificationArgs.ShouldNotBeNull();
-                notificationArgs?.PropertyName.ShouldBe(nameof(IControlledTimeSource.Now));
-            }
-
-            [Fact]
             public void updates_timeSource_Now()
             {
                 //Arrange

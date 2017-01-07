@@ -15,13 +15,13 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeController
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControllerViewModel(timeSourceMock);
+                var vm = new TimeControllerViewModel(timeSourceMock,60);
 
                 //Act
                 vm.ToggleTimer();
 
                 //Assert
-                Thread.Sleep(500);
+                Thread.Sleep(100);
                 timeSourceMock.Received(1).UpdateClock();
             }
 
@@ -30,12 +30,13 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeController
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControllerViewModel(timeSourceMock);
+                var vm = new TimeControllerViewModel(timeSourceMock,90);
 
                 //Act
                 vm.ToggleTimer();
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
                 vm.ToggleTimer();
+                Thread.Sleep(100);
 
                 //Assert
                 timeSourceMock.Received(1).UpdateClock();
