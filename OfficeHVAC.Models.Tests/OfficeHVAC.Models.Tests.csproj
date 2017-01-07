@@ -51,6 +51,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
@@ -77,6 +78,11 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="ControlledTimeSource\AddXYZ.cs" />
+    <Compile Include="ControlledTimeSource\Constructor.cs" />
+    <Compile Include="ControlledTimeSource\Reset.cs" />
+    <Compile Include="ControlledTimeSource\UpdateClock.cs" />
+    <Compile Include="ControlledTimeSource\SpeedProperty.cs" />
     <Compile Include="TemperatureDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
