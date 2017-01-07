@@ -1,19 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DE8D9282-1A38-42ED-BC78-C1A0F62CA765}</ProjectGuid>
+    <ProjectGuid>{9C8B6BDE-D08A-4DFF-9D3D-A09B7ED0C048}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OfficeHVAC.Factories.Tests</RootNamespace>
-    <AssemblyName>OfficeHVAC.Factories.Tests</AssemblyName>
+    <RootNamespace>OfficeHVAC.Modules.TimeSimulation.Tests</RootNamespace>
+    <AssemblyName>OfficeHVAC.Modules.TimeSimulation.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,20 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Akka, Version=1.1.2.29, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Akka.1.1.2\lib\net45\Akka.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NodaTime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
       <HintPath>..\packages\NodaTime.1.3.2\lib\net35-Client\NodaTime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NSubstitute">
+    <Reference Include="NodaTime.Testing, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NodaTime.Testing.1.3.2\lib\net35-Client\NodaTime.Testing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NSubstitute, Version=1.10.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
       <HintPath>..\packages\NSubstitute.1.10.0.0\lib\net45\NSubstitute.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Prism, Version=6.2.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.2.0\lib\net45\Prism.dll</HintPath>
@@ -57,10 +51,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -86,42 +76,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActorPaths\RemoteActor.cs" />
-    <Compile Include="Configs\Remote.cs" />
+    <Compile Include="ControlledTimeSource\AddXYZ.cs" />
+    <Compile Include="ControlledTimeSource\Constructor.cs" />
+    <Compile Include="ControlledTimeSource\Reset.cs" />
+    <Compile Include="ControlledTimeSource\SpeedProperty.cs" />
+    <Compile Include="ControlledTimeSource\UpdateClock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Simulators\Temperature\TemperatureSimulatorFactory.cs" />
+    <Compile Include="TimeController\Buttons.cs" />
+    <Compile Include="TimeController\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OfficeHVAC.Actors\OfficeHVAC.Actors.csproj">
-      <Project>{A018C9AA-EB70-4751-9DC5-C701C39A715A}</Project>
-      <Name>OfficeHVAC.Actors</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OfficeHVAC.Factories\OfficeHVAC.Factories.csproj">
-      <Project>{F678EE5A-B0C5-4314-AF14-EED628C9F630}</Project>
-      <Name>OfficeHVAC.Factories</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OfficeHVAC.Models\OfficeHVAC.Models.csproj">
-      <Project>{584598C9-E1CD-4592-9A88-24F34D23D282}</Project>
+      <Project>{584598c9-e1cd-4592-9a88-24f34d23d282}</Project>
       <Name>OfficeHVAC.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OfficeHVAC.Simulators\OfficeHVAC.Simulators.csproj">
-      <Project>{0B83EBD2-2C92-4B9B-B1CE-45C96F6C453B}</Project>
-      <Name>OfficeHVAC.Simulators</Name>
+    <ProjectReference Include="..\OfficeHVAC.Modules.TimeSimulation\OfficeHVAC.Modules.TimeSimulation.csproj">
+      <Project>{641B89A7-EC7A-480F-858E-93B40A7C9197}</Project>
+      <Name>OfficeHVAC.Modules.TimeSimulation</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

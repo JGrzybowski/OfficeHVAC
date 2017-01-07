@@ -1,13 +1,13 @@
-﻿using System;
+﻿using NodaTime;
 using OfficeHVAC.Models;
 
 namespace OfficeHVAC.Simulators.Tests
 {
     public class TimeSourceFake : ITimeSource
     {
-        public DateTime Now { get; set; }
+        public Instant Now { get; set; }
 
-        public TimeSourceFake(DateTime dateTime)
+        public TimeSourceFake(Instant dateTime)
         {
             Now = dateTime;
         }

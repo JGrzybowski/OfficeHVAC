@@ -58,6 +58,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Modules.RoomSimu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Applications.LogServer", "OfficeHVAC.Applications.LogServer\OfficeHVAC.Applications.LogServer.csproj", "{47BCE15C-EF7E-40CC-BED3-261FF79197CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Modules.TimeSimulation", "OfficeHVAC.Modules.TimeSimulation\OfficeHVAC.Modules.TimeSimulation.csproj", "{641B89A7-EC7A-480F-858E-93B40A7C9197}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Modules.TimeSimulation.Tests", "OfficeHVAC.Modules.TimeSimulation.Tests\OfficeHVAC.Modules.TimeSimulation.Tests.csproj", "{9C8B6BDE-D08A-4DFF-9D3D-A09B7ED0C048}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +120,14 @@ Global
 		{47BCE15C-EF7E-40CC-BED3-261FF79197CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47BCE15C-EF7E-40CC-BED3-261FF79197CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47BCE15C-EF7E-40CC-BED3-261FF79197CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{641B89A7-EC7A-480F-858E-93B40A7C9197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{641B89A7-EC7A-480F-858E-93B40A7C9197}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{641B89A7-EC7A-480F-858E-93B40A7C9197}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{641B89A7-EC7A-480F-858E-93B40A7C9197}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C8B6BDE-D08A-4DFF-9D3D-A09B7ED0C048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C8B6BDE-D08A-4DFF-9D3D-A09B7ED0C048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C8B6BDE-D08A-4DFF-9D3D-A09B7ED0C048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C8B6BDE-D08A-4DFF-9D3D-A09B7ED0C048}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,5 +137,7 @@ Global
 		{6FCADE50-DBCE-4B84-AA05-55AC373B93EF} = {794AA963-4C54-46F7-8191-F03A303355E3}
 		{1FB5D144-1DE7-44CC-96B2-1B4FAAAFDE6F} = {794AA963-4C54-46F7-8191-F03A303355E3}
 		{47BCE15C-EF7E-40CC-BED3-261FF79197CD} = {2E0A7F95-5F26-40DE-81A5-79FE112AAC85}
+		{641B89A7-EC7A-480F-858E-93B40A7C9197} = {794AA963-4C54-46F7-8191-F03A303355E3}
+		{9C8B6BDE-D08A-4DFF-9D3D-A09B7ED0C048} = {794AA963-4C54-46F7-8191-F03A303355E3}
 	EndGlobalSection
 EndGlobal

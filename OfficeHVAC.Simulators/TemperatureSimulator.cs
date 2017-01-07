@@ -1,6 +1,6 @@
-﻿using OfficeHVAC.Models;
+﻿using NodaTime;
+using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,14 +9,14 @@ namespace OfficeHVAC.Simulators
     public class TemperatureSimulator : ITemperatureSimulator
     {
         protected float LastTemperature { get; set; }
-        protected DateTime LastTime { get; set; }
+        protected Instant LastTime { get; set; }
 
         protected const int WattsToChangeOneDegreeInOneHour = 20;
 
         protected virtual float CalculateChange()
         {
             var now = this.TimeSource.Now;
-            var hoursSinceLastUpdate = (now - this.LastTime).TotalHours;
+            var hoursSinceLastUpdate = (now - this.LastTime).ToTimeSpan().TotalHours;
             this.LastTime = now;
             return (float)(this.Devices
                             .Sum(device => device.MaxPower * device.HeatingParameter)
