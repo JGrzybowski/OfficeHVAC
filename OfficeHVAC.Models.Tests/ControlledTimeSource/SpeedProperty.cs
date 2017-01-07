@@ -13,7 +13,7 @@ namespace OfficeHVAC.Models.Tests.ControlledTimeSource
         public void throws_ArgumentOutOfRangeException_when_trying_to_set_to_negative_value()
         {
             //Arrange
-            var clock = new Models.ControlledTimeSource(InitialTime);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime);
 
             //Act & Assert
             var ex = Should.Throw<ArgumentOutOfRangeException>(() => clock.Speed = -3);

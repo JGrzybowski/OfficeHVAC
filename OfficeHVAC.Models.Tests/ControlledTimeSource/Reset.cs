@@ -12,7 +12,7 @@ namespace OfficeHVAC.Models.Tests.ControlledTimeSource
         public void sets_new_value_of_Now()
         {
             //Arrange
-            var clock = new Models.ControlledTimeSource(InitialTime);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime);
             var newInstant = InitialTime - Duration.FromHours(-15);
 
             //Act

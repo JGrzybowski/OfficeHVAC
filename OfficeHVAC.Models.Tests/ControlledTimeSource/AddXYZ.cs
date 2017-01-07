@@ -9,10 +9,10 @@ namespace OfficeHVAC.Models.Tests.ControlledTimeSource
         private static readonly Instant InitialTime = Instant.FromUtc(2000, 12, 01, 12, 00, 00);
 
         [Fact]
-        public void can_change_time_in_hours()
+        public void can_change_Time_in_hours()
         {
             //Arrange
-            var clock = new Models.ControlledTimeSource(InitialTime);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime);
 
             //Act
             clock.AddHours(3);
@@ -22,10 +22,10 @@ namespace OfficeHVAC.Models.Tests.ControlledTimeSource
         }
 
         [Fact]
-        public void can_change_time_in_minutes()
+        public void can_change_Time_in_minutes()
         {
             //Arrange
-            var clock = new Models.ControlledTimeSource(InitialTime);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime);
 
             //Act
             clock.AddMinutes(3);
@@ -35,10 +35,10 @@ namespace OfficeHVAC.Models.Tests.ControlledTimeSource
         }
 
         [Fact]
-        public void can_change_time_in_seconds()
+        public void can_change_Time_in_seconds()
         {
             //Arrange
-            var clock = new Models.ControlledTimeSource(InitialTime);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime);
 
             //Act
             clock.AddSeconds(3);

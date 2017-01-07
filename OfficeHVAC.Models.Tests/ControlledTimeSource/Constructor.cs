@@ -12,7 +12,7 @@ namespace OfficeHVAC.Models.Tests.ControlledTimeSource
         public void returns_initial_time_after_being_constructed()
         {
             //Arrange
-            var clock = new Models.ControlledTimeSource(InitialTime);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime);
 
             //Assert
             clock.Now.ShouldBe(InitialTime);
@@ -22,7 +22,7 @@ namespace OfficeHVAC.Models.Tests.ControlledTimeSource
         public void initial_speed_should_be_1()
         {
             //Arrange
-            var clock = new Models.ControlledTimeSource(InitialTime);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime);
 
             //Assert
             clock.Speed.ShouldBe(1);

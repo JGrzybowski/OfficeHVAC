@@ -4,6 +4,7 @@ using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Configs;
 using OfficeHVAC.Factories.Simulators.Temperature;
 using OfficeHVAC.Models;
+using OfficeHVAC.Models.TimeSources;
 using OfficeHVAC.Modules.RoomSimulator.Factories;
 using OfficeHVAC.Modules.RoomSimulator.ViewModels;
 using Prism.Regions;
