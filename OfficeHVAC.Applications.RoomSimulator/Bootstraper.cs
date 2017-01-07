@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using OfficeHVAC.Modules.RoomSimulator;
+using OfficeHVAC.Modules.TimeSimulation;
 using Prism.Autofac;
 using Prism.Modularity;
 using System.Windows;
@@ -13,6 +14,7 @@ namespace OfficeHVAC.Applications.RoomSimulator
         {
             base.ConfigureContainerBuilder(containerBuilder);
 
+            TimeSimulationModule.InitializeDependencies(containerBuilder);
             RoomSimulatorModule.InitializeDependencies(containerBuilder);
         }
 
@@ -32,6 +34,7 @@ namespace OfficeHVAC.Applications.RoomSimulator
         protected override void ConfigureModuleCatalog()
         {
             ModuleCatalog catalog = (ModuleCatalog)ModuleCatalog;
+            catalog.AddModule(typeof(TimeSimulationModule));
             catalog.AddModule(typeof(RoomSimulatorModule));
         }
     }

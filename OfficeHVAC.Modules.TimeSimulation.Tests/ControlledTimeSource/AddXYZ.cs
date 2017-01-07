@@ -2,7 +2,7 @@ using NodaTime;
 using Shouldly;
 using Xunit;
 
-namespace OfficeHVAC.Models.Tests.ControlledTimeSource
+namespace OfficeHVAC.Modules.TimeSimulation.Tests.ControlledTimeSource
 {
     public class AddXYZ
     {

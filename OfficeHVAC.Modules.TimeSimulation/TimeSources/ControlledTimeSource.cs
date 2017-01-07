@@ -2,9 +2,9 @@
 using NodaTime.Testing;
 using System;
 
-namespace OfficeHVAC.Models.TimeSources
+namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
 {
-    public class ControlledTimeSource : ITimeSource
+    public class ControlledTimeSource : IControlledTimeSource
     {
         private static readonly long TicksInSecond = Duration.FromSeconds(1).Ticks;
 
