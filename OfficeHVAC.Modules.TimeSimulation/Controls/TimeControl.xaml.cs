@@ -5,13 +5,13 @@ using System.Windows.Controls;
 namespace OfficeHVAC.Modules.TimeSimulation.Controls
 {
     /// <summary>
-    /// Interaction logic for TimeController.xaml
+    /// Interaction logic for TimeControl.xaml
     /// </summary>
-    public partial class TimeController : UserControl
+    public partial class TimeControl : UserControl
     {
-        private ITimeControllerViewModel ViewModel => this.DataContext as ITimeControllerViewModel;
+        private ITimeControlViewModel ViewModel => this.DataContext as ITimeControlViewModel;
 
-        public TimeController()
+        public TimeControl()
         {
             InitializeComponent();
         }

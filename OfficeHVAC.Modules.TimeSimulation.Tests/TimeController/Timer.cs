@@ -20,7 +20,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeController
                 PropertyChangedEventArgs notificationArgs = null;
 
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControllerViewModel(timeSourceMock);
+                var vm = new TimeControlViewModel(timeSourceMock);
 
                 vm.PropertyChanged += (sender, args) =>
                 {
@@ -34,15 +34,15 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeController
                 //Assert
                 UI_notified.ShouldBe(true);
                 notificationArgs.ShouldNotBeNull();
-                notificationArgs?.PropertyName.ShouldBe(nameof(TimeControllerViewModel.Speed));
+                notificationArgs?.PropertyName.ShouldBe(nameof(TimeControlViewModel.Speed));
             }
 
             [Fact]
-            public void changes_timeSource_Speed()
+            public void changes_time_source_Speed()
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControllerViewModel(timeSourceMock);
+                var vm = new TimeControlViewModel(timeSourceMock);
 
                 //Act
                 vm.Speed = 3;
@@ -50,16 +50,31 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeController
                 //Assert
                 timeSourceMock.Received(1).Speed = 3;
             }
+
+            [Fact]
+            public void returns_time_source_Speed()
+            {
+                //Arrange
+                var timeSourceMock = Substitute.For<IControlledTimeSource>();
+                timeSourceMock.Speed.Returns(5);
+                var vm = new TimeControlViewModel(timeSourceMock);
+
+                //Act
+                var s = vm.Speed;
+
+                //Assert
+                s.ShouldBe(5);
+            }
         }
 
         public class Tick
         {
             [Fact]
-            public void updates_timeSource_Now()
+            public void updates_time_source_Now()
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControllerViewModel(timeSourceMock);
+                var vm = new TimeControlViewModel(timeSourceMock);
                 
                 //Act
                 vm.TimerTick(null, null);

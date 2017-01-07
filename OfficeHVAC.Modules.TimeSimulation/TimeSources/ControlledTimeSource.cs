@@ -38,6 +38,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
         {
             _internalClock.AdvanceMinutes(minutes);
         }
+
         public void AddSeconds(long seconds)
         {
             _internalClock.AdvanceSeconds(seconds);

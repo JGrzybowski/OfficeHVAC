@@ -19,7 +19,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.ControlledTimeSource
         }
 
         [Fact]
-        public void initial_speed_should_be_1()
+        public void sets_initial_speed_to_1()
         {
             //Arrange
             var clock = new TimeSources.ControlledTimeSource(InitialTime);

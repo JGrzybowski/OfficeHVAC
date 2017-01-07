@@ -77,15 +77,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TimeSources\ControlledTimeSource.cs" />
-    <Compile Include="Controls\TimeController.xaml.cs">
-      <DependentUpon>TimeController.xaml</DependentUpon>
+    <Compile Include="Controls\TimeControl.xaml.cs">
+      <DependentUpon>TimeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeSources\IControlledTimeSource.cs" />
     <Compile Include="TimeSources\RealTimeSource.cs" />
     <Compile Include="TimeSimulationModule.cs" />
-    <Compile Include="ViewModels\ITimeControllerViewModel.cs" />
-    <Compile Include="ViewModels\TimeControllerViewModel.cs" />
+    <Compile Include="ViewModels\ITimeControlViewModel.cs" />
+    <Compile Include="ViewModels\TimeControlViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -99,7 +99,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Page Include="Controls\TimeController.xaml">
+    <Page Include="Controls\TimeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -19,5 +19,20 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.ControlledTimeSource
             var ex = Should.Throw<ArgumentOutOfRangeException>(() => clock.Speed = -3);
             ex.ParamName.ShouldBe("value");
         }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(5)]
+        public void sets_speed_when_value_is_non_negative(int newSpeed)
+        {
+            //Arrange
+            var clock = new TimeSources.ControlledTimeSource(InitialTime);
+
+            //Act
+            clock.Speed = newSpeed;
+
+            //Assert
+            clock.Speed.ShouldBe(newSpeed);
+        }
     }
 }
