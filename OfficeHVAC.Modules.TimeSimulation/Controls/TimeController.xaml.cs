@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OfficeHVAC.Modules.TimeSimulation.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace OfficeHVAC.Modules.TimeSimulation.Controls
 {
@@ -20,9 +9,23 @@ namespace OfficeHVAC.Modules.TimeSimulation.Controls
     /// </summary>
     public partial class TimeController : UserControl
     {
+        private ITimeControllerViewModel ViewModel => this.DataContext as ITimeControllerViewModel;
+
         public TimeController()
         {
             InitializeComponent();
         }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e) => ViewModel.ToggleTimer();
+
+        private void Plus5minButton_Click(object sender, RoutedEventArgs e) => ViewModel.AddMinutes(5);
+
+        private void Plus15minButton_Click(object sender, RoutedEventArgs e) => ViewModel.AddMinutes(15);
+
+        private void Plus1hrButton_Click(object sender, RoutedEventArgs e) => ViewModel.AddMinutes(60);
+
+        private void TickButton_Click(object sender, RoutedEventArgs e) => ViewModel.TickManually();
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e) => ViewModel.Reset();
     }
 }

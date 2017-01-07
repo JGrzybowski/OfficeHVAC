@@ -7,6 +7,27 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding TimeText, Mode=OneWay}" VerticalAlignment="Center"/>
+
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <Button x:Name="StartButton" Content="Start / Stop" Width="75" Click="StartButton_Click"/>
+            <Button x:Name="Plus5minButton" Content="+ 5 min" Width="75" Click="Plus5minButton_Click"/>
+            <Button x:Name="Plus15minButton" Content="+ 15 min" Width="75" Click="Plus15minButton_Click"/>
+            <Button x:Name="Plus1hrButton" Content="+ 1 hr" Width="75" Click="Plus1hrButton_Click"/>
+            <Button x:Name="TickButton" Content="Tick" Width="75" Click="TickButton_Click"/>
+            <Button x:Name="ResetButton" Content="Reset" Width="75" Click="ResetButton_Click"/>
+        </StackPanel>
+
+        <DockPanel Grid.Row="2" VerticalAlignment="Center">
+            <TextBox Width="25" Text="{Binding Speed}" />
+            <Slider x:Name="slider" LargeChange="0.5" TickFrequency="0.5" Value="{Binding Speed}" TickPlacement="Both" IsSnapToTickEnabled="True"
+                    Ticks="0.1,1,10,60,300" Maximum="300"/>
+        </DockPanel>
     </Grid>
 </UserControl>
