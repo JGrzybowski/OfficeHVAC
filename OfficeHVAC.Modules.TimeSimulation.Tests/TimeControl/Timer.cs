@@ -5,13 +5,12 @@ using Shouldly;
 using System.ComponentModel;
 using Xunit;
 
-namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeController
+namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
 {
     public class Timer
     {
         public class SpeedProperty
         {
-
             [Fact]
             public void notifies_UI()
             {
@@ -67,7 +66,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeController
             }
         }
 
-        public class Tick
+        public class TimerTick
         {
             [Fact]
             public void updates_time_source_Now()

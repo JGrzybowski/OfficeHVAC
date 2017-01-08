@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace OfficeHVAC.Modules.TimeSimulation.Controls
+namespace OfficeHVAC.Modules.TimeSimulation.Views
 {
     /// <summary>
     /// Interaction logic for TimeControl.xaml

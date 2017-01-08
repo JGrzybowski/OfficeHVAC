@@ -24,6 +24,8 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
             }
         }
 
+        public string TimeText => _controlledTimeSource.Now.ToString();
+
         public TimeControlViewModel(IControlledTimeSource controlledTimeSource, long timerRefreshRate = 1000)
         {
             _controlledTimeSource = controlledTimeSource;
@@ -43,10 +45,22 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
             OnPropertyChanged(nameof(IsRunning));
         }
 
-        public void AddMinutes(long minutes) => _controlledTimeSource.AddMinutes(minutes);
+        public void AddMinutes(long minutes)
+        {
+            _controlledTimeSource.AddMinutes(minutes);
+            OnPropertyChanged(nameof(TimeText));
+        }
 
-        public void TickManually() => _controlledTimeSource.UpdateClock();
+        public void TickManually()
+        {
+            _controlledTimeSource.UpdateClock();
+            OnPropertyChanged(nameof(TimeText));
+        }
 
-        public void Reset() => _controlledTimeSource.Reset(ResetTime);
+        public void Reset()
+        {
+            _controlledTimeSource.Reset(ResetTime);
+            OnPropertyChanged(nameof(TimeText));
+        }
     }
 }

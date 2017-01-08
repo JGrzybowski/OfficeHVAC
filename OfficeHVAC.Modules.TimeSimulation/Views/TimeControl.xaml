@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="OfficeHVAC.Modules.TimeSimulation.Views.TimeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OfficeHVAC.Modules.TimeSimulation.Views"
+             mc:Ignorable="d" 
+             xmlns:mvvm="http://prismlibrary.com/"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             d:DesignHeight="50" d:DesignWidth="600">
+    <UserControl.Resources>
+        <Style x:Key="TimeControlButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Margin="10,0">
+            <Button x:Name="StartButton" Content="⏯" Click="StartButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
+            <Button x:Name="TickButton" Content="🔂" Click="TickButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
+            <Button x:Name="ResetButton" Content="🔄" Click="ResetButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
+
+            <Button x:Name="Plus5minButton" Content="🕐" Click="Plus5minButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
+            <Button x:Name="Plus15minButton" Content="🕒" Click="Plus15minButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
+            <Button x:Name="Plus1hrButton" Content="🕛" Click="Plus1hrButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
+        </StackPanel>
+
+        <TextBlock x:Name="ClockLabel" Grid.Column="1" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   TextWrapping="Wrap" Text="{Binding TimeText, Mode=OneWay}" FontSize="24" />
+
+        <DockPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0">
+            <TextBlock Width="25" Text="{Binding Speed}" DockPanel.Dock="Right"/>
+            <Slider x:Name="slider" LargeChange="0.5" TickFrequency="0.5" Value="{Binding Speed}" 
+                    TickPlacement="Both" IsSnapToTickEnabled="True"
+                    Ticks="1,10,60,300" Maximum="300"/>
+        </DockPanel>
+    </Grid>
+</UserControl>
