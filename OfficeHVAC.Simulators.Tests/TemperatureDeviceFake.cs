@@ -1,4 +1,5 @@
 ﻿using OfficeHVAC.Models.Devices;
+using System.Collections.Generic;
 
 namespace OfficeHVAC.Simulators.Tests
 {
@@ -12,9 +13,10 @@ namespace OfficeHVAC.Simulators.Tests
 
         public float HeatingParameter { get; set; }
 
-        public void TurnOff()
-        {
-            HeatingParameter = 0;
-        }
+        public void TurnOff() => HeatingParameter = 0;
+
+        public IReadOnlyCollection<string> Modes { get; set; }
+        public IReadOnlyDictionary<string, double> EstimatedPowerConsumption { get; set; }
+        public double DesiredTemperature { get; set; }
     }
 }
