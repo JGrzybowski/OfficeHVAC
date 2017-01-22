@@ -16,10 +16,12 @@ namespace OfficeHVAC.Simulators
         protected virtual float CalculateChange()
         {
             var now = this.TimeSource.Now;
-            var hoursSinceLastUpdate = (now - this.LastTime).ToTimeSpan().TotalHours;
+            var deltaTime = (now - this.LastTime);
+            var timespan = deltaTime.ToTimeSpan();
+            var hoursSinceLastUpdate = timespan.TotalHours;
             this.LastTime = now;
             return (float)(this.Devices
-                            .Sum(device => device.MaxPower * device.HeatingParameter)
+                            .Sum(device => device.EffectivePower)
                             / WattsToChangeOneDegreeInOneHour
                             * hoursSinceLastUpdate);
 

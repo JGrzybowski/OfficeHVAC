@@ -5,18 +5,19 @@ namespace OfficeHVAC.Simulators.Tests
 {
     public class TemperatureDeviceFake : ITemperatureDevice
     {
-        public bool IsTurnedOn => HeatingParameter != 0.0f;
+        public bool IsTurnedOn => PowerConsumption != 0.0;
         
         public int MaxPower { get; set; }
 
         public double PowerConsumption { get; set; }
 
-        public float HeatingParameter { get; set; }
+        public double EffectivePower { get; set; }
 
-        public void TurnOff() => HeatingParameter = 0;
+        public void TurnOff() => PowerConsumption = 0;
 
-        public IReadOnlyCollection<string> Modes { get; set; }
-        public IReadOnlyDictionary<string, double> EstimatedPowerConsumption { get; set; }
+        public string ActiveModeName { get; set; }
+        public IReadOnlyCollection<string> ModesNames { get; set; }
+        public ICollection<ITemperatureMode> Modes{ get; set; }
         public double DesiredTemperature { get; set; }
     }
 }

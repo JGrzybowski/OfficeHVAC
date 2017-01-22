@@ -1,6 +1,6 @@
 ﻿namespace OfficeHVAC.Models.Devices
 {
-    public class Mode : ITemparatureMode
+    public class TemperatureMode : ITemperatureMode
     {
         public string Name { get; set; }
 

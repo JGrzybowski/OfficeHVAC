@@ -12,7 +12,7 @@ namespace OfficeHVAC.Models.Tests
         public void returns_zero_if_consumption_or_efficiency_is_equal_to_0(double powerConsumption, double powerEfficency)
         {
             //Arrange
-            var mode = new Mode()
+            var mode = new TemperatureMode()
             {
                 PowerConsumption = powerConsumption,
                 PowerEfficiency = powerEfficency
@@ -30,7 +30,7 @@ namespace OfficeHVAC.Models.Tests
         {
             //Arrange
             var Pmax = 100;
-            var mode = new Mode()
+            var mode = new TemperatureMode()
             {
                 PowerConsumption = 0.5,
                 PowerEfficiency = 0.5
@@ -48,7 +48,7 @@ namespace OfficeHVAC.Models.Tests
         {
             //Arrange
             var Pmax = 100;
-            var mode = new Mode()
+            var mode = new TemperatureMode()
             {
                 PowerConsumption = 1.5,
                 PowerEfficiency = 1.5
@@ -66,7 +66,7 @@ namespace OfficeHVAC.Models.Tests
         {
             //Arrange
             var Pmax = 100;
-            var mode = new Mode()
+            var mode = new TemperatureMode()
             {
                 PowerConsumption = 1,
                 PowerEfficiency = 1

@@ -4,10 +4,14 @@ namespace OfficeHVAC.Models.Devices
 {
     public interface ITemperatureDevice : IDevice
     {
-        float HeatingParameter { get; set; }
-        double DesiredTemperature { get; set; }
+        double EffectivePower { get; }
 
-        IReadOnlyCollection<string> Modes { get; }
-        IReadOnlyDictionary<string, double> EstimatedPowerConsumption { get; }
+        double DesiredTemperature { get; set; }
+        
+        string ActiveModeName { get; set; }
+
+        IReadOnlyCollection<string> ModesNames { get; }
+
+        ICollection<ITemperatureMode> Modes { get; set; }
     }
 }
