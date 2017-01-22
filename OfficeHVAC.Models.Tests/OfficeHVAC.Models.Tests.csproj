@@ -70,6 +70,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="ModeEffectivePowerCalculation.cs" />
     <Compile Include="Range\Contains.cs" />
     <Compile Include="Range\MaxProperty.cs" />
     <Compile Include="Range\MinProperty.cs" />

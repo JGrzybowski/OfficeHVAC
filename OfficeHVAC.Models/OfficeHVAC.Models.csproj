@@ -50,7 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Devices\IMode.cs" />
+    <Compile Include="Devices\ITemparatureMode.cs" />
     <Compile Include="Devices\ITemperatureDevice.cs" />
+    <Compile Include="Devices\Mode.cs" />
     <Compile Include="Devices\TemperatureDevice.cs" />
     <Compile Include="IRandomValueGenerator.cs" />
     <Compile Include="IRange.cs" />
