@@ -8,7 +8,7 @@ namespace OfficeHVAC.Simulators
 {
     public class TemperatureSimulator : ITemperatureSimulator
     {
-        protected float LastTemperature { get; set; }
+        protected double LastTemperature { get; set; }
         protected Instant LastTime { get; set; }
 
         protected const int WattsToChangeOneDegreeInOneHour = 20;
@@ -27,7 +27,7 @@ namespace OfficeHVAC.Simulators
 
         }
 
-        public TemperatureSimulator(ITimeSource timeSource, float initialTemperature)
+        public TemperatureSimulator(ITimeSource timeSource, double initialTemperature)
         {
             this.TimeSource = timeSource;
             this.LastTime = timeSource.Now;
@@ -36,7 +36,7 @@ namespace OfficeHVAC.Simulators
 
         public IEnumerable<ITemperatureDevice> Devices { get; set; } = new List<ITemperatureDevice>();
         public ITimeSource TimeSource { get; }
-        public float Temperature 
+        public double Temperature 
         {
             get
             {
@@ -51,6 +51,5 @@ namespace OfficeHVAC.Simulators
                 this.LastTemperature = value;
             }
         }
-
     }
 }

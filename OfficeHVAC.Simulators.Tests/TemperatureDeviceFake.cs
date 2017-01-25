@@ -15,7 +15,7 @@ namespace OfficeHVAC.Simulators.Tests
 
         public void TurnOff() => PowerConsumption = 0;
 
-        public string ActiveModeName { get; set; }
+        public string SetActiveModeByName { get; set; }
         public IReadOnlyCollection<string> ModesNames { get; set; }
         public ICollection<ITemperatureMode> Modes{ get; set; }
         public double DesiredTemperature { get; set; }

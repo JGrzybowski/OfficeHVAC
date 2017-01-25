@@ -16,7 +16,7 @@ namespace OfficeHVAC.Models.Devices
                 TemperatureRange = new Range<double>(double.NegativeInfinity, double.PositiveInfinity)
             };
             Modes  = new HashSet<ITemperatureMode>() { offMode };
-            this.ActiveModeName = offMode.Name;
+            this.SetActiveModeByName = offMode.Name;
         }
 
         public enum Mode { Off, StandBy, Eco, Normal, Turbo }
@@ -25,21 +25,22 @@ namespace OfficeHVAC.Models.Devices
 
         public int MaxPower { get; set; }
 
-        public double EffectivePower => this.activeMode.CalculateEffectivePower(MaxPower);
+        public double EffectivePower => this.ActiveMode.CalculateEffectivePower(MaxPower);
 
         public double PowerConsumption => MaxPower * Math.Abs(EffectivePower);
 
-        public void TurnOff() => ActiveModeName = nameof(Mode.Off);
+        public void TurnOff() => SetActiveModeByName = nameof(Mode.Off);
 
-        private ITemperatureMode activeMode;
-        public string ActiveModeName
+        public ITemperatureMode ActiveMode { get; private set; }
+
+        public string SetActiveModeByName
         {
-            get { return activeMode.Name; }
+            get { return ActiveMode.Name; }
             set
             {
                 if (Modes.Any(m => m.Name == value))
                 {
-                    activeMode = Modes.Single(m => m.Name == value);
+                    ActiveMode = Modes.Single(m => m.Name == value);
                 }
                 else 
                     throw new ArgumentOutOfRangeException(nameof(value), value, 

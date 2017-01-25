@@ -2,6 +2,6 @@
 {
     public interface IRoomViewModel
     {
-        float Temperature { get; set; }
+        double Temperature { get; set; }
     }
 }

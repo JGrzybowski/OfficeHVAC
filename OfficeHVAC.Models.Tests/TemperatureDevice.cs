@@ -46,10 +46,10 @@ namespace OfficeHVAC.Models.Tests
             };
 
             //Act
-            device.ActiveModeName = nameof(WorkingMode);
+            device.SetActiveModeByName = nameof(WorkingMode);
 
             //Assert
-            device.ActiveModeName.ShouldBe(nameof(WorkingMode));
+            device.SetActiveModeByName.ShouldBe(nameof(WorkingMode));
             device.PowerConsumption.ShouldBeGreaterThan(0);
         }
 
@@ -64,7 +64,7 @@ namespace OfficeHVAC.Models.Tests
             };
 
             //Act & Assert
-            var ex = Should.Throw<ArgumentOutOfRangeException>(() => device.ActiveModeName = "Invalid Mode Name");
+            var ex = Should.Throw<ArgumentOutOfRangeException>(() => device.SetActiveModeByName = "Invalid Mode Name");
             ex.ParamName.ShouldBe("value");
             ex.ActualValue.ShouldBe("Invalid Mode Name");
         }
@@ -81,7 +81,7 @@ namespace OfficeHVAC.Models.Tests
             {
                 Modes = new List<ITemperatureMode> {OffMode, workingModeFake},
                 MaxPower = 1000,
-                ActiveModeName = nameof(workingModeFake)
+                SetActiveModeByName = nameof(workingModeFake)
             };
 
             //Act

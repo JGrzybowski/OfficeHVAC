@@ -1,4 +1,5 @@
 ﻿using NodaTime;
+using NSubstitute;
 using OfficeHVAC.Models.Devices;
 using Shouldly;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace OfficeHVAC.Simulators.Tests
 {
     public class TemperatureSimulatorTests
     {
-        private static readonly float StartingTemperature = 36.6f;
+        private static readonly double StartingTemperature = 36.6f;
         private static readonly Instant StartDateTime = new Instant();
 
         private static readonly Instant FiveMinutesLater = StartDateTime + Duration.FromMinutes(5);
@@ -20,7 +21,11 @@ namespace OfficeHVAC.Simulators.Tests
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(StartDateTime);
-            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature)
+            var temperatureModelFake = Substitute.For<ITemperatureModel>();
+            temperatureModelFake
+                .CalculateChange(Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<Duration>())
+                .ReturnsForAnyArgs(25.0);
+            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature, temperatureModelFake)
             {
                 Devices = new List<ITemperatureDevice> { new TemperatureDeviceFake() { MaxPower = 40 } }
             };
@@ -40,7 +45,11 @@ namespace OfficeHVAC.Simulators.Tests
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(StartDateTime);
-            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature)
+            var temperatureModelFake = Substitute.For<ITemperatureModel>();
+            temperatureModelFake
+                .CalculateChange(Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<Duration>())
+                .ReturnsForAnyArgs(25.0);
+            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature, temperatureModelFake)
             {
                 Devices = new List<ITemperatureDevice>
                 {
@@ -69,7 +78,11 @@ namespace OfficeHVAC.Simulators.Tests
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(StartDateTime);
-            var simulator = new Simulators.TemperatureSimulator(timeSourceFake, StartingTemperature)
+            var temperatureModelFake = Substitute.For<ITemperatureModel>();
+            temperatureModelFake
+                .CalculateChange(Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<Duration>())
+                .ReturnsForAnyArgs(25.0);
+            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature, temperatureModelFake)
             {
                 Devices = new List<ITemperatureDevice>
                 {
@@ -96,7 +109,11 @@ namespace OfficeHVAC.Simulators.Tests
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(StartDateTime);
-            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature)
+            var temperatureModelFake = Substitute.For<ITemperatureModel>();
+            temperatureModelFake
+                .CalculateChange(Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<Duration>())
+                .ReturnsForAnyArgs(25.0);
+            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature, temperatureModelFake)
             {
                 Devices = new List<ITemperatureDevice>
                 {

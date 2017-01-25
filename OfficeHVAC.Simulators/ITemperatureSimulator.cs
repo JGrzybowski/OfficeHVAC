@@ -2,6 +2,6 @@
 {
     public interface ITemperatureSimulator : IParameterSimulator
     {
-        float Temperature { get; set; }
+        double Temperature { get; set; }
     }
 }
