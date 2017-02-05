@@ -16,9 +16,6 @@ namespace OfficeHVAC.Factories.Tests.Simulators.Temperature
         {
             //Arrange
             var temperatureModelFake = Substitute.For<ITemperatureModel>();
-            temperatureModelFake
-                .CalculateChange(Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<Duration>())
-                .ReturnsForAnyArgs(25.0);
             var simulatorFactory = new Factories.Simulators.Temperature.TemperatureSimulatorFactory(Substitute.For<ITimeSource>(),temperatureModelFake);
             simulatorFactory.InitialTemperature = 45;
 

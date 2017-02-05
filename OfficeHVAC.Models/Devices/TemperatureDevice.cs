@@ -19,7 +19,7 @@ namespace OfficeHVAC.Models.Devices
             this.SetActiveModeByName = offMode.Name;
         }
 
-        public enum Mode { Off, StandBy, Eco, Normal, Turbo }
+        public enum Mode { Off, StandBy, Eco, Normal, Turbo, Stabilization }
 
         public bool IsTurnedOn => PowerConsumption > 0;
 

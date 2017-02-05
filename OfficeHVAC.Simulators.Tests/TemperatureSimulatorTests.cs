@@ -11,23 +11,27 @@ namespace OfficeHVAC.Simulators.Tests
     {
         private static readonly double StartingTemperature = 36.6f;
         private static readonly Instant StartDateTime = new Instant();
-
-        private static readonly Instant FiveMinutesLater = StartDateTime + Duration.FromMinutes(5);
-        private static readonly Instant TenMinutesLater = StartDateTime + Duration.FromMinutes(10);
-        private static readonly Instant FifteenMinutesLater = StartDateTime + Duration.FromMinutes(15);
-
-        [Fact]
-        public void does_not_change_temperature_value_when_devices_are_turned_off()
+        private static readonly Duration FiveMinutes = Duration.FromMinutes(5);
+        private static readonly Instant FiveMinutesLater = StartDateTime + FiveMinutes;
+       
+        [Theory]
+        [InlineData(1)]
+        [InlineData(-1)]
+        public void stores_initial_temperature(float desiredTemperatureDelta)
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(StartDateTime);
             var temperatureModelFake = Substitute.For<ITemperatureModel>();
-            temperatureModelFake
-                .CalculateChange(Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<Duration>())
-                .ReturnsForAnyArgs(25.0);
             var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature, temperatureModelFake)
             {
-                Devices = new List<ITemperatureDevice> { new TemperatureDeviceFake() { MaxPower = 40 } }
+                Devices = new List<ITemperatureDevice>
+                {
+                    new TemperatureDeviceFake()
+                    {
+                        EffectivePower = 40,
+                        DesiredTemperature = StartingTemperature + desiredTemperatureDelta
+                    }
+                }
             };
 
             //Act
@@ -38,136 +42,62 @@ namespace OfficeHVAC.Simulators.Tests
             temperatureAfter.ShouldBe(StartingTemperature);
         }
 
+
         [Theory]
         [InlineData(1)]
         [InlineData(-1)]
-        public void change_temperature_value_when_devices_are_turned_on(float temperatureChange)
+        public void uses_model_to_calculate_change(int desiredTemperatureDelta)
         {
             //Arrange
             var timeSourceFake = new TimeSourceFake(StartDateTime);
             var temperatureModelFake = Substitute.For<ITemperatureModel>();
-            temperatureModelFake
-                .CalculateChange(Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<Duration>())
-                .ReturnsForAnyArgs(25.0);
-            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature, temperatureModelFake)
+            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature,temperatureModelFake)
             {
-                Devices = new List<ITemperatureDevice>
+                Devices = new List<TemperatureDeviceFake>
                 {
                     new TemperatureDeviceFake()
                     {
-                        MaxPower = 40,
-                        EffectivePower = temperatureChange
+                        EffectivePower = 1500,
+                        DesiredTemperature = StartingTemperature + desiredTemperatureDelta
                     }
                 }
             };
-
-            //Act
             timeSourceFake.Now = FiveMinutesLater;
-
-            //Assert
-            var temperatureAfter = simulator.Temperature;
-            temperatureAfter.ShouldNotBe(StartingTemperature);
-        }
-
-
-        [Theory]
-        [InlineData(1)]
-        [InlineData(0)]
-        [InlineData(-1)]
-        public void does_not_change_temperature_value_when_time_does_not_change(float temperatureChange)
-        {
-            //Arrange
-            var timeSourceFake = new TimeSourceFake(StartDateTime);
-            var temperatureModelFake = Substitute.For<ITemperatureModel>();
-            temperatureModelFake
-                .CalculateChange(Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<Duration>())
-                .ReturnsForAnyArgs(25.0);
-            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature, temperatureModelFake)
-            {
-                Devices = new List<ITemperatureDevice>
-                {
-                    new TemperatureDeviceFake()
-                    {
-                        MaxPower = 40,
-                        EffectivePower = temperatureChange
-                    }
-                }
-            };
-
-            //Act
-            var temperatureAfter = simulator.Temperature;
-
-            //Assert
-            temperatureAfter.ShouldBe(StartingTemperature);
-        }
-
-        [Theory]
-        [InlineData(1)]
-        [InlineData(0)]
-        [InlineData(-1)]
-        public void should_turn_off_all_devices_when_temperature_is_set(float temperatureChange)
-        {
-            //Arrange
-            var timeSourceFake = new TimeSourceFake(StartDateTime);
-            var temperatureModelFake = Substitute.For<ITemperatureModel>();
-            temperatureModelFake
-                .CalculateChange(Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<Duration>())
-                .ReturnsForAnyArgs(25.0);
-            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature, temperatureModelFake)
-            {
-                Devices = new List<ITemperatureDevice>
-                {
-                    new TemperatureDeviceFake()
-                    {
-                        MaxPower = 40,
-                        EffectivePower = temperatureChange
-                    }
-                }
-            };
             
+            //Act
+            var temperatureAfter = simulator.Temperature;
+
+            //Assert
+            temperatureModelFake.Received().CalculateChange(StartingTemperature, simulator.Devices, FiveMinutes);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void should_turn_off_all_devices_when_temperature_is_set(float desiredTemperatureDelta)
+        {
+            //Arrange
+            var timeSourceFake = new TimeSourceFake(StartDateTime);
+            var temperatureModelFake = Substitute.For<ITemperatureModel>();
+            var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature, temperatureModelFake)
+            {
+                Devices = new List<ITemperatureDevice>
+                {
+                    new TemperatureDeviceFake()
+                    {
+                        EffectivePower = 1500,
+                        DesiredTemperature = StartingTemperature + desiredTemperatureDelta
+                    }
+                }
+            };
+
             //Act
             simulator.Temperature = 35;
-            
+
             //Assert
             simulator.Temperature.ShouldBe(35);
             simulator.Devices.ShouldAllBe(device => !device.IsTurnedOn);
         }
-
-        //[Theory]
-        //[InlineData(1)]
-        //[InlineData(-1)]
-        //public void takes_time_into_consideration(int heatingParameter)
-        //{
-        //    //Arrange
-        //    var timeSourceFake = new TimeSourceFake(StartDateTime);
-        //    var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature)
-        //    {
-        //        Devices = new List<ITemperatureDevice>
-        //        {
-        //            new TemperatureDeviceFake()
-        //            {
-        //                MaxPower = 40,
-        //                EffectivePower = heatingParameter
-        //            }
-        //        }
-        //    };
-        //    timeSourceFake.Now = FiveMinutesLater;
-        //    var temperatureAfterFiveMinutes = simulator.Temperature;
-
-        //    simulator.Devices.First().EffectivePower = 0;
-        //    timeSourceFake.Now = TenMinutesLater;
-        //    var temperatureAfterTenMinutes = simulator.Temperature;
-
-        //    simulator.Devices.First().EffectivePower = -heatingParameter;
-        //    timeSourceFake.Now = FifteenMinutesLater;
-
-        //    //Act
-        //    var temperatureAfterFifteenMinutes = simulator.Temperature;
-
-        //    //Assert
-        //    temperatureAfterFifteenMinutes.ShouldBe(StartingTemperature);
-        //    temperatureAfterFifteenMinutes.ShouldNotBe(temperatureAfterFiveMinutes);
-        //    temperatureAfterFifteenMinutes.ShouldNotBe(temperatureAfterTenMinutes);
-        //}
     }
 }
