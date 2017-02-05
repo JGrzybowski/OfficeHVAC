@@ -1,8 +1,17 @@
-﻿namespace OfficeHVAC.Models.Devices
+﻿using System.Collections.Generic;
+
+namespace OfficeHVAC.Models.Devices
 {
     public interface ITemperatureDevice : IDevice
     {
-        int MaxPower { get; set; }
-        float HeatingParameter { get; set; }
+        double EffectivePower { get; }
+
+        double DesiredTemperature { get; set; }
+        
+        string SetActiveModeByName { get; set; }
+
+        IReadOnlyCollection<string> ModesNames { get; }
+
+        ICollection<ITemperatureMode> Modes { get; set; }
     }
 }

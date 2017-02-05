@@ -21,7 +21,7 @@ namespace OfficeHVAC.Actors.Tests
 
         private class TemperatureSimulatorFake : ITemperatureSimulator
         {
-            public float Temperature { get; set; }
+            public double Temperature { get; set; }
             public IEnumerable<ITemperatureDevice> Devices { get; set; }
             public ITimeSource TimeSource { get; }
         }

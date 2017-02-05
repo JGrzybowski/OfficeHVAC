@@ -2,31 +2,18 @@
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace OfficeHVAC.Simulators
 {
     public class TemperatureSimulator : ITemperatureSimulator
     {
-        protected float LastTemperature { get; set; }
+        private readonly ITemperatureModel model;
+        protected double LastTemperature { get; set; }
         protected Instant LastTime { get; set; }
 
-        protected const int WattsToChangeOneDegreeInOneHour = 20;
-
-        protected virtual float CalculateChange()
+        public TemperatureSimulator(ITimeSource timeSource, double initialTemperature, ITemperatureModel model)
         {
-            var now = this.TimeSource.Now;
-            var hoursSinceLastUpdate = (now - this.LastTime).ToTimeSpan().TotalHours;
-            this.LastTime = now;
-            return (float)(this.Devices
-                            .Sum(device => device.MaxPower * device.HeatingParameter)
-                            / WattsToChangeOneDegreeInOneHour
-                            * hoursSinceLastUpdate);
-
-        }
-
-        public TemperatureSimulator(ITimeSource timeSource, float initialTemperature)
-        {
+            this.model = model;
             this.TimeSource = timeSource;
             this.LastTime = timeSource.Now;
             this.LastTemperature = initialTemperature;
@@ -34,12 +21,16 @@ namespace OfficeHVAC.Simulators
 
         public IEnumerable<ITemperatureDevice> Devices { get; set; } = new List<ITemperatureDevice>();
         public ITimeSource TimeSource { get; }
-        public float Temperature 
+        public double Temperature 
         {
             get
             {
-                this.LastTemperature += CalculateChange();
-                return this.LastTemperature;
+                var now = this.TimeSource.Now;
+                var timeDelta = (now - LastTime);
+                LastTime = now;
+
+                LastTemperature += model.CalculateChange(LastTemperature, Devices, timeDelta);
+                return LastTemperature;
             }
 
             set
@@ -49,6 +40,5 @@ namespace OfficeHVAC.Simulators
                 this.LastTemperature = value;
             }
         }
-
     }
 }

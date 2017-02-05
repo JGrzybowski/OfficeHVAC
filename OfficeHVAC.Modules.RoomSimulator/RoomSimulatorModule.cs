@@ -27,7 +27,7 @@ namespace OfficeHVAC.Modules.RoomSimulator
         //         which was defined on the MainWindow in the HelloWorld project.
         public void Initialize()
         {
-            _regionManager.RegisterViewWithRegion("MainRegion", typeof(OfficeHVAC.Modules.RoomSimulator.Views.RoomSimulator));
+            _regionManager.RegisterViewWithRegion("RoomSim", typeof(OfficeHVAC.Modules.RoomSimulator.Views.RoomSimulator));
         }
 
         public static void InitializeDependencies (ContainerBuilder containerBuilder)

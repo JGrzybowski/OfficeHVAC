@@ -1,13 +1,13 @@
 ﻿using Akka.Actor;
 using Akka.Configuration;
 using OfficeHVAC.Factories.Configs;
+using OfficeHVAC.Messages;
 using OfficeHVAC.Modules.RoomSimulator.Factories;
+using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using OfficeHVAC.Messages;
-using Prism.Commands;
 
 namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
 {
@@ -26,8 +26,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
         public ActorSystem LocalActorSystem { get; set; }
 
         // Notifiable Properties 
-        private float _temperature;
-        public float Temperature
+        private double _temperature;
+        public double Temperature
         {
             get { return _temperature; }
             set { SetProperty(ref _temperature, value); }
