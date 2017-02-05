@@ -54,6 +54,5 @@ namespace OfficeHVAC.Models
         internal static bool AreEqual<T>(this IComparable<T> a, T b)      => a.CompareTo(b) == 0;
         internal static bool IsGreaterThan<T>(this IComparable<T> a, T b) => a.CompareTo(b) > 0;
         internal static bool IsGreaterOrEqualTo<T>(this IComparable<T> a, T b) => a.CompareTo(b) >= 0;
-
     }
 }

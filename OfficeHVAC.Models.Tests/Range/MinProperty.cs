@@ -37,7 +37,7 @@ namespace OfficeHVAC.Models.Tests.Range
 
         [Theory]
         [MemberData("Min_Max_Above")]
-        public void Min_throws_ArgumentOutOfRangeException_when_value_is_greater_or_equal_to_max(T min, T max, T invalidMin)
+        public void Min_setter_throws_ArgumentOutOfRangeException_when_value_is_greater_or_equal_to_max(T min, T max, T invalidMin)
         {
             //Arrange
             var range = new Range<T>(min, max);

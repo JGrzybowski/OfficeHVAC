@@ -44,7 +44,7 @@ namespace OfficeHVAC.Models.Tests
         }
 
         [Fact]
-        public void should_be_above_max_if_consumption_or_efficiency_is_greater_than_1()
+        public void should_be_above_max_if_consumption_and_efficiency_is_greater_than_1()
         {
             //Arrange
             var Pmax = 100;
@@ -62,7 +62,7 @@ namespace OfficeHVAC.Models.Tests
         }
 
         [Fact]
-        public void should_be_equal_to_max_if_consumption_or_efficiency_are_equal_to_1()
+        public void should_be_equal_to_max_if_consumption_and_efficiency_are_equal_to_1()
         {
             //Arrange
             var Pmax = 100;

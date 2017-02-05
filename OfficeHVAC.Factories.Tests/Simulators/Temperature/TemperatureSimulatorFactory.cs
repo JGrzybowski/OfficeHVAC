@@ -1,10 +1,7 @@
-﻿using NodaTime;
-using NSubstitute;
+﻿using NSubstitute;
 using OfficeHVAC.Models;
-using OfficeHVAC.Models.Devices;
 using OfficeHVAC.Simulators;
 using Shouldly;
-using System.Collections.Generic;
 using Xunit;
 
 namespace OfficeHVAC.Factories.Tests.Simulators.Temperature
@@ -32,9 +29,6 @@ namespace OfficeHVAC.Factories.Tests.Simulators.Temperature
             //Arrange
             var timeSourceFake = Substitute.For<ITimeSource>();
             var temperatureModelFake = Substitute.For<ITemperatureModel>();
-            temperatureModelFake
-                .CalculateChange(Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<Duration>())
-                .ReturnsForAnyArgs(25.0);
             var simulatorFactory = new Factories.Simulators.Temperature.TemperatureSimulatorFactory(timeSourceFake, temperatureModelFake);
             
             //Act

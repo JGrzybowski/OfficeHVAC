@@ -8,7 +8,6 @@ namespace OfficeHVAC.Models.Tests.Range
     {
         [Theory]
         [MemberData("Min_Max")]
-
         public void Max_getter_returns_the_value_of_max(T min, T max)
         {
             //Arrange
@@ -38,7 +37,7 @@ namespace OfficeHVAC.Models.Tests.Range
 
         [Theory]
         [MemberData("Min_Max_Below")]
-        public void Max_throws_ArgumentOutOfRangeException_when_value_is_smaller_or_equal_to_min(T min, T max, T invalidMax)
+        public void Max_setter_throws_ArgumentOutOfRangeException_when_value_is_smaller_or_equal_to_min(T min, T max, T invalidMax)
         {
             //Arrange
             var range = new Range<T>(min, max);
@@ -48,6 +47,5 @@ namespace OfficeHVAC.Models.Tests.Range
             ex.ParamName.ShouldBe(nameof(Range<T>.Max));
             ex.ActualValue.ShouldBe(invalidMax);
         }
-
     }
 }
