@@ -111,6 +111,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Actors\RoomSimulatorActor.cs" />
     <Compile Include="Factories\BridgeRoomActorPropsFactoryTests.cs" />
     <Compile Include="Factories\RoomSimulatorActorPropsFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -121,9 +122,9 @@
     <Compile Include="RoomViewModel\ShutdownSimulator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OfficeHVAC.Actors\OfficeHVAC.Actors.csproj">
-      <Project>{A018C9AA-EB70-4751-9DC5-C701C39A715A}</Project>
-      <Name>OfficeHVAC.Actors</Name>
+    <ProjectReference Include="..\OfficeHVAC.Models\OfficeHVAC.Models.csproj">
+      <Project>{584598C9-E1CD-4592-9A88-24F34D23D282}</Project>
+      <Name>OfficeHVAC.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\OfficeHVAC.Modules.RoomSimulator\OfficeHVAC.Modules.RoomSimulator.csproj">
       <Project>{6FCADE50-DBCE-4B84-AA05-55AC373B93EF}</Project>

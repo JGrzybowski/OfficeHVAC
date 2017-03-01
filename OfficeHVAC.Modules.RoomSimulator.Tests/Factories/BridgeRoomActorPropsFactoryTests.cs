@@ -41,7 +41,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
             var resultProps = factory.Props();
 
             //Assert
-            var bridgeActor = ActorOfAsTestActorRef<Actors.RoomBridgeActor>(resultProps);
+            var bridgeActor = ActorOfAsTestActorRef<RoomSimulator.Actors.RoomBridgeActor>(resultProps);
             bridgeActor.UnderlyingActor.ShouldNotBeNull();
         }
     }

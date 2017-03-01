@@ -2,9 +2,9 @@
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
-using OfficeHVAC.Actors;
 using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Simulators.Temperature;
+using OfficeHVAC.Modules.RoomSimulator.Actors;
 using OfficeHVAC.Modules.RoomSimulator.Factories;
 using OfficeHVAC.Simulators;
 using Shouldly;

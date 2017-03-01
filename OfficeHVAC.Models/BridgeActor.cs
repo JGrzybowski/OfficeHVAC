@@ -1,6 +1,6 @@
 ﻿using Akka.Actor;
 
-namespace OfficeHVAC.Actors
+namespace OfficeHVAC.Models
 {
     public abstract class BridgeActor<TViewModel> : ReceiveActor
     {

@@ -1,9 +1,9 @@
 ﻿using Akka.Actor;
-using OfficeHVAC.Actors;
 using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Simulators.Temperature;
 using Prism.Mvvm;
 using System;
+using RoomSimulatorActor = OfficeHVAC.Modules.RoomSimulator.Actors.RoomSimulatorActor;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Factories
 {

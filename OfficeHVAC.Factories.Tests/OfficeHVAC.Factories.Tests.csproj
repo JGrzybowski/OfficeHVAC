@@ -96,10 +96,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OfficeHVAC.Actors\OfficeHVAC.Actors.csproj">
-      <Project>{A018C9AA-EB70-4751-9DC5-C701C39A715A}</Project>
-      <Name>OfficeHVAC.Actors</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OfficeHVAC.Factories\OfficeHVAC.Factories.csproj">
       <Project>{F678EE5A-B0C5-4314-AF14-EED628C9F630}</Project>
       <Name>OfficeHVAC.Factories</Name>

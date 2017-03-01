@@ -1,10 +1,11 @@
-﻿using System;
-using Akka.Actor;
+﻿using Akka.Actor;
 using OfficeHVAC.Messages;
+using OfficeHVAC.Models.Devices;
 using OfficeHVAC.Simulators;
+using System;
 using System.Collections.Generic;
 
-namespace OfficeHVAC.Actors
+namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
     public class RoomSimulatorActor : ReceiveActor
     {
@@ -16,13 +17,13 @@ namespace OfficeHVAC.Actors
 
         private HashSet<IActorRef> Subscribers { get; } = new HashSet<IActorRef>();
 
-        private ActorPath ComparnySupervisorActorPath { get; }
+        private ActorPath CompanySupervisorActorPath { get; }
 
         public RoomSimulatorActor(string roomName, ITemperatureSimulator temperatureSimulator, ActorPath companySupervisorActorPath)
         {
             this.RoomName = roomName;
             this.TemperatureSimulator = temperatureSimulator;
-            this.ComparnySupervisorActorPath = companySupervisorActorPath;
+            this.CompanySupervisorActorPath = companySupervisorActorPath;
 
             this.Receive<SubscribeMessage>(message =>
             {
@@ -46,16 +47,27 @@ namespace OfficeHVAC.Actors
             {
                 TemperatureSimulator.Temperature += message.DeltaT;
             });
+
+            this.Receive<SetDesiredTemperature>(message => {
+                foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
+                    device.DesiredTemperature = message.DesiredTemperature;
+            });
+
+            this.Receive<SetDesiredMode>(message =>
+            {
+                foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
+                    device.SetActiveModeByName = message.DesiredMode;
+            });
         }
 
-        public RoomStatusMessage GenerateRoomStatus()
+        private RoomStatusMessage GenerateRoomStatus()
         {
             return new RoomStatusMessage(RoomName, TemperatureSimulator.Temperature);
         }
 
         protected override void PreStart()
         {
-            var selection = Context.System.ActorSelection(this.ComparnySupervisorActorPath.ToString());
+            var selection = Context.System.ActorSelection(this.CompanySupervisorActorPath.ToString());
             selection.Tell(new RoomAvaliabilityMessage(Self));
 
             Scheduler = Context.System

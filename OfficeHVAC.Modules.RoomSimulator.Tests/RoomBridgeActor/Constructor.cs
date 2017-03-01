@@ -30,12 +30,12 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
         public void creates_room_actor()
         {
             //Arrange & Act
-            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
+            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
             ExpectMsg<SubscribeMessage>();
             Thread.Sleep(500);
 
             //Assert
-            var roomActor = Sys.ActorSelection(bridge.Path.Child(Actors.RoomBridgeActor.RoomActorName));
+            var roomActor = Sys.ActorSelection(bridge.Path.Child(RoomSimulator.Actors.RoomBridgeActor.RoomActorName));
             roomActor.Tell("Hello");
             ExpectMsg<string>(msg => msg.ShouldBe("Hello"));
         }

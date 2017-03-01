@@ -5,6 +5,7 @@ using NSubstitute;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
+using OfficeHVAC.Modules.RoomSimulator.Actors;
 using OfficeHVAC.Simulators;
 using Shouldly;
 using System;
@@ -12,9 +13,9 @@ using System.Collections.Generic;
 using System.Threading;
 using Xunit;
 
-namespace OfficeHVAC.Actors.Tests
+namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors
 {
-    public class RoomSimulatorActor : TestKit
+    public class RoomSimulatorActorTests : TestKit
     {
         private const string TestRoomName = "Room 101";
         private const float TemperatureInRoom = 20f;
@@ -24,6 +25,7 @@ namespace OfficeHVAC.Actors.Tests
             public double Temperature { get; set; }
             public IEnumerable<ITemperatureDevice> Devices { get; set; }
             public ITimeSource TimeSource { get; }
+            public ITemperatureModel Model { get; }
         }
 
         private static ITemperatureSimulator GenerateTemperatureSimulatorFake()
@@ -34,7 +36,7 @@ namespace OfficeHVAC.Actors.Tests
         }
 
         private Props SimulatorActorProps(ActorPath companyActorPath) =>
-            Props.Create(() => new Actors.RoomSimulatorActor(TestRoomName, GenerateTemperatureSimulatorFake(), companyActorPath));
+            Props.Create(() => new RoomSimulatorActor(TestRoomName, GenerateTemperatureSimulatorFake(), companyActorPath));
         
         [Fact]
         public void sends_avaliability_message_to_server()
@@ -51,7 +53,7 @@ namespace OfficeHVAC.Actors.Tests
         {
             //Arrange
             var temperatureSimulatorFake = new TemperatureSimulatorFake();
-            var roomActor = ActorOfAsTestActorRef(() => new Actors.RoomSimulatorActor(TestRoomName, temperatureSimulatorFake, ActorOf(BlackHoleActor.Props).Path));
+            var roomActor = ActorOfAsTestActorRef(() => new RoomSimulatorActor(TestRoomName, temperatureSimulatorFake, ActorOf(BlackHoleActor.Props).Path));
             var temperatureBefore = temperatureSimulatorFake.Temperature;
 
             //Act

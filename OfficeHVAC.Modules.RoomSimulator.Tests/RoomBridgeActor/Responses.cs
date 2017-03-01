@@ -31,7 +31,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
         public void forwards_SetTemperature_message_to_RoomActor()
         {
             //Arrange
-            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel,_echoActorProps), "bridge");
+            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel,_echoActorProps), "bridge");
             ExpectMsg<SubscribeMessage>();
             var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
 
@@ -52,7 +52,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
         public void forwards_ChangeTemperature_message_to_RoomActor(float deltaT)
         {
             //Arrange
-            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
+            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
             ExpectMsg<SubscribeMessage>();
             var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
 
@@ -71,7 +71,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
         public void updates_ViewModel_Temperature_when_recieved_RoomStatusMessage()
         {
             //Arrange
-            var bridge = ActorOf(() => new Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
+            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
             ExpectMsg<SubscribeMessage>();
 
             //Act
