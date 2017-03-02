@@ -1,6 +1,6 @@
 ﻿using Akka.Actor;
-using OfficeHVAC.Actors;
 using OfficeHVAC.Messages;
+using OfficeHVAC.Models;
 using OfficeHVAC.Modules.RoomSimulator.ViewModels;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
