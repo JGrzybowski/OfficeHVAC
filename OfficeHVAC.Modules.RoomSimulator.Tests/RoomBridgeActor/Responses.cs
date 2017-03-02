@@ -2,9 +2,7 @@
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
-using OfficeHVAC.Factories.Configs;
 using OfficeHVAC.Messages;
-using OfficeHVAC.Modules.RoomSimulator.Factories;
 using Shouldly;
 using System.Threading;
 using Xunit;
@@ -14,11 +12,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
     public class Responses :TestKit
     {
 
-        private readonly ViewModels.RoomSimulatorViewModel _viewModel = 
-            Substitute.For<ViewModels.RoomSimulatorViewModel>(
-                Substitute.For<IConfigBuilder>(),
-                Substitute.For<IBridgeRoomActorPropsFactory>()
-            );
+        private readonly ViewModels.IRoomViewModel _viewModel = Substitute.For<ViewModels.IRoomViewModel>();
 
         private readonly Props _echoActorProps;
 
@@ -75,11 +69,11 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
             ExpectMsg<SubscribeMessage>();
 
             //Act
-            bridge.Tell(new RoomStatusMessage("Room 101", 26f));
+            bridge.Tell(new RoomStatusMessage("Room 101", 26));
 
             //Assert
             Thread.Sleep(1000);
-            _viewModel.Received().Temperature = 26f;
+            _viewModel.Temperature.ShouldBe(26);
         }
     }
 }

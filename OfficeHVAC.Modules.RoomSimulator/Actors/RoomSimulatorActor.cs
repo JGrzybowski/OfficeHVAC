@@ -1,7 +1,6 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Messages;
-using OfficeHVAC.Models.Devices;
-using OfficeHVAC.Simulators;
+using OfficeHVAC.Modules.TemperatureSimulation;
 using System;
 using System.Collections.Generic;
 
@@ -48,16 +47,16 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 TemperatureSimulator.Temperature += message.DeltaT;
             });
 
-            this.Receive<SetDesiredTemperature>(message => {
-                foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
-                    device.DesiredTemperature = message.DesiredTemperature;
-            });
+            //this.Receive<SetDesiredTemperature>(message => {
+            //    foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
+            //        device.DesiredTemperature = message.DesiredTemperature;
+            //});
 
-            this.Receive<SetDesiredMode>(message =>
-            {
-                foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
-                    device.SetActiveModeByName = message.DesiredMode;
-            });
+            //this.Receive<SetDesiredMode>(message =>
+            //{
+            //    foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
+            //        device.SetActiveModeByName = message.DesiredMode;
+            //});
         }
 
         private RoomStatusMessage GenerateRoomStatus()

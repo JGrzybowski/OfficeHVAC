@@ -1,19 +1,19 @@
 ﻿using NSubstitute;
 using OfficeHVAC.Models;
-using OfficeHVAC.Simulators;
+using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using Shouldly;
 using Xunit;
 
-namespace OfficeHVAC.Factories.Tests.Simulators.Temperature
+namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.Factories
 {
-    public class TemperatureSimulatorFactory
+    public class TemperatureSimulatorFactoryTests
     {
         [Fact]
         public void should_create_simulator_with_initial_temperature()
         {
             //Arrange
             var temperatureModelFake = Substitute.For<ITemperatureModel>();
-            var simulatorFactory = new Factories.Simulators.Temperature.TemperatureSimulatorFactory(Substitute.For<ITimeSource>(),temperatureModelFake);
+            var simulatorFactory = new TemperatureSimulatorFactory(Substitute.For<ITimeSource>(),temperatureModelFake);
             simulatorFactory.InitialTemperature = 45;
 
             //Act
@@ -29,7 +29,7 @@ namespace OfficeHVAC.Factories.Tests.Simulators.Temperature
             //Arrange
             var timeSourceFake = Substitute.For<ITimeSource>();
             var temperatureModelFake = Substitute.For<ITemperatureModel>();
-            var simulatorFactory = new Factories.Simulators.Temperature.TemperatureSimulatorFactory(timeSourceFake, temperatureModelFake);
+            var simulatorFactory = new TemperatureSimulatorFactory(timeSourceFake, temperatureModelFake);
             
             //Act
             var temperatureSimulator = simulatorFactory.TemperatureSimulator();

@@ -1,7 +1,7 @@
 ﻿using NodaTime;
 using OfficeHVAC.Models;
 
-namespace OfficeHVAC.Simulators.Tests
+namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
 {
     public class TimeSourceFake : ITimeSource
     {

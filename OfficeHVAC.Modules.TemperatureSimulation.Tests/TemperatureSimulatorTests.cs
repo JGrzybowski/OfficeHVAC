@@ -1,11 +1,12 @@
 ﻿using NodaTime;
 using NSubstitute;
+using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
 using Shouldly;
 using System.Collections.Generic;
 using Xunit;
 
-namespace OfficeHVAC.Simulators.Tests
+namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
 {
     public class TemperatureSimulatorTests
     {

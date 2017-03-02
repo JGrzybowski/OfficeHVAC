@@ -1,8 +1,7 @@
 ﻿using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
-using OfficeHVAC.Simulators;
 
-namespace OfficeHVAC.Factories.Simulators.Temperature
+namespace OfficeHVAC.Modules.TemperatureSimulation.Factories
 {
     public class TemperatureSimulatorFactory : ITemperatureSimulatorFactory
     {

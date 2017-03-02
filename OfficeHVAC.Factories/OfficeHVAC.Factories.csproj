@@ -67,8 +67,6 @@
     <Compile Include="Configs\IConfigBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Propses\IPropsFactory.cs" />
-    <Compile Include="Simulators\Temperature\ITemperatureSimulatorFactory.cs" />
-    <Compile Include="Simulators\Temperature\TemperatureSimulatorFactory.cs" />
     <Compile Include="TimeSources\ITimeSourceFactory.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,10 +77,6 @@
     <ProjectReference Include="..\OfficeHVAC.Models\OfficeHVAC.Models.csproj">
       <Project>{584598C9-E1CD-4592-9A88-24F34D23D282}</Project>
       <Name>OfficeHVAC.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OfficeHVAC.Simulators\OfficeHVAC.Simulators.csproj">
-      <Project>{0B83EBD2-2C92-4B9B-B1CE-45C96F6C453B}</Project>
-      <Name>OfficeHVAC.Simulators</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

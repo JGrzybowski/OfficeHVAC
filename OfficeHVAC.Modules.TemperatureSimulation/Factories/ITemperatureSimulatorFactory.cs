@@ -1,6 +1,4 @@
-﻿using OfficeHVAC.Simulators;
-
-namespace OfficeHVAC.Factories.Simulators.Temperature
+﻿namespace OfficeHVAC.Modules.TemperatureSimulation.Factories
 {
     public interface ITemperatureSimulatorFactory
     {

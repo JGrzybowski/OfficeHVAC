@@ -2,9 +2,9 @@
 using Autofac.Core;
 using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Configs;
-using OfficeHVAC.Factories.Simulators.Temperature;
 using OfficeHVAC.Modules.RoomSimulator.Factories;
 using OfficeHVAC.Modules.RoomSimulator.ViewModels;
+using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using Prism.Regions;
 
 namespace OfficeHVAC.Modules.RoomSimulator

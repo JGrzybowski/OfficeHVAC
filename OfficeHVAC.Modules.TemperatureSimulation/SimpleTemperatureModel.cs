@@ -1,9 +1,10 @@
 ﻿using NodaTime;
+using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OfficeHVAC.Simulators
+namespace OfficeHVAC.Modules.TemperatureSimulation
 {
     public class SimpleTemperatureModel : ITemperatureModel
     {
@@ -16,6 +17,11 @@ namespace OfficeHVAC.Simulators
             return devices.Sum(device => device.EffectivePower * (device.DesiredTemperature - temperature))
                             / WattsToChangeOneDegreeInOneHour
                             * hoursSinceLastUpdate;
+        }
+
+        public Duration CalculateNeededTime(double initialTemperature, double desiredTemperature, IEnumerable<ITemperatureDevice> devices, string mode)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

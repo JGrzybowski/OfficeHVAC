@@ -133,9 +133,9 @@
       <Project>{584598C9-E1CD-4592-9A88-24F34D23D282}</Project>
       <Name>OfficeHVAC.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OfficeHVAC.Simulators\OfficeHVAC.Simulators.csproj">
-      <Project>{0B83EBD2-2C92-4B9B-B1CE-45C96F6C453B}</Project>
-      <Name>OfficeHVAC.Simulators</Name>
+    <ProjectReference Include="..\OfficeHVAC.Modules.TemperatureSimulation\OfficeHVAC.Modules.TemperatureSimulation.csproj">
+      <Project>{9CF90BD2-370B-4464-B4E6-3BFF8CD01BE1}</Project>
+      <Name>OfficeHVAC.Modules.TemperatureSimulation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

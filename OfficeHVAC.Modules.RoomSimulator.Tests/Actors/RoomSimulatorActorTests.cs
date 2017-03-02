@@ -6,7 +6,7 @@ using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
 using OfficeHVAC.Modules.RoomSimulator.Actors;
-using OfficeHVAC.Simulators;
+using OfficeHVAC.Modules.TemperatureSimulation;
 using Shouldly;
 using System;
 using System.Collections.Generic;

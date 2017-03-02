@@ -172,10 +172,6 @@
       <Project>{641B89A7-EC7A-480F-858E-93B40A7C9197}</Project>
       <Name>OfficeHVAC.Modules.TimeSimulation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OfficeHVAC.Simulators\OfficeHVAC.Simulators.csproj">
-      <Project>{0B83EBD2-2C92-4B9B-B1CE-45C96F6C453B}</Project>
-      <Name>OfficeHVAC.Simulators</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

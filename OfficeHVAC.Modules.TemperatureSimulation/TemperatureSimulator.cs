@@ -3,17 +3,17 @@ using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
 using System.Collections.Generic;
 
-namespace OfficeHVAC.Simulators
+namespace OfficeHVAC.Modules.TemperatureSimulation
 {
     public class TemperatureSimulator : ITemperatureSimulator
     {
-        private readonly ITemperatureModel model;
+        public ITemperatureModel Model { get; }
         protected double LastTemperature { get; set; }
         protected Instant LastTime { get; set; }
 
         public TemperatureSimulator(ITimeSource timeSource, double initialTemperature, ITemperatureModel model)
         {
-            this.model = model;
+            this.Model = model;
             this.TimeSource = timeSource;
             this.LastTime = timeSource.Now;
             this.LastTemperature = initialTemperature;
@@ -29,7 +29,7 @@ namespace OfficeHVAC.Simulators
                 var timeDelta = (now - LastTime);
                 LastTime = now;
 
-                LastTemperature += model.CalculateChange(LastTemperature, Devices, timeDelta);
+                LastTemperature += Model.CalculateChange(LastTemperature, Devices, timeDelta);
                 return LastTemperature;
             }
 

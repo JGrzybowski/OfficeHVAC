@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using OfficeHVAC.Models;
-using OfficeHVAC.Models.Devices;
+﻿using OfficeHVAC.Models.Devices;
+using System.Collections.Generic;
 
-namespace OfficeHVAC.Simulators
+namespace OfficeHVAC.Models
 {
     public interface IParameterSimulator
     {
