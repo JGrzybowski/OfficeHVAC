@@ -2,46 +2,24 @@
 using OfficeHVAC.Messages;
 using OfficeHVAC.Modules.TemperatureSimulation;
 using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
-    public class RoomSimulatorActor : ReceiveActor
+    public class RoomSimulatorActor : RoomActor
     {
-        private string RoomName { get; }
-
         private ICancelable Scheduler { get; set; }
 
         private ITemperatureSimulator TemperatureSimulator { get; }
 
-        private HashSet<IActorRef> Subscribers { get; } = new HashSet<IActorRef>();
-
         private ActorPath CompanySupervisorActorPath { get; }
 
-        public RoomSimulatorActor(string roomName, ITemperatureSimulator temperatureSimulator, ActorPath companySupervisorActorPath)
+        public RoomSimulatorActor(string roomName, ITemperatureSimulator temperatureSimulator, ActorPath companySupervisorActorPath) : base(roomName)
         {
-            this.RoomName = roomName;
             this.TemperatureSimulator = temperatureSimulator;
             this.CompanySupervisorActorPath = companySupervisorActorPath;
-
-            this.Receive<SubscribeMessage>(message =>
-            {
-                this.Subscribers.Add(Sender);
-                Sender.Tell(GenerateRoomStatus());
-            });
-
-            this.Receive<UnsubscribeMessage>(message =>
-            {
-                this.Subscribers.Remove(Sender);
-            });
-
-            this.Receive<RoomStatusRequest>(message =>
-            {
-                var status = GenerateRoomStatus();
-                foreach (var subscriber in this.Subscribers)
-                    subscriber.Tell(status, Self);
-            });
-
+            
+            //Temperature calculation 
             this.Receive<ChangeTemperature>(message =>
             {
                 TemperatureSimulator.Temperature += message.DeltaT;
@@ -59,9 +37,10 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             //});
         }
 
-        private RoomStatusMessage GenerateRoomStatus()
+        protected override async Task<RoomStatusMessage> GenerateRoomStatus()
         {
-            return new RoomStatusMessage(RoomName, TemperatureSimulator.Temperature);
+            var msg = new RoomStatusMessage(RoomName, TemperatureSimulator.Temperature);
+            return await Task.FromResult(msg);
         }
 
         protected override void PreStart()

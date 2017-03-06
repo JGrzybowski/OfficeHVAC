@@ -68,6 +68,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ParameterValueMessage.cs" />
+    <Compile Include="ParameterValueRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoomAvaliabilityMessage.cs" />
     <Compile Include="RoomClosedMessage.cs" />
@@ -76,11 +78,19 @@
     <Compile Include="ChangeTemperature.cs" />
     <Compile Include="SetTemperature.cs" />
     <Compile Include="SubscribeMessage.cs" />
+    <Compile Include="TemperatureValueMessage.cs" />
+    <Compile Include="TemperatureValueRequest.cs" />
     <Compile Include="UnsubscribeMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OfficeHVAC.Models\OfficeHVAC.Models.csproj">
+      <Project>{584598C9-E1CD-4592-9A88-24F34D23D282}</Project>
+      <Name>OfficeHVAC.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
