@@ -47,7 +47,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
                 vm.Speed = 3;
 
                 //Assert
-                timeSourceMock.Received(1).Speed = 3;
+                timeSourceMock.Speed.ShouldBe(3);
             }
 
             [Fact]
