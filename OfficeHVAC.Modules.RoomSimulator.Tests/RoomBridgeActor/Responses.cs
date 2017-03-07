@@ -3,6 +3,7 @@ using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Messages;
+using OfficeHVAC.Models;
 using Shouldly;
 using System.Threading;
 using Xunit;
@@ -69,11 +70,14 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
             ExpectMsg<SubscribeMessage>();
 
             //Act
-            bridge.Tell(new RoomStatusMessage("Room 101", 26));
+            bridge.Tell(GenerateRoomStatusMessage("Room 101", 26));
 
             //Assert
             Thread.Sleep(1000);
             _viewModel.Temperature.ShouldBe(26);
         }
+
+        private RoomStatusMessage GenerateRoomStatusMessage(string roomName, double temperature) => 
+            new RoomStatusMessage(new RoomInfo() {Name = roomName}, temperature);
     }
 }

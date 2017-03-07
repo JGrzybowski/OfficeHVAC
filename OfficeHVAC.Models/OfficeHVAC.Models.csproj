@@ -80,8 +80,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomValueGenerator.cs" />
     <Compile Include="Range.cs" />
-    <Compile Include="Room.cs" />
+    <Compile Include="RoomInfo.cs" />
     <Compile Include="Sensor.cs" />
+    <Compile Include="SensorActor.cs" />
     <Compile Include="SensorTypes.cs" />
   </ItemGroup>
   <ItemGroup>

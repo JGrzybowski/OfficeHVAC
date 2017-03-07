@@ -1,4 +1,6 @@
-﻿namespace OfficeHVAC.Messages
+﻿using OfficeHVAC.Models;
+
+namespace OfficeHVAC.Messages
 {
     public class RoomStatusMessage
     {
@@ -6,9 +8,9 @@
 
         public double Temperature { get; private set; }
 
-        public RoomStatusMessage(string roomName, double temperature)
+        public RoomStatusMessage(RoomInfo roomInfo, double temperature)
         {
-            RoomName = roomName;
+            RoomName = roomInfo.Name;
             Temperature = temperature;
         }
     }

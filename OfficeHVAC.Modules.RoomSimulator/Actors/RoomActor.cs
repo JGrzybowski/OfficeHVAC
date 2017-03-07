@@ -10,15 +10,18 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
     public abstract class RoomActor : ReceiveActor
     {
-        protected string RoomName { get; }
+        protected RoomInfo RoomInfo { get; }
+
+        protected ActorPath CompanySupervisorActorPath { get; }
 
         protected HashSet<ISensorActor> Sensors { get; } = new HashSet<ISensorActor>();
 
         protected HashSet<IActorRef> Subscribers { get; } = new HashSet<IActorRef>();
 
-        public RoomActor(string roomName)
+        public RoomActor(string roomName, ActorPath companySupervisorActorPath)
         {
-            RoomName = roomName;
+            this.RoomInfo = new RoomInfo() {Name = roomName};
+            this.CompanySupervisorActorPath = companySupervisorActorPath;
 
             //Subscribtion handling
             this.ReceiveAsync<SubscribeMessage>(async message =>
@@ -46,7 +49,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             var temperatures = await Task.WhenAll(tempSensors.Select(s => s.Actor.Ask<TemperatureValueMessage>(new TemperatureValueRequest(), TimeSpan.FromSeconds(5))));
             var temperature = temperatures.Average(t => t.Temperature);
 
-            return new RoomStatusMessage(RoomName, temperature);
+            return new RoomStatusMessage(RoomInfo, temperature);
         }
     }
 }

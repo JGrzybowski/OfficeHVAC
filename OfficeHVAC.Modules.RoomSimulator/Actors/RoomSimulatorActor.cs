@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Messages;
+using OfficeHVAC.Models;
 using OfficeHVAC.Modules.TemperatureSimulation;
 using System;
 using System.Threading.Tasks;
@@ -12,18 +13,16 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         private ITemperatureSimulator TemperatureSimulator { get; }
 
-        private ActorPath CompanySupervisorActorPath { get; }
-
-        public RoomSimulatorActor(string roomName, ITemperatureSimulator temperatureSimulator, ActorPath companySupervisorActorPath) : base(roomName)
+        public RoomSimulatorActor(string roomName, ITemperatureSimulator temperatureSimulator, ActorPath companySupervisorActorPath) : base(roomName, companySupervisorActorPath)
         {
             this.TemperatureSimulator = temperatureSimulator;
-            this.CompanySupervisorActorPath = companySupervisorActorPath;
+
+            this.Sensors.Add(new SensorActor(Guid.NewGuid().ToString(), SensorTypes.Temperature, Self));
             
             //Temperature calculation 
-            this.Receive<ChangeTemperature>(message =>
-            {
-                TemperatureSimulator.Temperature += message.DeltaT;
-            });
+            this.Receive<ChangeTemperature>(message => TemperatureSimulator.Temperature += message.DeltaT);
+
+            this.Receive<TemperatureValueRequest>(message => Sender.Tell(new TemperatureValueMessage(TemperatureSimulator.Temperature)));
 
             //this.Receive<SetDesiredTemperature>(message => {
             //    foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
@@ -39,7 +38,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected override async Task<RoomStatusMessage> GenerateRoomStatus()
         {
-            var msg = new RoomStatusMessage(RoomName, TemperatureSimulator.Temperature);
+            var msg = new RoomStatusMessage(RoomInfo, TemperatureSimulator.Temperature);
             return await Task.FromResult(msg);
         }
 

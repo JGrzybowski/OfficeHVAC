@@ -66,7 +66,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors
         }
 
         [Fact]
-        public void sends_initial_room_info_when_some_actor_subscribes()
+        public void sends_initial_room_status_when_some_actor_subscribes()
         {
             //Arrange
             var simulatorProps = SimulatorActorProps(ActorOf(BlackHoleActor.Props).Path);
