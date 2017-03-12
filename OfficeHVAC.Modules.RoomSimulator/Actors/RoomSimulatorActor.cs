@@ -17,7 +17,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         {
             this.TemperatureSimulator = temperatureSimulator;
 
-            this.Sensors.Add(new SensorActor(Guid.NewGuid().ToString(), SensorTypes.Temperature, Self));
+            this.Sensors.Add(new SensorActorRef(Guid.NewGuid().ToString(), SensorType.Temperature, Self));
             
             //Temperature calculation 
             this.Receive<ChangeTemperature>(message => TemperatureSimulator.Temperature += message.DeltaT);

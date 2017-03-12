@@ -2,13 +2,13 @@
 
 namespace OfficeHVAC.Models
 {
-    public class SensorActor : ISensorActor
+    public class SensorActorRef : ISensorActorRef
     {
         public string Id { get; set; }
-        public SensorTypes Type { get; set; }
+        public SensorType Type { get; set; }
         public IActorRef Actor { get; }
 
-        public SensorActor(string id, SensorTypes type, IActorRef actor)
+        public SensorActorRef(string id, SensorType type, IActorRef actor)
         {
             Id = id;
             Type = type;

@@ -72,7 +72,7 @@
     <Compile Include="IRandomValueGenerator.cs" />
     <Compile Include="IRange.cs" />
     <Compile Include="ISensor.cs" />
-    <Compile Include="ISensorActor.cs" />
+    <Compile Include="ISensorActorRef.cs" />
     <Compile Include="ITemperatureModel.cs" />
     <Compile Include="ITemperatureSensor.cs" />
     <Compile Include="ITimeSource.cs" />
@@ -83,7 +83,7 @@
     <Compile Include="RoomInfo.cs" />
     <Compile Include="Sensor.cs" />
     <Compile Include="SensorActor.cs" />
-    <Compile Include="SensorTypes.cs" />
+    <Compile Include="SensorType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

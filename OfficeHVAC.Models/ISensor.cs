@@ -1,8 +1,10 @@
-﻿namespace OfficeHVAC.Models
+﻿using System;
+
+namespace OfficeHVAC.Models
 {
-    public interface ISensor
+    public interface ISensor : ICloneable
     {
         string Id { get; set; }
-        SensorTypes Type { get; set; }
+        SensorType Type { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected ActorPath CompanySupervisorActorPath { get; }
 
-        protected HashSet<ISensorActor> Sensors { get; } = new HashSet<ISensorActor>();
+        protected HashSet<ISensorActorRef> Sensors { get; } = new HashSet<ISensorActorRef>();
 
         protected HashSet<IActorRef> Subscribers { get; } = new HashSet<IActorRef>();
 
@@ -45,7 +45,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected virtual async Task<RoomStatusMessage> GenerateRoomStatus()
         {
-            var tempSensors = Sensors.Where(s => s.Type == SensorTypes.Temperature);
+            var tempSensors = Sensors.Where(s => s.Type == SensorType.Temperature);
             var temperatures = await Task.WhenAll(tempSensors.Select(s => s.Actor.Ask<TemperatureValueMessage>(new TemperatureValueRequest(), TimeSpan.FromSeconds(5))));
             var temperature = temperatures.Average(t => t.Temperature);
 
