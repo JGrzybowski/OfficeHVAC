@@ -14,5 +14,7 @@ namespace OfficeHVAC.Models
             Type = type;
             Actor = actor;
         }
+
+        public object Clone() => new SensorActorRef(Id, Type, Actor);
     }
 }
