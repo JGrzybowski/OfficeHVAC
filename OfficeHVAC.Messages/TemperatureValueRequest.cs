@@ -4,6 +4,6 @@ namespace OfficeHVAC.Messages
 {
     public class TemperatureValueRequest : ParameterValueRequest
     {
-        public TemperatureValueRequest() : base(SensorTypes.Temperature) { }
+        public TemperatureValueRequest() : base(SensorType.Temperature) { }
     }
 }

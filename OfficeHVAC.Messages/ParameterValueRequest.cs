@@ -4,9 +4,9 @@ namespace OfficeHVAC.Messages
 {
     public class ParameterValueRequest
     {
-        public SensorTypes ParamType { get; }
+        public SensorType ParamType { get; }
 
-        public ParameterValueRequest(SensorTypes paramType)
+        public ParameterValueRequest(SensorType paramType)
         {
             ParamType = paramType;
         }
