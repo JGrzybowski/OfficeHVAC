@@ -2,19 +2,39 @@
 
 namespace OfficeHVAC.Models
 {
-    public class ParameterValue : IToMessage<IParameterValueMessage>, ICloneable
+    public class ParameterValue : IToMessage<IParameterValueMessage>, ICloneable, IParameterValueMessage
     {
+        public ParameterValue() { }
+
+        public ParameterValue(SensorType parameterType, object value)
+        {
+            ParameterType = parameterType;
+            Value = value;
+        }
+
         public SensorType ParameterType { get; set; }
 
-        public ICloneable Value { get; set; }
+        public object Value { get; set; }
 
         public IParameterValueMessage ToMessage() => this.Clone() as IParameterValueMessage;
 
-        public object Clone() => new ParameterValue()
+        public object Clone()
         {
-            ParameterType = ParameterType,
-            Value = Value.Clone() as ICloneable
-        };
+            var clone = new ParameterValue()
+            {
+                ParameterType = ParameterType,
+            };
+            clone.Value = Value.GetType().IsValueType ? this.Value : (Value as ICloneable).Clone();
+
+            return clone;
+        }
+
+        public class Request
+        {
+            public Request(SensorType parameterType) { ParameterType = parameterType; }
+
+            public SensorType ParameterType { get; set; }
+        }
     }
 
     public interface IParameterValueMessage : ICloneable

@@ -8,9 +8,9 @@ namespace OfficeHVAC.Models
     {
         public RoomInfo RoomInfo { get; set; }
 
-        public IEnumerable<ISensorActorRef> Sensors { get; private set; }
+        public IEnumerable<ISensorActorRef> Sensors { get; set; }
 
-        public IEnumerable<IParameterValueMessage> ParameterValues { get; private set; }
+        public IEnumerable<IParameterValueMessage> ParameterValues { get; set; }
 
         public IRoomStatusMessage ToMessage() => this.Clone() as IRoomStatusMessage;
         
