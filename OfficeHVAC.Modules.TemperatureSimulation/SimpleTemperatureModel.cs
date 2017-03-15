@@ -10,18 +10,26 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
     {
         public double WattsToChangeOneDegreeInOneHour { get; set; } = 20;
 
-        public virtual double CalculateChange(double temperature, IEnumerable<ITemperatureDevice> devices, Duration timeDelta)
+        private const double AirsSpecificHeat = 1005;   //  W / kg*K*s
+        private const double AirsDensity = 1200;        // kg / m^3
+
+        public virtual double CalculateChange(double temperature, IEnumerable<ITemperatureDevice> devices, Duration timeDelta, double volume)
         {
-            var timespan = timeDelta.ToTimeSpan();
-            var hoursSinceLastUpdate = timespan.TotalHours;
-            return devices.Sum(device => device.EffectivePower * (device.DesiredTemperature - temperature))
-                            / WattsToChangeOneDegreeInOneHour
-                            * hoursSinceLastUpdate;
+            var seconds = timeDelta.ToTimeSpan().TotalSeconds;
+            var power = devices.Sum(device => device.EffectivePower * (device.DesiredTemperature - temperature));
+
+            return (power * seconds) / (AirsDensity * volume * AirsSpecificHeat);
         }
 
-        public Duration CalculateNeededTime(double initialTemperature, double desiredTemperature, IEnumerable<ITemperatureDevice> devices, string mode)
+        public Duration CalculateNeededTime(double initialTemperature, double desiredTemperature, IEnumerable<ITemperatureDevice> devices, string mode, double volume)
         {
-            throw new System.NotImplementedException();
+            var deltaT = desiredTemperature - initialTemperature;
+            var power = devices.Sum(dev => dev.Modes.Single(m => m.Name == mode).CalculateEffectivePower(dev.MaxPower));
+
+            var seconds = AirsSpecificHeat * AirsDensity * volume * deltaT / power;
+
+            var time = Duration.FromSeconds((long) seconds);
+            return time;
         }
     }
 }
