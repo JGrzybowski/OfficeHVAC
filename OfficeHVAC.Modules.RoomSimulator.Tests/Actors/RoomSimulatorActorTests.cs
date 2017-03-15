@@ -26,6 +26,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors
             public IEnumerable<ITemperatureDevice> Devices { get; set; }
             public ITimeSource TimeSource { get; }
             public ITemperatureModel Model { get; }
+            public double RoomVolume { get; set; }
         }
 
         private static ITemperatureSimulator GenerateTemperatureSimulatorFake()

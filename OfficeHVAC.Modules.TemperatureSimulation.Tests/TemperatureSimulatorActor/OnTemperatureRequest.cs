@@ -18,7 +18,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
             var actor = ActorOfAsTestActorRef<Actors.TemperatureSimulatorActor>(
                 Props.Create<Actors.TemperatureSimulatorActor>(temperatureSimulatorFake));
 
-            //Act
+            //Act		
             actor.Tell(new ParameterValue.Request(SensorType.Temperature));
 
             //Assert
@@ -31,7 +31,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
             //Arrange
             int expectedTemperature = 27;
             var temperatureSimulatorFake = Substitute.For<ITemperatureSimulator>();
-            temperatureSimulatorFake.Temperature.Returns(expectedTemperature);
+                temperatureSimulatorFake.Temperature.Returns(expectedTemperature);
             var actor = ActorOfAsTestActorRef<Actors.TemperatureSimulatorActor>(
                 Props.Create<Actors.TemperatureSimulatorActor>(temperatureSimulatorFake));
 
@@ -51,8 +51,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
 
             //Act
             actor.Tell(new ParameterValue.Request(SensorType.Temperature));
-            ReceiveOne();
-            actor.Tell(status.ToMessage());
+            var roomStatusRequest = ReceiveOne();
+            LastSender.Tell(status.ToMessage());
 
             //Assert
             var temperatureMsg = ExpectMsg<IParameterValueMessage>();

@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Models;
+using System.Threading.Tasks;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
@@ -11,18 +12,16 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         {
             this.temperatureSimulator = temperatureSimulator;
 
-            Receive<ParameterValue.Request>(msg =>
-            {
-                if (msg.ParameterType == SensorType.Temperature)
-                    Sender.Tell(CheckTemperature());
-                else
-                    throw new InvalidMessageException();
-            });
+            ReceiveAsync<ParameterValue.Request>(
+                async msg => Sender.Tell(await CheckTemperature()), 
+                      msg => msg.ParameterType == SensorType.Temperature
+            );
         }
 
-        private IParameterValueMessage CheckTemperature()
+        private async Task<IParameterValueMessage> CheckTemperature()
         {
-            var roomStatus = Sender.Ask<RoomStatus>(new RoomStatus.Request());
+            var roomStatus = await Sender.Ask<IRoomStatusMessage>(new RoomStatus.Request());
+            temperatureSimulator.RoomVolume = roomStatus.RoomInfo.Area;
 
             return new ParameterValue(SensorType.Temperature, temperatureSimulator.Temperature);
         }
