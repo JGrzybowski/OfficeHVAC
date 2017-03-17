@@ -11,19 +11,12 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
     {
         private ICancelable Scheduler { get; set; }
 
-        private ITemperatureSimulator TemperatureSimulator { get; }
-
-        public RoomSimulatorActor(string roomName, ITemperatureSimulator temperatureSimulator, ActorPath companySupervisorActorPath)
-            : base(new RoomInfo() { Name = roomName }, companySupervisorActorPath, new ParameterValuesCollection() { new ParameterValue(SensorType.Temperature, temperatureSimulator.Temperature) })
+        public RoomSimulatorActor(string roomName, ActorPath companySupervisorActorPath, ParameterValuesCollection parameters)
+            : base(new RoomInfo() { Name = roomName }, companySupervisorActorPath, parameters)
         {
-            this.TemperatureSimulator = temperatureSimulator;
-
             this.Sensors.Add(new SensorActorRef(Guid.NewGuid().ToString(), SensorType.Temperature, Self));
 
-            //Temperature calculation 
-            this.Receive<ChangeTemperature>(message => TemperatureSimulator.Temperature += message.DeltaT);
 
-            this.Receive<TemperatureValueRequest>(message => Sender.Tell(new TemperatureValueMessage(TemperatureSimulator.Temperature)));
 
             //this.Receive<SetDesiredTemperature>(message => {
             //    foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
@@ -45,7 +38,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                     TimeSpan.FromMilliseconds(1000),
                     TimeSpan.FromMilliseconds(1000),
                     Self,
-                    new RoomStatus.Request(),
+                    new SubscriptionTriggerMessage(),
                     Self);
 
             base.PreStart();

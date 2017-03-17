@@ -114,8 +114,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Actors\RoomActor\Subscriptions.cs" />
+    <Compile Include="Actors\RoomSimulatorAgent\StatusRequests.cs" />
     <Compile Include="Actors\RoomActor\Avaliability.cs" />
-    <Compile Include="Actors\RoomSimulatorActorTests.cs" />
+    <Compile Include="Actors\RoomSimulatorAgent\SettingParameterValues.cs" />
     <Compile Include="Factories\BridgeRoomActorPropsFactoryTests.cs" />
     <Compile Include="Factories\RoomSimulatorActorPropsFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
