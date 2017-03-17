@@ -38,7 +38,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors
 
         private Props SimulatorActorProps(ActorPath companyActorPath) =>
             Props.Create(() => new RoomSimulatorActor(TestRoomName, GenerateTemperatureSimulatorFake(), companyActorPath));
-        
+
         [Fact]
         public void sends_avaliability_message_to_server()
         {
@@ -72,7 +72,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors
             //Arrange
             var simulatorProps = SimulatorActorProps(ActorOf(BlackHoleActor.Props).Path);
             var actor = ActorOf(simulatorProps);
-            
+
             //Act
             actor.Tell(new SubscribeMessage(TestActor));
 
@@ -92,9 +92,9 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors
             var actor = ActorOf(simulatorProps);
             actor.Tell(new SubscribeMessage(TestActor));
             ExpectMsg<RoomStatusMessage>();
-            
+
             //Act
-            actor.Tell(new RoomStatusRequest());
+            actor.Tell(new RoomStatus.Request());
 
             //Assert
             ExpectMsg<RoomStatusMessage>(msg =>
@@ -102,7 +102,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors
                 msg.RoomName.ShouldBe(TestRoomName);
                 msg.Temperature.ShouldBe(TemperatureInRoom);
             },
-            timeout : TimeSpan.FromSeconds(10));
+            timeout: TimeSpan.FromSeconds(10));
         }
 
         [Fact]
@@ -115,7 +115,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors
             ExpectMsg<RoomStatusMessage>();
 
             //Act
-            actor.Tell(new RoomStatusRequest());
+            actor.Tell(new RoomStatus.Request());
 
             //Assert
             ExpectMsg<RoomStatusMessage>(msg =>
@@ -143,7 +143,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors
             actor.Tell(new UnsubscribeMessage(TestActor));
 
             //Act
-            actor.Tell(new RoomStatusRequest());
+            actor.Tell(new RoomStatus.Request());
 
             //Assert
             ExpectNoMsg();

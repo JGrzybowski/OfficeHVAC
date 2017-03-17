@@ -8,8 +8,6 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
 {
     public class SimpleTemperatureModel : ITemperatureModel
     {
-        public double WattsToChangeOneDegreeInOneHour { get; set; } = 20;
-
         private const double AirsSpecificHeat = 1005;   //  W / kg*K*s
         private const double AirsDensity = 1200;        // kg / m^3
 

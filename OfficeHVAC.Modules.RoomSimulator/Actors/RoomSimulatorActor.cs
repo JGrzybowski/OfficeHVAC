@@ -13,12 +13,13 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         private ITemperatureSimulator TemperatureSimulator { get; }
 
-        public RoomSimulatorActor(string roomName, ITemperatureSimulator temperatureSimulator, ActorPath companySupervisorActorPath) : base(roomName, companySupervisorActorPath)
+        public RoomSimulatorActor(string roomName, ITemperatureSimulator temperatureSimulator, ActorPath companySupervisorActorPath)
+            : base(new RoomInfo() { Name = roomName }, companySupervisorActorPath, new ParameterValuesCollection() { new ParameterValue(SensorType.Temperature, temperatureSimulator.Temperature) })
         {
             this.TemperatureSimulator = temperatureSimulator;
 
             this.Sensors.Add(new SensorActorRef(Guid.NewGuid().ToString(), SensorType.Temperature, Self));
-            
+
             //Temperature calculation 
             this.Receive<ChangeTemperature>(message => TemperatureSimulator.Temperature += message.DeltaT);
 
@@ -36,25 +37,18 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             //});
         }
 
-        protected override async Task<RoomStatusMessage> GenerateRoomStatus()
-        {
-            var msg = new RoomStatusMessage(RoomInfo, TemperatureSimulator.Temperature);
-            return await Task.FromResult(msg);
-        }
-
         protected override void PreStart()
         {
-            var selection = Context.System.ActorSelection(this.CompanySupervisorActorPath.ToString());
-            selection.Tell(new RoomAvaliabilityMessage(Self));
-
             Scheduler = Context.System
                 .Scheduler
                 .ScheduleTellRepeatedlyCancelable(
                     TimeSpan.FromMilliseconds(1000),
                     TimeSpan.FromMilliseconds(1000),
                     Self,
-                    new RoomStatusRequest(), 
+                    new RoomStatus.Request(),
                     Self);
+
+            base.PreStart();
         }
     }
 }

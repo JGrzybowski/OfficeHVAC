@@ -35,7 +35,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
             var actor = ActorOfAsTestActorRef<Actors.TemperatureSimulatorActor>(
                 Props.Create<Actors.TemperatureSimulatorActor>(temperatureSimulatorFake));
 
-            var parameters = new List<IParameterValueMessage>()
+            var parameters = new ParameterValuesCollection()
             {
                 new ParameterValue(SensorType.Temperature, 25)
             };
@@ -44,7 +44,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
 
             var status = new RoomStatus()
             {
-                ParameterValues = parameters,
+                Parameters = parameters,
                 RoomInfo = new RoomInfo() { Area = 20 },
                 Sensors = sensors
             };

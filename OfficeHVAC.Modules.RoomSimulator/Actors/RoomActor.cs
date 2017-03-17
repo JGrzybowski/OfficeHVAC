@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
-    public abstract class RoomActor : ReceiveActor
+    public class RoomActor : ReceiveActor
     {
-        protected RoomInfo RoomInfo { get; }
+        protected RoomInfo RoomInfo { get; } = new RoomInfo();
+
+        protected ParameterValuesCollection Parameters { get; } = new ParameterValuesCollection();
 
         protected ActorPath CompanySupervisorActorPath { get; }
 
@@ -18,38 +20,63 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected HashSet<IActorRef> Subscribers { get; } = new HashSet<IActorRef>();
 
-        public RoomActor(string roomName, ActorPath companySupervisorActorPath)
+        public RoomActor(RoomInfo roomInfo, ActorPath companySupervisorActorPath, ParameterValuesCollection parameters) : this()
         {
-            this.RoomInfo = new RoomInfo() {Name = roomName};
-            this.CompanySupervisorActorPath = companySupervisorActorPath;
+            RoomInfo = roomInfo;
+            CompanySupervisorActorPath = companySupervisorActorPath;
+            Parameters = parameters;
+        }
+
+        public RoomActor()
+        {
+            Receive<ParameterValueMessage>(
+                msg => Parameters[msg.ParamType].Value = msg.Value,
+                msg => msg.ParamType != SensorType.Unknown
+            );
 
             //Subscribtion handling
-            this.ReceiveAsync<SubscribeMessage>(async message =>
+            Receive<SubscribeMessage>(message =>
             {
-                this.Subscribers.Add(Sender);
-                Sender.Tell(await GenerateRoomStatus());
+                Subscribers.Add(Sender);
+                Sender.Tell(GenerateRoomStatus());
             });
 
-            this.Receive<UnsubscribeMessage>(message =>
+            Receive<SubscriptionTriggerMessage>(message =>
             {
-                this.Subscribers.Remove(Sender);
-            });
-
-            this.ReceiveAsync<RoomStatusRequest>(async message =>
-            {
-                var status = await GenerateRoomStatus();
-                foreach (var subscriber in this.Subscribers)
+                var status = GenerateRoomStatus();
+                foreach (var subscriber in Subscribers)
                     subscriber.Tell(status, Self);
             });
+
+            Receive<UnsubscribeMessage>(message =>
+            {
+                Subscribers.Remove(Sender);
+            });
+
+            Receive<RoomStatus.Request>(message =>
+            {
+                var status = GenerateRoomStatus();
+                Sender.Tell(status, Self);
+            });
         }
 
-        protected virtual async Task<RoomStatusMessage> GenerateRoomStatus()
+        protected override void PreStart()
         {
-            var tempSensors = Sensors.Where(s => s.Type == SensorType.Temperature);
-            var temperatures = await Task.WhenAll(tempSensors.Select(s => s.Actor.Ask<TemperatureValueMessage>(new TemperatureValueRequest(), TimeSpan.FromSeconds(5))));
-            var temperature = temperatures.Average(t => t.Temperature);
-
-            return new RoomStatusMessage(RoomInfo, temperature);
+            var selection = Context.System.ActorSelection(CompanySupervisorActorPath.ToString());
+            selection.Tell(new RoomAvaliabilityMessage(Self));
+            base.PreStart();
         }
+
+        protected virtual IRoomStatusMessage GenerateRoomStatus()
+        {
+            var status = new RoomStatus()
+            {
+                RoomInfo = RoomInfo,
+                Parameters = Parameters,
+                Sensors = new List<ISensorActorRef>()
+            };
+            return status.ToMessage();
+        }
+
     }
 }

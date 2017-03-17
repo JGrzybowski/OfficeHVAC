@@ -10,7 +10,7 @@ namespace OfficeHVAC.Models
 
         public IEnumerable<ISensorActorRef> Sensors { get; set; }
 
-        public IEnumerable<IParameterValueMessage> ParameterValues { get; set; }
+        public ParameterValuesCollection Parameters { get; set; }
 
         public IRoomStatusMessage ToMessage() => this.Clone() as IRoomStatusMessage;
         
@@ -19,7 +19,7 @@ namespace OfficeHVAC.Models
             return new RoomStatus()
             {
                 RoomInfo = this.RoomInfo.Clone() as RoomInfo,
-                ParameterValues = this.ParameterValues.Select(param => param.Clone() as IParameterValueMessage).ToList(),
+                Parameters = Parameters.Clone(),
                 Sensors = this.Sensors.Select(param => param.Clone() as ISensorActorRef).ToList()
             };
         }
@@ -31,6 +31,6 @@ namespace OfficeHVAC.Models
     {
         RoomInfo RoomInfo { get; }
 
-        IEnumerable<IParameterValueMessage> ParameterValues { get; }
+        ParameterValuesCollection Parameters { get; }
     }
 }
