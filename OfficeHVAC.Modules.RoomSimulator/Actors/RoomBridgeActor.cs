@@ -1,4 +1,5 @@
-﻿using Akka.Actor;
+﻿using System;
+using Akka.Actor;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Modules.RoomSimulator.ViewModels;
@@ -19,14 +20,15 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             
             Receive<SetTemperature>(msg => _roomActorRef.Tell(msg));
             Receive<ChangeTemperature>(msg => _roomActorRef.Tell(msg));
-            Receive<RoomStatusMessage>(msg => UpdateViewModel(msg));
+            Receive<IRoomStatusMessage>(msg => UpdateViewModel(msg));
 
             _roomActorRef.Tell(new SubscribeMessage(Self));
         }
 
-        private void UpdateViewModel(RoomStatusMessage msg)
+        private void UpdateViewModel(IRoomStatusMessage msg)
         {
-            ViewModel.Temperature = msg.Temperature;
+            if (msg.Parameters.Contains(SensorType.Temperature))
+                ViewModel.Temperature = Convert.ToDouble(msg.Parameters[SensorType.Temperature].Value);
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
-using OfficeHVAC.Modules.TemperatureSimulation;
 using System;
-using System.Threading.Tasks;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -16,6 +14,9 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         {
             this.Sensors.Add(new SensorActorRef(Guid.NewGuid().ToString(), SensorType.Temperature, Self));
 
+            this.Receive<ChangeTemperature>(
+                msg => Parameters[SensorType.Temperature].Value = Convert.ToDouble(Parameters[SensorType.Temperature].Value) + msg.DeltaT, 
+                msg => Parameters.Contains(SensorType.Temperature));
 
 
             //this.Receive<SetDesiredTemperature>(message => {

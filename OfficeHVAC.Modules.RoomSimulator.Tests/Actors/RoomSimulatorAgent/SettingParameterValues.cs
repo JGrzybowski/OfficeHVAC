@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Akka.Actor;
+﻿using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
@@ -10,6 +8,8 @@ using OfficeHVAC.Models.Devices;
 using OfficeHVAC.Modules.RoomSimulator.Actors;
 using OfficeHVAC.Modules.TemperatureSimulation;
 using Shouldly;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
