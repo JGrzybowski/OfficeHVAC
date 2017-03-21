@@ -1,8 +1,8 @@
 ﻿namespace OfficeHVAC.Models
 {
-    public enum SensorTypes
+    public enum SensorType
     {
-        None = 0,
+        Unknown = 0,
         Temperature = 1,
     }
 }

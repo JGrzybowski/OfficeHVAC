@@ -1,7 +1,6 @@
 ﻿namespace OfficeHVAC.Messages
 {
-    public class RoomStatusRequest
+    public class SubscriptionTriggerMessage
     {
-        
     }
 }

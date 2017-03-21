@@ -61,7 +61,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
                         EffectivePower = 1500,
                         DesiredTemperature = StartingTemperature + desiredTemperatureDelta
                     }
-                }
+                },
+                RoomVolume = 250
             };
             timeSourceFake.Now = FiveMinutesLater;
             
@@ -69,7 +70,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
             var temperatureAfter = simulator.Temperature;
 
             //Assert
-            temperatureModelFake.Received().CalculateChange(StartingTemperature, simulator.Devices, FiveMinutes);
+            temperatureModelFake.Received().CalculateChange(StartingTemperature, simulator.Devices, FiveMinutes, 250);
         }
 
         [Theory]

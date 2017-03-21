@@ -19,7 +19,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
             var devices = new List<ITemperatureDevice> {new TemperatureDeviceFake() {MaxPower = 40}};
 
             //Act
-            var temperatureDelta = temperatureModel.CalculateChange(StartingTemperature, devices, FiveMinutes);
+            var temperatureDelta = temperatureModel.CalculateChange(StartingTemperature, devices, FiveMinutes, 250);
             
             //Assert
             temperatureDelta.ShouldBe(0); 
@@ -42,7 +42,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
             };
 
             //Act
-            var temperatureDelta = temperatureModel.CalculateChange(StartingTemperature, devices, FiveMinutes);
+            var temperatureDelta = temperatureModel.CalculateChange(StartingTemperature, devices, FiveMinutes, 250);
 
             //Assert
             (temperatureDelta * desiredTemperatureDelta).ShouldBeGreaterThan(0);
@@ -67,7 +67,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
             };
 
             //Act
-            var temperatureDelta = temperatureModel.CalculateChange(StartingTemperature, devices, Duration.Zero);
+            var temperatureDelta = temperatureModel.CalculateChange(StartingTemperature, devices, Duration.Zero, 250);
 
             //Assert
             (temperatureDelta * desiredTemperatureDelta).ShouldBe(0);

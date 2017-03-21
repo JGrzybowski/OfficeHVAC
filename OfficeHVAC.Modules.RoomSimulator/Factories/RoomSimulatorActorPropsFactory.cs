@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Factories.ActorPaths;
+using OfficeHVAC.Models;
 using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using Prism.Mvvm;
 using System;
@@ -36,8 +37,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Factories
 
             return Akka.Actor.Props.Create(() => new RoomSimulatorActor(
                 RoomName,
-                TemperatureSimulatorFactory.TemperatureSimulator(),
-                CompanyPathBuilder.ActorPath()
+                CompanyPathBuilder.ActorPath(),
+                new ParameterValuesCollection() { new ParameterValue(SensorType.Temperature, 20)}
             ));
         }
     }

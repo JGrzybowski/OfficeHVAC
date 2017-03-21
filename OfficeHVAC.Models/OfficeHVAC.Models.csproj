@@ -41,7 +41,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NodaTime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NodaTime.1.3.2\lib\net35-Client\NodaTime.dll</HintPath>
+      <HintPath>..\packages\NodaTime.1.3.3\lib\net35-Client\NodaTime.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NodaTime.Testing, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
@@ -68,18 +68,25 @@
     <Compile Include="Devices\ITemperatureDevice.cs" />
     <Compile Include="Devices\TemperatureMode.cs" />
     <Compile Include="Devices\TemperatureDevice.cs" />
-    <Compile Include="IParameterSimulator.cs" />
     <Compile Include="IRandomValueGenerator.cs" />
     <Compile Include="IRange.cs" />
+    <Compile Include="ISensor.cs" />
+    <Compile Include="ISensorActorRef.cs" />
     <Compile Include="ITemperatureModel.cs" />
     <Compile Include="ITimeSource.cs" />
     <Compile Include="Devices\IDevice.cs" />
+    <Compile Include="IToMessage.cs" />
+    <Compile Include="ParameterValue.cs" />
+    <Compile Include="ParameterValuesCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomValueGenerator.cs" />
     <Compile Include="Range.cs" />
-    <Compile Include="Room.cs" />
+    <Compile Include="RoomInfo.cs" />
+    <Compile Include="RoomStatus.cs" />
     <Compile Include="Sensor.cs" />
-    <Compile Include="SensorTypes.cs" />
+    <Compile Include="SensorActor.cs" />
+    <Compile Include="SensorType.cs" />
+    <Compile Include="TemperatureJob.cs" />
+    <Compile Include="TemperatureTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

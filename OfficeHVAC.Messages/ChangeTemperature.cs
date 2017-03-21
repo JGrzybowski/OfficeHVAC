@@ -2,9 +2,9 @@
 {
     public class ChangeTemperature
     {
-        public float DeltaT { get; }
+        public double DeltaT { get; }
 
-        public ChangeTemperature(float deltaT)
+        public ChangeTemperature(double deltaT)
         {
             DeltaT = deltaT;
         }

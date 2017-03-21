@@ -1,6 +1,7 @@
 ﻿using NodaTime;
+using OfficeHVAC.Models;
 
-namespace OfficeHVAC.Models.TimeSources
+namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
 {
     public class RealTimeSource : ITimeSource
     {

@@ -31,13 +31,13 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
             _temperatureSimulatorFactoryFake = Substitute.For<ITemperatureSimulatorFactory>();
             _temperatureSimulatorFactoryFake.TemperatureSimulator().Returns(temperatureSimulatorFake);
         }
-        
+
         [Fact]
         public void returns_RoomActor_props()
         {
             //Arrange
-            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake) {RoomName = "Room 101"};
-            
+            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake) { RoomName = "Room 101" };
+
             //Act
             var resultProps = propsBuilder.Props();
 
@@ -59,26 +59,13 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
             _pathBuilderFake.Received().ActorPath();
         }
 
-        [Fact]
-        public void constructs_props_using_TemperatureSimulatorBuilder()
-        {
-            //Arrange
-            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake) { RoomName = "Room 101" };
-
-            //Act
-            var resultProps = propsBuilder.Props();
-
-            //Assert
-            _temperatureSimulatorFactoryFake.Received().TemperatureSimulator();
-        }
-
         [Theory]
         [InlineData(null)]
         [InlineData(" ")]
         public void throws_ArgumentException_when_RoomName_is_empty(string emptyRoomName)
         {
             //Arrange
-            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake){RoomName = emptyRoomName};
+            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake) { RoomName = emptyRoomName };
 
             //Act
             var ex = Should.Throw<ArgumentException>(() => propsBuilder.Props());

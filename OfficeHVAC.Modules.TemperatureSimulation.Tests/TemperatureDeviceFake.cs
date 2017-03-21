@@ -8,7 +8,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
     public class TemperatureDeviceFake : ITemperatureDevice
     {
         public bool IsTurnedOn => PowerConsumption != 0.0;
-        
+
         public int MaxPower { get; set; }
 
         public double PowerConsumption { get; set; }
@@ -21,11 +21,11 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
 
         public IReadOnlyCollection<string> ModesNames { get; set; }
 
-        public ICollection<ITemperatureMode> Modes{ get; set; }
+        public ICollection<ITemperatureMode> Modes { get; set; }
 
         public double DesiredTemperature { get; set; }
 
-        public Func<string,Duration, double> CalculatePowerConsumptionFunction { get; set; }
+        public Func<string, Duration, double> CalculatePowerConsumptionFunction { get; set; }
 
         public double CalculatePowerConsumption(string name, Duration time) => CalculatePowerConsumptionFunction(name, time);
     }
