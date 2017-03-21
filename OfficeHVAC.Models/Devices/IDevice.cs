@@ -7,6 +7,7 @@
         void TurnOff();
 
         double PowerConsumption { get; }
+
         int MaxPower { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace OfficeHVAC.Models
 {
-    public class ParameterValue : IToMessage<IParameterValueMessage>, ICloneable, IParameterValueMessage
+    public class ParameterValue : IToMessage<IParameterValueMessage>, IParameterValueMessage
     {
         public ParameterValue() { }
 
