@@ -22,10 +22,6 @@ namespace OfficeHVAC.Applications.LogServer
                 Console.WriteLine($"NEW ROOM [{Sender.Path}]");
             });
 
-            Receive<RoomStatusMessage>(msg =>
-            {
-                Console.WriteLine($"UPDATE   [{msg.RoomName}] T:{msg.Temperature}°C");
-            });
         }
 
         protected override void PostStop()

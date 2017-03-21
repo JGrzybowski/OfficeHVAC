@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -52,5 +53,9 @@ namespace OfficeHVAC.Models.Devices
         public ICollection<ITemperatureMode> Modes { get; set; } 
 
         public double DesiredTemperature { get; set; }
+
+        public double CalculatePowerConsumption(string name, Duration time) =>
+            this.Modes.Single(m => m.Name == name)
+                .CalculateEffectivePower(MaxPower) * time.ToTimeSpan().TotalSeconds;
     }
 }

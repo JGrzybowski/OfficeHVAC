@@ -9,7 +9,7 @@ namespace OfficeHVAC.Models.Tests
 {
     public class TemperatureDevice
     {
-        public ITemperatureMode OffMode = new TemperatureMode() {Name = "Off", PowerEfficiency = 0, PowerConsumption = 0, TemperatureRange = new Range<double>(0,10)};
+        public ITemperatureMode OffMode     = new TemperatureMode() {Name = "Off", PowerEfficiency = 0, PowerConsumption = 0, TemperatureRange = new Range<double>(0,10)};
         public ITemperatureMode WorkingMode = new TemperatureMode() {Name = nameof(WorkingMode), PowerEfficiency = 0.5, PowerConsumption = 0.6, TemperatureRange = new Range<double>(0,10)};
         
         [Fact]
@@ -98,10 +98,10 @@ namespace OfficeHVAC.Models.Tests
             //Arrange
             var device = new Devices.TemperatureDevice()
             {
-                Modes = new List<ITemperatureMode> { OffMode, WorkingMode },
+                Modes = new List<ITemperatureMode> {OffMode, WorkingMode},
                 MaxPower = 1000
             };
-            
+
             //Act
             var names = device.ModesNames;
 

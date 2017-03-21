@@ -10,9 +10,8 @@ using Xunit;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
 {
-    public class Responses :TestKit
+    public class Responses : TestKit
     {
-
         private readonly ViewModels.IRoomViewModel _viewModel = Substitute.For<ViewModels.IRoomViewModel>();
 
         private readonly Props _echoActorProps;
@@ -26,7 +25,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
         public void forwards_SetTemperature_message_to_RoomActor()
         {
             //Arrange
-            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel,_echoActorProps), "bridge");
+            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
             ExpectMsg<SubscribeMessage>();
             var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
 
@@ -36,7 +35,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
             //Assert
             ExpectMsg<SetTemperature>((msg, sender) =>
             {
-                msg.Temperature.ShouldBe(30f); 
+                msg.Temperature.ShouldBe(30f);
                 sender.ShouldBe(roomActor);
             });
         }
@@ -63,11 +62,10 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
         }
 
         [Fact]
-        public void updates_ViewModel_Temperature_when_recieved_RoomStatusMessage()
+        public void updates_ViewModel_Temperature_when_recieved_RoomStatusMessage_with_temperature()
         {
             //Arrange
-            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
-            ExpectMsg<SubscribeMessage>();
+            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel, BlackHoleActor.Props), "bridge");
 
             //Act
             bridge.Tell(GenerateRoomStatusMessage("Room 101", 26));
@@ -77,7 +75,11 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
             _viewModel.Temperature.ShouldBe(26);
         }
 
-        private RoomStatusMessage GenerateRoomStatusMessage(string roomName, double temperature) => 
-            new RoomStatusMessage(new RoomInfo() {Name = roomName}, temperature);
+        private IRoomStatusMessage GenerateRoomStatusMessage(string roomName, double temperature) =>
+            new RoomStatus()
+            {
+                RoomInfo = new RoomInfo() { Name = roomName },
+                Parameters = new ParameterValuesCollection { new ParameterValue(SensorType.Temperature, temperature) }
+            };
     }
 }
