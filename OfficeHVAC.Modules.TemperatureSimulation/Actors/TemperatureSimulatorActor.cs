@@ -13,7 +13,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             this.temperatureSimulator = temperatureSimulator;
 
             ReceiveAsync<ParameterValue.Request>(
-                async msg => Sender.Tell(await CheckTemperature()), 
+                async msg => Sender.Tell(await CheckTemperature()),
                       msg => msg.ParameterType == SensorType.Temperature
             );
         }
@@ -21,7 +21,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         private async Task<IParameterValueMessage> CheckTemperature()
         {
             var roomStatus = await Sender.Ask<IRoomStatusMessage>(new RoomStatus.Request());
-            temperatureSimulator.RoomVolume = roomStatus.RoomInfo.Area;
+            temperatureSimulator.RoomVolume = roomStatus.Area;
 
             return new ParameterValue(SensorType.Temperature, temperatureSimulator.Temperature);
         }

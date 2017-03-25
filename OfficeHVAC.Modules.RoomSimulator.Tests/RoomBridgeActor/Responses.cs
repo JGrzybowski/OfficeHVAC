@@ -78,8 +78,11 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
         private IRoomStatusMessage GenerateRoomStatusMessage(string roomName, double temperature) =>
             new RoomStatus()
             {
-                RoomInfo = new RoomInfo() { Name = roomName },
-                Parameters = new ParameterValuesCollection { new ParameterValue(SensorType.Temperature, temperature) }
+                Name = roomName,
+                Parameters = new ParameterValuesCollection
+                {
+                    new ParameterValue(SensorType.Temperature, temperature)
+                }
             };
     }
 }

@@ -35,10 +35,15 @@ namespace OfficeHVAC.Modules.RoomSimulator.Factories
             if (string.IsNullOrWhiteSpace(RoomName))
                 throw new ArgumentException("Room name cannot be empty.", nameof(RoomName));
 
+            var initialRoomStatus = new RoomStatus()
+            {
+                Name = RoomName,
+                Parameters = new ParameterValuesCollection() { new ParameterValue(SensorType.Temperature, 20) }
+            };
+
             return Akka.Actor.Props.Create(() => new RoomSimulatorActor(
-                RoomName,
-                CompanyPathBuilder.ActorPath(),
-                new ParameterValuesCollection() { new ParameterValue(SensorType.Temperature, 20)}
+                initialRoomStatus,
+                CompanyPathBuilder.ActorPath()
             ));
         }
     }

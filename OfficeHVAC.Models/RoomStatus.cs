@@ -6,19 +6,25 @@ namespace OfficeHVAC.Models
 {
     public class RoomStatus : IRoomStatusMessage, IToMessage<IRoomStatusMessage>
     {
-        public RoomInfo RoomInfo { get; set; }
+        public string Id { get; set; }
 
-        public IEnumerable<ISensorActorRef> Sensors { get; set; }
+        public string Name { get; set; }
 
-        public ParameterValuesCollection Parameters { get; set; }
+        public double Area { get; set; }
+
+        public IEnumerable<ISensorActorRef> Sensors { get; set; } = new HashSet<ISensorActorRef>();
+
+        public ParameterValuesCollection Parameters { get; set; } = new ParameterValuesCollection();
 
         public IRoomStatusMessage ToMessage() => this.Clone() as IRoomStatusMessage;
-        
+
         public object Clone()
         {
             return new RoomStatus()
             {
-                RoomInfo = this.RoomInfo.Clone() as RoomInfo,
+                Id = Id,
+                Area = Area,
+                Name = Name,
                 Parameters = Parameters.Clone(),
                 Sensors = this.Sensors.Select(param => param.Clone() as ISensorActorRef).ToList()
             };
@@ -29,7 +35,11 @@ namespace OfficeHVAC.Models
 
     public interface IRoomStatusMessage : ICloneable
     {
-        RoomInfo RoomInfo { get; }
+        string Id { get; set; }
+
+        string Name { get; set; }
+
+        double Area { get; set; }
 
         ParameterValuesCollection Parameters { get; }
     }

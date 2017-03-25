@@ -14,9 +14,12 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
 
         private Props RoomActorProps(ActorPath companyActorPath) =>
             Props.Create(() => new RoomSimulator.Actors.RoomActor(
-                new RoomInfo() { Name = TestRoomName },
-                companyActorPath,
-                new ParameterValuesCollection())
+                new RoomStatus()
+                {
+                    Name = TestRoomName,
+                    Parameters = new ParameterValuesCollection()
+                },
+                companyActorPath)
             );
 
         [Fact]

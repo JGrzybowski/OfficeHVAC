@@ -9,14 +9,14 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
     {
         private ICancelable Scheduler { get; set; }
 
-        public RoomSimulatorActor(string roomName, ActorPath companySupervisorActorPath, ParameterValuesCollection parameters)
-            : base(new RoomInfo() { Name = roomName }, companySupervisorActorPath, parameters)
+        public RoomSimulatorActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath)
+            : base(initialStatus, companySupervisorActorPath)
         {
             this.Sensors.Add(new SensorActorRef(Guid.NewGuid().ToString(), SensorType.Temperature, Self));
 
             this.Receive<ChangeTemperature>(
-                msg => Parameters[SensorType.Temperature].Value = Convert.ToDouble(Parameters[SensorType.Temperature].Value) + msg.DeltaT, 
-                msg => Parameters.Contains(SensorType.Temperature));
+                msg => Status.Parameters[SensorType.Temperature].Value = Convert.ToDouble(Status.Parameters[SensorType.Temperature].Value) + msg.DeltaT,
+                msg => Status.Parameters.Contains(SensorType.Temperature));
 
 
             //this.Receive<SetDesiredTemperature>(message => {

@@ -16,9 +16,15 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
 
         private Props RoomActorProps() =>
             Props.Create(() => new RoomSimulator.Actors.RoomActor(
-                new RoomInfo() { Name = TestRoomName },
-                ActorOf(BlackHoleActor.Props).Path,
-                new ParameterValuesCollection() { new ParameterValue(SensorType.Temperature, TemperatureInRoom) })
+                new RoomStatus()
+                {
+                    Name = TestRoomName,
+                    Parameters = new ParameterValuesCollection()
+                    {
+                        new ParameterValue(SensorType.Temperature, TemperatureInRoom)
+                    }
+                },
+                ActorOf(BlackHoleActor.Props).Path)
             );
 
         [Fact]
@@ -33,7 +39,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
             //Assert
             ExpectMsg<IRoomStatusMessage>(msg =>
             {
-                msg.RoomInfo.Name.ShouldBe(TestRoomName);
+                msg.Name.ShouldBe(TestRoomName);
                 msg.Parameters[SensorType.Temperature].Value.ShouldBe(TemperatureInRoom);
             });
         }
@@ -52,7 +58,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
             //Assert
             ExpectMsg<IRoomStatusMessage>(msg =>
             {
-                msg.RoomInfo.Name.ShouldBe(TestRoomName);
+                msg.Name.ShouldBe(TestRoomName);
                 msg.Parameters[SensorType.Temperature].Value.ShouldBe(TemperatureInRoom);
             },
             timeout: TimeSpan.FromSeconds(10));

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Akka.Actor;
-using Akka.Remote;
+﻿using Akka.Actor;
 using OfficeHVAC.Messages;
+using System;
+using System.Collections.Generic;
+using OfficeHVAC.Models;
 
 namespace OfficeHVAC.Applications.LogServer
 {
@@ -22,6 +19,10 @@ namespace OfficeHVAC.Applications.LogServer
                 Console.WriteLine($"NEW ROOM [{Sender.Path}]");
             });
 
+            Receive<IRoomStatusMessage>(msg =>
+            {
+                Console.WriteLine($"UPDATE   [{ msg.Name }] T:{ msg.Parameters[SensorType.Temperature] }°C");
+            });
         }
 
         protected override void PostStop()

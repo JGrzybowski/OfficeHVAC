@@ -7,9 +7,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
     public class RoomActor : ReceiveActor
     {
-        protected RoomInfo RoomInfo { get; } = new RoomInfo();
-
-        protected ParameterValuesCollection Parameters { get; } = new ParameterValuesCollection();
+        protected RoomStatus Status { get; } = new RoomStatus();
 
         protected ActorPath CompanySupervisorActorPath { get; }
 
@@ -17,44 +15,47 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected HashSet<IActorRef> Subscribers { get; } = new HashSet<IActorRef>();
 
-        public RoomActor(RoomInfo roomInfo, ActorPath companySupervisorActorPath, ParameterValuesCollection parameters) : this()
+        public RoomActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath) : this()
         {
-            RoomInfo = roomInfo;
+            Status = initialStatus;
             CompanySupervisorActorPath = companySupervisorActorPath;
-            Parameters = parameters;
         }
 
         public RoomActor()
         {
             Receive<ParameterValueMessage>(
-                msg => Parameters[msg.ParamType].Value = msg.Value,
+                msg => Status.Parameters[msg.ParamType].Value = msg.Value,
                 msg => msg.ParamType != SensorType.Unknown
             );
 
             //Subscribtion handling
-            Receive<SubscribeMessage>(message =>
-            {
-                Subscribers.Add(Sender);
-                Sender.Tell(GenerateRoomStatus());
-            });
-
-            Receive<SubscriptionTriggerMessage>(message =>
-            {
-                var status = GenerateRoomStatus();
-                foreach (var subscriber in Subscribers)
-                    subscriber.Tell(status, Self);
-            });
-
-            Receive<UnsubscribeMessage>(message =>
-            {
-                Subscribers.Remove(Sender);
-            });
+            Receive<SubscribeMessage>(message => OnSubscribeMessage());
+            Receive<SubscriptionTriggerMessage>(message => SendSubscribtionNewsletter());
+            Receive<UnsubscribeMessage>(message => OnUnsubscribeMesssage());
 
             Receive<RoomStatus.Request>(message =>
             {
                 var status = GenerateRoomStatus();
                 Sender.Tell(status, Self);
             });
+        }
+
+        protected virtual void OnUnsubscribeMesssage()
+        {
+            Subscribers.Remove(Sender);
+        }
+
+        protected virtual void SendSubscribtionNewsletter()
+        {
+            var status = GenerateRoomStatus();
+            foreach (var subscriber in Subscribers)
+                subscriber.Tell(status, Self);
+        }
+
+        protected virtual void OnSubscribeMessage()
+        {
+            Subscribers.Add(Sender);
+            Sender.Tell(GenerateRoomStatus());
         }
 
         protected override void PreStart()
@@ -66,14 +67,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected virtual IRoomStatusMessage GenerateRoomStatus()
         {
-            var status = new RoomStatus()
-            {
-                RoomInfo = RoomInfo,
-                Parameters = Parameters,
-                Sensors = new List<ISensorActorRef>()
-            };
-            return status.ToMessage();
+            return Status.ToMessage();
         }
-
     }
 }

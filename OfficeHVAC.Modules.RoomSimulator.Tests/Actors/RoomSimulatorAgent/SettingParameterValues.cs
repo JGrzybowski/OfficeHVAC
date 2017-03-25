@@ -37,9 +37,15 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
 
         private Props SimulatorActorProps() =>
             Props.Create(() => new RoomSimulatorActor(
-                TestRoomName,
-                ActorOf(BlackHoleActor.Props).Path,
-                new ParameterValuesCollection() { new ParameterValue(SensorType.Temperature, TemperatureInRoom) }
+                new RoomStatus()
+                {
+                    Name = TestRoomName,
+                    Parameters = new ParameterValuesCollection()
+                    {
+                        new ParameterValue(SensorType.Temperature, TemperatureInRoom)
+                    }
+                },
+                ActorOf(BlackHoleActor.Props).Path
             ));
 
         [Theory]
