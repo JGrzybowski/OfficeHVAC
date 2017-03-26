@@ -2,6 +2,8 @@
 {
     public interface IDevice
     {
+        string Id { get; }
+
         bool IsTurnedOn { get; }
 
         void TurnOff();

@@ -61,9 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BridgeActor.cs" />
+    <Compile Include="Devices\DeviceDefinition.cs" />
     <Compile Include="Devices\IMode.cs" />
+    <Compile Include="Devices\ITemperatureDeviceDefinition.cs" />
     <Compile Include="Devices\ITemperatureMode.cs" />
     <Compile Include="Devices\ITemperatureDevice.cs" />
+    <Compile Include="Devices\TemperatureDeviceDefinition.cs" />
     <Compile Include="Devices\TemperatureMode.cs" />
     <Compile Include="Devices\TemperatureDevice.cs" />
     <Compile Include="IRandomValueGenerator.cs" />

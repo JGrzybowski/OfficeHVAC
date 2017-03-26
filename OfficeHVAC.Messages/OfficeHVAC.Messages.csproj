@@ -67,10 +67,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddDevice.cs" />
     <Compile Include="GetNextTask.cs" />
     <Compile Include="ParameterValueMessage.cs" />
     <Compile Include="ParameterValueRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoveDevice.cs" />
     <Compile Include="RoomAvaliabilityMessage.cs" />
     <Compile Include="ChangeTemperature.cs" />
     <Compile Include="SetTemperature.cs" />

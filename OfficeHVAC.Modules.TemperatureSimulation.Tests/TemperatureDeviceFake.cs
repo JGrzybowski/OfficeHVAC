@@ -7,6 +7,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
 {
     public class TemperatureDeviceFake : ITemperatureDevice
     {
+        public string Id { get; set; }
+
         public bool IsTurnedOn => PowerConsumption != 0.0;
 
         public int MaxPower { get; set; }

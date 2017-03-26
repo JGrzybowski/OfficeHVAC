@@ -11,5 +11,14 @@
         public IRange<double> TemperatureRange { get; set; }
 
         public double CalculateEffectivePower(double maxPower) => maxPower * PowerConsumption * PowerEfficiency;
+
+        public ITemperatureMode Clone() =>
+            new TemperatureMode()
+            {
+                Name = Name,
+                PowerConsumption = PowerConsumption,
+                PowerEfficiency = PowerEfficiency,
+                TemperatureRange = new Range<double>(TemperatureRange.Min, TemperatureRange.Max)
+            };
     }
 }

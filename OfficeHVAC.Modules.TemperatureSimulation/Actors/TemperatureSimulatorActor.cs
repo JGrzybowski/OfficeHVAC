@@ -14,16 +14,18 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
             ReceiveAsync<ParameterValue.Request>(
                 async msg => Sender.Tell(await CheckTemperature()),
-                      msg => msg.ParameterType == SensorType.Temperature
+                msg => msg.ParameterType == SensorType.Temperature
             );
         }
 
         private async Task<IParameterValueMessage> CheckTemperature()
         {
             var roomStatus = await Sender.Ask<IRoomStatusMessage>(new RoomStatus.Request());
-            temperatureSimulator.RoomVolume = roomStatus.Area;
 
-            return new ParameterValue(SensorType.Temperature, temperatureSimulator.Temperature);
+            temperatureSimulator.RoomVolume = roomStatus.Area;
+            var temperature = temperatureSimulator.Temperature;
+
+            return new ParameterValue(SensorType.Temperature, temperature);
         }
     }
 }
