@@ -8,7 +8,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Factories
         private readonly ITimeSource timeSource;
         private readonly ITemperatureModel model;
 
-        public float InitialTemperature { get; set; }
+        public double InitialTemperature { get; set; }
 
         public TemperatureSimulatorFactory(ITimeSource timeSource, ITemperatureModel model)
         {

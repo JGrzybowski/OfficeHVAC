@@ -2,7 +2,7 @@
 {
     public interface ITemperatureSimulatorFactory
     {
-        float InitialTemperature { get; set; }
+        double InitialTemperature { get; set; }
 
         ITemperatureSimulator TemperatureSimulator();
     }

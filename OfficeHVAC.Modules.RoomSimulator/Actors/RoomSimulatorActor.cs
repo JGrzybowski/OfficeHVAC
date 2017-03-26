@@ -1,6 +1,8 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
+using OfficeHVAC.Modules.TemperatureSimulation.Actors;
+using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using System;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
@@ -9,10 +11,18 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
     {
         private ICancelable Scheduler { get; set; }
 
-        public RoomSimulatorActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath)
+        private readonly ITemperatureSimulatorFactory temperatureSimulatorFactory;
+
+        public RoomSimulatorActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath, ITemperatureSimulatorFactory temperatureSimulatorFactory)
             : base(initialStatus, companySupervisorActorPath)
         {
-            this.Sensors.Add(new SensorActorRef(Guid.NewGuid().ToString(), SensorType.Temperature, Self));
+            this.temperatureSimulatorFactory = temperatureSimulatorFactory;
+
+            this.Sensors.Add(
+                new SensorActorRef(Guid.NewGuid().ToString(),
+                SensorType.Temperature,
+                Context.ActorOf(this.PrepareTemperatureSimulatorActorProps(initialStatus))
+            ));
 
             this.Receive<ChangeTemperature>(
                 msg => Status.Parameters[SensorType.Temperature].Value = Convert.ToDouble(Status.Parameters[SensorType.Temperature].Value) + msg.DeltaT,
@@ -43,6 +53,18 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                     Self);
 
             base.PreStart();
+        }
+
+        protected Props PrepareTemperatureSimulatorActorProps(RoomStatus initialStatus)
+        {
+            if (initialStatus.Parameters.Contains(SensorType.Temperature))
+                this.temperatureSimulatorFactory.InitialTemperature = Convert.ToDouble(initialStatus.Parameters[SensorType.Temperature].Value);
+
+            var props = Props.Create<TemperatureSimulatorActor>(
+                () => new TemperatureSimulatorActor(temperatureSimulatorFactory.TemperatureSimulator())
+            );
+
+            return props;
         }
     }
 }
