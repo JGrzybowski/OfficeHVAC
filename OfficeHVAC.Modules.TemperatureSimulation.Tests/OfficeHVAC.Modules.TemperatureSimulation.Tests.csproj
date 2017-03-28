@@ -96,10 +96,12 @@
   <ItemGroup>
     <Compile Include="Factories\TemperatureSimulatorFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleTemperatureModelChangeCalculation.cs" />
+    <Compile Include="SimpleTemperatureModel\ModeFinding.cs" />
+    <Compile Include="SimpleTemperatureModel\TemperatureChangeCalculation.cs" />
     <Compile Include="TemperatureControllerActor\TemperatureControllerActorTest.cs" />
     <Compile Include="TemperatureControllerActor\OnAddDevice.cs" />
     <Compile Include="TemperatureControllerActor\OnRemoveDevice.cs" />
+    <Compile Include="TemperatureControllerActor\OnTemperatureTask.cs" />
     <Compile Include="TemperatureDeviceFake.cs" />
     <Compile Include="TemperatureSimulatorActor\OnTemperatureRequest.cs" />
     <Compile Include="TemperatureSimulatorTests.cs" />

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NodaTime;
 
 namespace OfficeHVAC.Models.Devices
 {
@@ -19,5 +20,9 @@ namespace OfficeHVAC.Models.Devices
         }
 
         public ITemperatureDeviceDefinition ToMessage() => Clone();
+
+        public double CalculatePowerConsumption(string name, Duration time) =>
+            this.Modes.Single(m => m.Name == name)
+                .CalculateEffectivePower(MaxPower) * time.ToTimeSpan().TotalSeconds;
     }
 }

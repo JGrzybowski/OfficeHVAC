@@ -45,7 +45,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
             var status = new RoomStatus()
             {
                 Parameters = parameters,
-                Area = 20,
+                Volume = 20,
                 Sensors = sensors
             };
 

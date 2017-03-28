@@ -30,5 +30,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
         public Func<string, Duration, double> CalculatePowerConsumptionFunction { get; set; }
 
         public double CalculatePowerConsumption(string name, Duration time) => CalculatePowerConsumptionFunction(name, time);
+
+        IEnumerable<ITemperatureMode> ITemperatureDeviceDefinition.Modes => this.Modes;
     }
 }

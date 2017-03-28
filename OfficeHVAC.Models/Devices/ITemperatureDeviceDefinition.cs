@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NodaTime;
 
 namespace OfficeHVAC.Models.Devices
 {
@@ -9,5 +10,7 @@ namespace OfficeHVAC.Models.Devices
         int MaxPower { get; }
 
         IEnumerable<ITemperatureMode> Modes { get; }
+
+        double CalculatePowerConsumption(string modeName, Duration time);
     }
 }

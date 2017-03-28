@@ -10,7 +10,7 @@ namespace OfficeHVAC.Models
 
         public string Name { get; set; }
 
-        public double Area { get; set; }
+        public double Volume { get; set; }
 
         public IEnumerable<ISensorActorRef> Sensors { get; set; } = new HashSet<ISensorActorRef>();
 
@@ -23,7 +23,7 @@ namespace OfficeHVAC.Models
             return new RoomStatus()
             {
                 Id = Id,
-                Area = Area,
+                Volume = Volume,
                 Name = Name,
                 Parameters = Parameters.Clone(),
                 Sensors = this.Sensors.Select(param => param.Clone() as ISensorActorRef).ToList()
@@ -39,7 +39,7 @@ namespace OfficeHVAC.Models
 
         string Name { get; set; }
 
-        double Area { get; set; }
+        double Volume { get; set; }
 
         ParameterValuesCollection Parameters { get; }
     }

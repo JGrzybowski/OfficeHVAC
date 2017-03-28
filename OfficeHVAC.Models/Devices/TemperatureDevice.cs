@@ -59,5 +59,7 @@ namespace OfficeHVAC.Models.Devices
         public double CalculatePowerConsumption(string name, Duration time) =>
             this.Modes.Single(m => m.Name == name)
                 .CalculateEffectivePower(MaxPower) * time.ToTimeSpan().TotalSeconds;
+
+        IEnumerable<ITemperatureMode> ITemperatureDeviceDefinition.Modes => this.Modes;
     }
 }

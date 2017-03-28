@@ -10,7 +10,7 @@ namespace OfficeHVAC.Messages
 {
     public class AddDevice<TDeviceDefinition>
     {
-        public TDeviceDefinition Definition;
+        public readonly TDeviceDefinition Definition;
 
         public AddDevice(TDeviceDefinition definition)
         {
