@@ -20,7 +20,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.Factories
             var temperatureSimulator = simulatorFactory.TemperatureSimulator();
 
             //Assert
-            temperatureSimulator.Temperature.ShouldBe(45);
+            temperatureSimulator.GetTemperature().ShouldBe(45);
         }
 
         [Fact]

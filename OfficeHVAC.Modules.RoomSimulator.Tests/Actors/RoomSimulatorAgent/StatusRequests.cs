@@ -19,7 +19,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
         private static ITemperatureSimulatorFactory GenerateTemperatureSimulatorFake()
         {
             var simulatorFake = Substitute.For<ITemperatureSimulator>();
-            simulatorFake.Temperature.Returns(TemperatureInRoom);
+            simulatorFake.GetTemperature().Returns(TemperatureInRoom);
 
             var factoryFake = Substitute.For<ITemperatureSimulatorFactory>();
             factoryFake.TemperatureSimulator().Returns(simulatorFake);

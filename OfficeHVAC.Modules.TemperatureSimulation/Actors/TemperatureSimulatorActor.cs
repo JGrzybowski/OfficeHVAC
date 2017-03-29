@@ -23,7 +23,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             var roomStatus = await Sender.Ask<IRoomStatusMessage>(new RoomStatus.Request());
 
             temperatureSimulator.RoomVolume = roomStatus.Volume;
-            var temperature = temperatureSimulator.Temperature;
+            var temperature = temperatureSimulator.GetTemperature();
 
             return new ParameterValue(SensorType.Temperature, temperature);
         }

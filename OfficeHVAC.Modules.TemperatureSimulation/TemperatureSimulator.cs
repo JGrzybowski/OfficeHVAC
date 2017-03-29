@@ -23,24 +23,21 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
         public ITimeSource TimeSource { get; }
         public double RoomVolume { get; set; }
 
-        public double Temperature 
+        public double GetTemperature()
         {
-            get
-            {
-                var now = this.TimeSource.Now;
-                var timeDelta = (now - LastTime);
-                LastTime = now;
+            var now = this.TimeSource.Now;
+            var timeDelta = (now - LastTime);
+            LastTime = now;
 
-                LastTemperature += Model.CalculateChange(LastTemperature, Devices, timeDelta, RoomVolume);
-                return LastTemperature;
-            }
+            LastTemperature += Model.CalculateChange(LastTemperature, Devices, timeDelta, RoomVolume);
+            return LastTemperature;
+        }
 
-            set
-            {
-                foreach (var device in this.Devices)
-                    device.TurnOff();
-                this.LastTemperature = value;
-            }
+        public void SetTemperature(double value)
+        {
+            foreach (var device in this.Devices)
+                device.TurnOff();
+            this.LastTemperature = value;
         }
     }
 }

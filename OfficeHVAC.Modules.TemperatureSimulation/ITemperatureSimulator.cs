@@ -8,7 +8,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
     {
         double RoomVolume { get; set; }
 
-        double Temperature { get; set; }
+        double GetTemperature();
+        void SetTemperature(double value);
 
         ITemperatureModel Model { get; }
 

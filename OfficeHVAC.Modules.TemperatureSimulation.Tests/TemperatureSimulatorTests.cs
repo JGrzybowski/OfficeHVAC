@@ -39,7 +39,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
             timeSourceFake.Now = FiveMinutesLater;
 
             //Assert
-            var temperatureAfter = simulator.Temperature;
+            var temperatureAfter = simulator.GetTemperature();
             temperatureAfter.ShouldBe(StartingTemperature);
         }
 
@@ -67,7 +67,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
             timeSourceFake.Now = FiveMinutesLater;
             
             //Act
-            var temperatureAfter = simulator.Temperature;
+            var temperatureAfter = simulator.GetTemperature();
 
             //Assert
             temperatureModelFake.Received().CalculateChange(StartingTemperature, simulator.Devices, FiveMinutes, 250);
@@ -95,10 +95,10 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
             };
 
             //Act
-            simulator.Temperature = 35;
+            simulator.SetTemperature(35);
 
             //Assert
-            simulator.Temperature.ShouldBe(35);
+            simulator.GetTemperature().ShouldBe(35);
             simulator.Devices.ShouldAllBe(device => !device.IsTurnedOn);
         }
     }

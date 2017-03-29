@@ -26,7 +26,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
             _pathBuilderFake.ActorPath().Returns(blackHoleActor.Path);
 
             ITemperatureSimulator temperatureSimulatorFake = Substitute.For<ITemperatureSimulator>();
-            temperatureSimulatorFake.Temperature.Returns(28f);
+            temperatureSimulatorFake.GetTemperature().Returns(28f);
 
             _temperatureSimulatorFactoryFake = Substitute.For<ITemperatureSimulatorFactory>();
             _temperatureSimulatorFactoryFake.TemperatureSimulator().Returns(temperatureSimulatorFake);
