@@ -23,7 +23,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
         private static ITemperatureSimulatorFactory GenerateTemperatureSimulatorFake()
         {
             var simulatorFake = Substitute.For<ITemperatureSimulator>();
-            simulatorFake.GetTemperature().Returns(TemperatureInRoom);
+            simulatorFake.GetTemperature(Arg.Any<IRoomStatusMessage>()).Returns(TemperatureInRoom);
 
             var factoryFake = Substitute.For<ITemperatureSimulatorFactory>();
             factoryFake.TemperatureSimulator().Returns(simulatorFake);
@@ -42,7 +42,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
                     }
                 },
                 ActorOf(BlackHoleActor.Props).Path,
-                GenerateTemperatureSimulatorFake()
+                GenerateTemperatureSimulatorFake(),
+                Substitute.For<ISimulatorModels>()
             ));
 
         [Theory]

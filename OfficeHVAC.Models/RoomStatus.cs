@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Models
 {
@@ -16,6 +17,12 @@ namespace OfficeHVAC.Models
 
         public ParameterValuesCollection Parameters { get; set; } = new ParameterValuesCollection();
 
+        public HashSet<IDevice> Devices { get; set; } = new HashSet<IDevice>();
+        IEnumerable<IDevice> IRoomStatusMessage.Devices => this.Devices;
+
+        public List<TemperatureJob> Jobs { get; set; } = new List<TemperatureJob>();
+        IEnumerable<TemperatureJob> IRoomStatusMessage.Jobs => this.Jobs;
+
         public IRoomStatusMessage ToMessage() => this.Clone() as IRoomStatusMessage;
 
         public object Clone()
@@ -26,6 +33,7 @@ namespace OfficeHVAC.Models
                 Volume = Volume,
                 Name = Name,
                 Parameters = Parameters.Clone(),
+                Devices = new HashSet<IDevice>(this.Devices.Select(device => device.Clone())),
                 Sensors = this.Sensors.Select(param => param.Clone() as ISensorActorRef).ToList()
             };
         }
@@ -35,11 +43,15 @@ namespace OfficeHVAC.Models
 
     public interface IRoomStatusMessage : ICloneable
     {
-        string Id { get; set; }
+        string Id { get; }
 
-        string Name { get; set; }
+        string Name { get; }
 
-        double Volume { get; set; }
+        double Volume { get; }
+
+        IEnumerable<IDevice> Devices { get; }
+
+        IEnumerable<TemperatureJob> Jobs { get; }
 
         ParameterValuesCollection Parameters { get; }
     }

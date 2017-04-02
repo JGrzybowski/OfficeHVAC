@@ -11,5 +11,7 @@
         double PowerConsumption { get; }
 
         int MaxPower { get; set; }
+
+        IDevice Clone();
     }
 }

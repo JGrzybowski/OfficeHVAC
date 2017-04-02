@@ -73,6 +73,7 @@
     <Compile Include="IRange.cs" />
     <Compile Include="ISensor.cs" />
     <Compile Include="ISensorActorRef.cs" />
+    <Compile Include="SimulatorModels.cs" />
     <Compile Include="ITemperatureModel.cs" />
     <Compile Include="ITimeSource.cs" />
     <Compile Include="Devices\IDevice.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Sensor.cs" />
     <Compile Include="SensorActor.cs" />
     <Compile Include="SensorType.cs" />
+    <Compile Include="ISimulatorModels.cs" />
     <Compile Include="TemperatureJob.cs" />
     <Compile Include="TemperatureTask.cs" />
   </ItemGroup>

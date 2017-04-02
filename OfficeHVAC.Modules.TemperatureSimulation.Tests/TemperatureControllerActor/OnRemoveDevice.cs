@@ -23,7 +23,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerAc
             };
 
             var controller = ActorOfAsTestActorRef(() =>
-                new Actors.TemperatureControllerActor(
+                new Actors.JobScheduler(
                     modelFake,
                     new TimeSourceFake(new Instant()),
                     devices));

@@ -31,7 +31,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
             //Arrange
             int expectedTemperature = 27;
             var temperatureSimulatorFake = Substitute.For<ITemperatureSimulator>();
-            temperatureSimulatorFake.GetTemperature().Returns(expectedTemperature);
+            temperatureSimulatorFake.GetTemperature(Arg.Any<IRoomStatusMessage>()).Returns(expectedTemperature);
             var actor = ActorOfAsTestActorRef<Actors.TemperatureSimulatorActor>(
                 Props.Create<Actors.TemperatureSimulatorActor>(temperatureSimulatorFake));
 
@@ -61,4 +61,3 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
         }
     }
 }
-    

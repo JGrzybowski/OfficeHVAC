@@ -9,9 +9,9 @@ namespace OfficeHVAC.Models.Tests
 {
     public class TemperatureDevice
     {
-        public ITemperatureMode OffMode     = new TemperatureMode() {Name = "Off", PowerEfficiency = 0, PowerConsumption = 0, TemperatureRange = new Range<double>(0,10)};
-        public ITemperatureMode WorkingMode = new TemperatureMode() {Name = nameof(WorkingMode), PowerEfficiency = 0.5, PowerConsumption = 0.6, TemperatureRange = new Range<double>(0,10)};
-        
+        public ITemperatureMode OffMode = new TemperatureMode() { Name = "Off", PowerEfficiency = 0, PowerConsumption = 0, TemperatureRange = new Range<double>(0, 10) };
+        public ITemperatureMode WorkingMode = new TemperatureMode() { Name = nameof(WorkingMode), PowerEfficiency = 0.5, PowerConsumption = 0.6, TemperatureRange = new Range<double>(0, 10) };
+
         [Fact]
         public void is_created_turned_off()
         {
@@ -46,10 +46,10 @@ namespace OfficeHVAC.Models.Tests
             };
 
             //Act
-            device.SetActiveModeByName = nameof(WorkingMode);
+            device.SetActiveModeByName(nameof(WorkingMode));
 
             //Assert
-            device.SetActiveModeByName.ShouldBe(nameof(WorkingMode));
+            device.GetActiveModeByName().ShouldBe(nameof(WorkingMode));
             device.PowerConsumption.ShouldBeGreaterThan(0);
         }
 
@@ -64,7 +64,7 @@ namespace OfficeHVAC.Models.Tests
             };
 
             //Act & Assert
-            var ex = Should.Throw<ArgumentOutOfRangeException>(() => device.SetActiveModeByName = "Invalid Mode Name");
+            var ex = Should.Throw<ArgumentOutOfRangeException>(() => device.SetActiveModeByName("Invalid Mode Name"));
             ex.ParamName.ShouldBe("value");
             ex.ActualValue.ShouldBe("Invalid Mode Name");
         }
@@ -79,10 +79,10 @@ namespace OfficeHVAC.Models.Tests
 
             var device = new Devices.TemperatureDevice
             {
-                Modes = new List<ITemperatureMode> {OffMode, workingModeFake},
-                MaxPower = 1000,
-                SetActiveModeByName = nameof(workingModeFake)
+                Modes = new List<ITemperatureMode> { OffMode, workingModeFake },
+                MaxPower = 1000
             };
+            device.SetActiveModeByName(nameof(workingModeFake));
 
             //Act
             var Peff = device.EffectivePower;
@@ -98,7 +98,7 @@ namespace OfficeHVAC.Models.Tests
             //Arrange
             var device = new Devices.TemperatureDevice()
             {
-                Modes = new List<ITemperatureMode> {OffMode, WorkingMode},
+                Modes = new List<ITemperatureMode> { OffMode, WorkingMode },
                 MaxPower = 1000
             };
 

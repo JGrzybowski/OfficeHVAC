@@ -59,7 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actors\TemperatureControllerActor.cs" />
+    <Compile Include="Actors\JobScheduler.cs" />
     <Compile Include="Actors\TemperatureSimulatorActor.cs" />
     <Compile Include="Factories\ITemperatureSimulatorFactory.cs" />
     <Compile Include="Factories\TemperatureSimulatorFactory.cs" />

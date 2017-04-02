@@ -2,6 +2,7 @@
 using Autofac.Core;
 using OfficeHVAC.Factories.ActorPaths;
 using OfficeHVAC.Factories.Configs;
+using OfficeHVAC.Models;
 using OfficeHVAC.Modules.RoomSimulator.Factories;
 using OfficeHVAC.Modules.RoomSimulator.ViewModels;
 using OfficeHVAC.Modules.TemperatureSimulation;
@@ -31,9 +32,10 @@ namespace OfficeHVAC.Modules.RoomSimulator
             _regionManager.RegisterViewWithRegion("RoomSim", typeof(OfficeHVAC.Modules.RoomSimulator.Views.RoomSimulator));
         }
 
-        public static void InitializeDependencies (ContainerBuilder containerBuilder)
+        public static void InitializeDependencies(ContainerBuilder containerBuilder)
         {
-            containerBuilder.RegisterType<SimpleTemperatureModel>().AsImplementedInterfaces(); 
+            containerBuilder.RegisterType<SimpleTemperatureModel>().AsImplementedInterfaces();
+            containerBuilder.RegisterType<SimulatorModels>().AsImplementedInterfaces().SingleInstance();
 
             containerBuilder.RegisterType<RoomSimulatorModule>();
             containerBuilder.RegisterType<RemoteConfigBuilder>().As<IConfigBuilder>();

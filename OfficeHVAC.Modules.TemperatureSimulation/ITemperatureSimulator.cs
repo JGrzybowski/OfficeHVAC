@@ -8,12 +8,11 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
     {
         double RoomVolume { get; set; }
 
-        double GetTemperature();
+        double GetTemperature(IRoomStatusMessage status);
+
         void SetTemperature(double value);
 
         ITemperatureModel Model { get; }
-
-        IEnumerable<ITemperatureDevice> Devices { get; set; }
 
         ITimeSource TimeSource { get; }
     }

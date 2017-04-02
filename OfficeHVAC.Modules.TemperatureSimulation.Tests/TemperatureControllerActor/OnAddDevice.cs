@@ -2,7 +2,9 @@
 using OfficeHVAC.Models.Devices;
 using Shouldly;
 using System.Collections.Generic;
+using NSubstitute;
 using OfficeHVAC.Messages;
+using OfficeHVAC.Models;
 using Xunit;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerActor
@@ -13,13 +15,13 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerAc
         public void initializes_new_device_controller()
         {
             //Arrange 
-            var temperatureModelFake = GenerateModelFake();
-            var timeFake = new TimeSourceFake(new Instant());
+            var models = Substitute.For<SimulatorModels>();
+            models.TemperatureModel.Returns(GenerateModelFake());
+            models.TimeSource.Returns(new TimeSourceFake(new Instant()));
 
             var controller = ActorOfAsTestActorRef(() =>
-                new Actors.TemperatureControllerActor(
-                    temperatureModelFake,
-                    timeFake,
+                new Actors.JobScheduler(
+                    models,
                     new List<ITemperatureDeviceDefinition>()));
 
             var message = new AddTemperatureDevice(

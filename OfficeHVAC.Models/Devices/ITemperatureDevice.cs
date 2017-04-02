@@ -9,7 +9,8 @@ namespace OfficeHVAC.Models.Devices
 
         double DesiredTemperature { get; set; }
 
-        string SetActiveModeByName { get; set; }
+        string GetActiveModeByName();
+        void SetActiveModeByName(string value);
 
         IReadOnlyCollection<string> ModesNames { get; }
 

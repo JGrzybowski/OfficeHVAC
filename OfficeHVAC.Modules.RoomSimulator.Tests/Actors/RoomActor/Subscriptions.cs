@@ -1,6 +1,7 @@
 ﻿using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
+using NSubstitute;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using Shouldly;
@@ -14,6 +15,13 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
         private const string TestRoomName = "Room 101";
         private const double TemperatureInRoom = 20;
 
+        private readonly IActorRef blackHole;
+
+        public Subscriptions()
+        {
+            blackHole = ActorOf(BlackHoleActor.Props);
+        }
+
         private Props RoomActorProps() =>
             Props.Create(() => new RoomSimulator.Actors.RoomActor(
                 new RoomStatus()
@@ -24,7 +32,9 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
                         new ParameterValue(SensorType.Temperature, TemperatureInRoom)
                     }
                 },
-                ActorOf(BlackHoleActor.Props).Path)
+                blackHole.Path,
+                Substitute.For<ISimulatorModels>()
+                )
             );
 
         [Fact]
@@ -68,7 +78,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
         public void does_not_send_status_update_info_to_unsubscribed_actors_when_recieving_update_request()
         {
             //Arrange
-            var actor = ActorOf(RoomActorProps());
+            var actor = this.ActorOfAsTestActorRef<RoomSimulator.Actors.RoomActor>(RoomActorProps());
             actor.Tell(new SubscribeMessage(TestActor));
             ExpectMsg<IRoomStatusMessage>();
             actor.Tell(new UnsubscribeMessage(TestActor));

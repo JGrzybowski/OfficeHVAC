@@ -13,16 +13,22 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         private readonly ITemperatureSimulatorFactory temperatureSimulatorFactory;
 
-        public RoomSimulatorActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath, ITemperatureSimulatorFactory temperatureSimulatorFactory)
-            : base(initialStatus, companySupervisorActorPath)
+        public RoomSimulatorActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath, ITemperatureSimulatorFactory temperatureSimulatorFactory,
+                                  ISimulatorModels models)
+            : base(initialStatus, companySupervisorActorPath, models)
         {
             this.temperatureSimulatorFactory = temperatureSimulatorFactory;
 
-            this.Sensors.Add(
-                new SensorActorRef(Guid.NewGuid().ToString(),
+            Sensors.Add(new SensorActorRef(
+                Guid.NewGuid().ToString(),
                 SensorType.Temperature,
-                Context.ActorOf(this.PrepareTemperatureSimulatorActorProps(initialStatus))
-            ));
+                Context.ActorOf(this.PrepareTemperatureSimulatorActorProps(initialStatus))));
+
+            var tempController = Context.ActorOf(Props.Create(() => new JobScheduler(models)));
+            Controllers.Add(new SensorActorRef(
+                Guid.NewGuid().ToString(),
+                SensorType.Temperature,
+                tempController));
 
             this.Receive<ChangeTemperature>(
                 msg => Status.Parameters[SensorType.Temperature].Value = Convert.ToDouble(Status.Parameters[SensorType.Temperature].Value) + msg.DeltaT,
@@ -60,7 +66,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             if (initialStatus.Parameters.Contains(SensorType.Temperature))
                 this.temperatureSimulatorFactory.InitialTemperature = Convert.ToDouble(initialStatus.Parameters[SensorType.Temperature].Value);
 
-            var props = Props.Create<TemperatureSimulatorActor>(
+            var props = Props.Create(
                 () => new TemperatureSimulatorActor(temperatureSimulatorFactory.TemperatureSimulator())
             );
 
