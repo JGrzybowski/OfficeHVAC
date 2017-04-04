@@ -21,10 +21,10 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
             return (power * seconds) / (AirsDensity * volume * AirsSpecificHeat);
         }
 
-        public Duration CalculateNeededTime(double initialTemperature, double desiredTemperature, IEnumerable<ITemperatureDeviceDefinition> devices, string mode, double volume)
+        public Duration CalculateNeededTime(double initialTemperature, double desiredTemperature, IEnumerable<ITemperatureDeviceDefinition> devices, TemperatureModeType modeType, double volume)
         {
             var deltaT = Math.Abs(desiredTemperature - initialTemperature);
-            var power = devices.Sum(dev => dev.Modes.Single(m => m.Name == mode).CalculateEffectivePower(dev.MaxPower));
+            var power = devices.Sum(dev => dev.Modes.Single(m => m.Type == modeType).CalculateEffectivePower(dev.MaxPower));
             if (power == 0)
                 return Duration.FromTimeSpan(TimeSpan.MaxValue);
 
@@ -34,25 +34,25 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
             return time;
         }
 
-        public string FindMostEfficientCombination(TemperatureTask task, IRoomStatusMessage status, IEnumerable<ITemperatureDeviceDefinition> devices)
+        public TemperatureModeType FindMostEfficientCombination(TemperatureTask task, IRoomStatusMessage status, IEnumerable<ITemperatureDeviceDefinition> devices)
         {
-            var modesNames = devices.Select(dev => dev.Modes.Select(d => d.Name))
+            var modeTypes = devices.Select(dev => dev.Modes.Select(d => d.Type))
                                     .Aggregate((resultModes, newModes) => resultModes.Intersect(newModes));
 
-            var bestMode = modesNames
-                .Select(modeName => new
+            var bestMode = modeTypes
+                .Select(modeType => new
                 {
-                    Time = CalculateNeededTime(task.InitialTemperature, task.DesiredTemperature, devices, modeName, status.Volume),
-                    ModeName = modeName
+                    Time = CalculateNeededTime(task.InitialTemperature, task.DesiredTemperature, devices, modeType, status.Volume),
+                    ModeType = modeType
                 })
                 .Where(timeMode => (timeMode.Time < task.TimeLimit))
                 .Select(timeMode => new
                 {
-                    Power = devices.Sum(dev => dev.CalculatePowerConsumption(timeMode.ModeName, timeMode.Time)),
-                    timeMode.ModeName
+                    Power = devices.Sum(dev => dev.CalculatePowerConsumption(timeMode.ModeType, timeMode.Time)),
+                    ModeType = timeMode.ModeType
                 })
                 .MinBy(powerMode => powerMode.Power);
-            return bestMode.ModeName;
+            return bestMode.ModeType;
         }
     }
 }

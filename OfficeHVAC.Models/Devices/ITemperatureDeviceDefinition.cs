@@ -11,6 +11,6 @@ namespace OfficeHVAC.Models.Devices
 
         IEnumerable<ITemperatureMode> Modes { get; }
 
-        double CalculatePowerConsumption(string modeName, Duration time);
+        double CalculatePowerConsumption(TemperatureModeType modeType, Duration time);
     }
 }

@@ -1,7 +1,4 @@
-﻿using NodaTime;
-using System.Collections.Generic;
-
-namespace OfficeHVAC.Models.Devices
+﻿namespace OfficeHVAC.Models.Devices
 {
     public interface ITemperatureDevice : ITemperatureDeviceDefinition, IDevice
     {
@@ -9,13 +6,8 @@ namespace OfficeHVAC.Models.Devices
 
         double DesiredTemperature { get; set; }
 
-        string GetActiveModeByName();
-        void SetActiveModeByName(string value);
+        ITemperatureMode ActiveMode { get; }
 
-        IReadOnlyCollection<string> ModesNames { get; }
-
-        ICollection<ITemperatureMode> Modes { get; set; }
-
-        double CalculatePowerConsumption(string name, Duration time);
+        void SetActiveMode(TemperatureModeType mode);
     }
 }

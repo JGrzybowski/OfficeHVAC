@@ -27,9 +27,9 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.SimpleTemperatureModel
                 Volume = 35
             }.ToMessage();
 
-            var offMode = new TemperatureMode() { Name = "Off" };
-            var ecoMode = new TemperatureMode() { Name = "Eco", PowerEfficiency = 0.95, PowerConsumption = 0.3 };
-            var turboMode = new TemperatureMode() { Name = "Turbo", PowerEfficiency = 0.50, PowerConsumption = 1.0 };
+            var offMode = new TemperatureMode() { Name = "Off", Type = TemperatureModeType.Off };
+            var ecoMode = new TemperatureMode() { Name = "Eco", Type = TemperatureModeType.Eco, PowerEfficiency = 0.95, PowerConsumption = 0.3 };
+            var turboMode = new TemperatureMode() { Name = "Turbo", Type = TemperatureModeType.Turbo, PowerEfficiency = 0.50, PowerConsumption = 1.0 };
 
             var devices = new List<ITemperatureDeviceDefinition>()
             {
@@ -44,7 +44,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.SimpleTemperatureModel
             var bestMode = model.FindMostEfficientCombination(task, status, devices);
 
             //Assert
-            bestMode.ShouldBe(ecoMode.Name);
+            bestMode.ShouldBe(ecoMode.Type);
         }
     }
 }

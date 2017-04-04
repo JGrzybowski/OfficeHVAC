@@ -52,11 +52,11 @@ namespace OfficeHVAC.Modules.RoomSimulator.Factories
                     {
                         Id = Guid.NewGuid().ToString(),
                         MaxPower = 2000,
-                        Modes = new HashSet<ITemperatureMode>
+                        Modes = new ModesCollection
                         {
-                            new TemperatureMode() {Name = "Off", TemperatureRange = new Range<double>(-100,100) },
-                            new TemperatureMode() {Name = "Eco", PowerEfficiency = 0.95, PowerConsumption = 0.3, TemperatureRange = new Range<double>(-100,100)},
-                            new TemperatureMode() {Name = "Turbo", PowerEfficiency = 0.50, PowerConsumption = 1.0, TemperatureRange = new Range<double>(-100,100)}
+                            new TemperatureMode() {Name = "Off", Type = TemperatureModeType.Off, TemperatureRange = new Range<double>(-100,100) },
+                            new TemperatureMode() {Name = "Eco", Type = TemperatureModeType.Eco, PowerEfficiency = 0.95, PowerConsumption = 0.3, TemperatureRange = new Range<double>(-100,100)},
+                            new TemperatureMode() {Name = "Turbo", Type = TemperatureModeType.Turbo, PowerEfficiency = 0.50, PowerConsumption = 1.0, TemperatureRange = new Range<double>(-100,100)}
                         }
                     }
                 }

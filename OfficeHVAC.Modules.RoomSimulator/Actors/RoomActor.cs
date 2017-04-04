@@ -57,7 +57,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             Receive<TemperatureJob>(message =>
             {
                 foreach (var device in Status.Devices.Where(dev => dev is ITemperatureDevice).Cast<ITemperatureDevice>())
-                    device.SetActiveModeByName(message.ModeName);
+                    device.SetActiveMode(message.ModeType);
             });
         }
 
