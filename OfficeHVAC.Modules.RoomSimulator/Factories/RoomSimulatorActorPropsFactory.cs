@@ -44,7 +44,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Factories
             var initialRoomStatus = new RoomStatus()
             {
                 Name = RoomName,
-                Parameters = new ParameterValuesCollection() { new ParameterValue(SensorType.Temperature, 20) },
+                Parameters = new ParameterValuesCollection() { new ParameterValue(SensorType.Temperature, 25) },
                 Volume = 100,
                 Devices = new HashSet<IDevice>()
                 {
@@ -55,6 +55,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Factories
                         Modes = new ModesCollection
                         {
                             new TemperatureMode() {Name = "Off", Type = TemperatureModeType.Off, TemperatureRange = new Range<double>(-100,100) },
+                            new TemperatureMode() {Name = "Stabilization", Type = TemperatureModeType.Stabilization, PowerEfficiency = 0.99, PowerConsumption = 0.1, TemperatureRange = new Range<double>(-3,3)},
                             new TemperatureMode() {Name = "Eco", Type = TemperatureModeType.Eco, PowerEfficiency = 0.95, PowerConsumption = 0.3, TemperatureRange = new Range<double>(-100,100)},
                             new TemperatureMode() {Name = "Turbo", Type = TemperatureModeType.Turbo, PowerEfficiency = 0.50, PowerConsumption = 1.0, TemperatureRange = new Range<double>(-100,100)}
                         }
