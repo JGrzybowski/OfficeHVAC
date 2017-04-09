@@ -9,14 +9,16 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-
-        <ListView ItemsSource="{Binding Logs}" />
+        
+        <ScrollViewer x:Name="LogScroller">
+            <ListView ItemsSource="{Binding Logs}" x:Name="LogList" />
+        </ScrollViewer>
 
         <Button Width="75" Height="30" Grid.Row="1"
                 Content="Initialise" Command="{Binding InitializeCommand}" />

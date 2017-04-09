@@ -12,6 +12,12 @@ namespace OfficeHVAC.Modules.ServerSimulator.Views
         public ServerLog()
         {
             InitializeComponent();
+            LogList.SizeChanged += ScrollDown;
+        }
+
+        private void ScrollDown(object sender, System.Windows.SizeChangedEventArgs e)
+        {
+            LogScroller.ScrollToBottom();
         }
     }
 }

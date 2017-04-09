@@ -14,13 +14,12 @@ namespace OfficeHVAC.Modules.ServerSimulator
         {
             this.ServerActor = Context.ActorOf(serverActorProps, "Logger");
 
-            Receive<RoomAvaliabilityMessage>(msg => ViewModel.Log($"Room {Sender.Path.Name} is avaliable."));
+            Receive<RoomAvaliabilityMessage>(msg => ViewModel.Log($"Room {Sender.Path} is avaliable."));
 
             Receive<IRoomStatusMessage>(msg =>
             {
                 var sb = new StringBuilder();
-                sb.AppendLine($"Room {Sender.Path.Name}");
-
+                sb.AppendLine($"Room {msg.Name}");
                 foreach (var paramValue in msg.Parameters)
                     sb.AppendLine($"{paramValue.ToString()} - {paramValue.Value.ToString()}");
 
