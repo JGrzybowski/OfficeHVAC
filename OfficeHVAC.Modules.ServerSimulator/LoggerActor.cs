@@ -1,11 +1,12 @@
-﻿using Akka.Actor;
-using OfficeHVAC.Messages;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Akka.Actor;
 using NodaTime;
+using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 
-namespace OfficeHVAC.Applications.LogServer
+namespace OfficeHVAC.Modules.ServerSimulator
 {
     public class LoggerActor : ReceiveActor
     {
@@ -13,11 +14,16 @@ namespace OfficeHVAC.Applications.LogServer
 
         public LoggerActor()
         {
+            Debug.WriteLine($"Starting Logger on {Context.Self.Path}");
+
             Receive<RoomAvaliabilityMessage>(msg =>
             {
                 Sender.Tell(new SubscribeMessage(Self));
                 rooms.Add(Sender);
-                Console.WriteLine($"NEW ROOM [{Sender.Path}]");
+
+                Debug.WriteLine($"NEW ROOM [{Sender.Path}]");
+                Context.Parent.Forward(msg);
+
                 Sender.Tell(
                     new Requirements(
                         Instant.FromDateTimeUtc(DateTime.UtcNow) + Duration.FromHours(12),
@@ -29,7 +35,8 @@ namespace OfficeHVAC.Applications.LogServer
 
             Receive<IRoomStatusMessage>(msg =>
             {
-                Console.WriteLine($"UPDATE   [{ msg.Name }] T:{ msg.Parameters[SensorType.Temperature].Value }°C");
+                Debug.WriteLine($"UPDATE   [{ msg.Name }] T:{ msg.Parameters[SensorType.Temperature].Value }°C");
+                Context.Parent.Forward(msg);
             });
         }
 
@@ -39,9 +46,9 @@ namespace OfficeHVAC.Applications.LogServer
             foreach (var room in rooms)
             {
                 room.Tell(new UnsubscribeMessage(Self));
-                Console.WriteLine($"Unsubscribed from {room.Path}");
+                Debug.WriteLine($"Unsubscribed from {room.Path}");
             }
-            Console.WriteLine("Shutting down");
+            Debug.WriteLine("Shutting down");
         }
     }
 }

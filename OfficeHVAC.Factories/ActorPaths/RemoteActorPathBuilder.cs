@@ -5,7 +5,7 @@ namespace OfficeHVAC.Factories.ActorPaths
 {
     public class RemoteActorPathBuilder : BindableBase, IRemoteActorPathBuilder
     {
-        private string _systemName = "HVACsystem";
+        private string _systemName = "OfficeHVAC";
         public string SystemName
         {
             get { return _systemName; }
@@ -36,7 +36,7 @@ namespace OfficeHVAC.Factories.ActorPaths
         public virtual ActorPath ActorPath()
         {
             ServerAddress = ServerAddress?.Trim();
-            
+
             return new ChildActorPath(
                 new RootActorPath(
                     new Address(

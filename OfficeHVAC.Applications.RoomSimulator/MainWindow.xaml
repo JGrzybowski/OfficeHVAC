@@ -22,6 +22,7 @@
         <views:RoomSimulator Grid.Column="1" Grid.Row="0" />
         <views:RoomSimulator Grid.Column="1" Grid.Row="1" />
 
+        <ContentControl regions:RegionManager.RegionName="ServerLogRegion" />
         <ContentControl regions:RegionManager.RegionName="TimeSimulationRegion" Grid.Row="2" Grid.ColumnSpan="2" />
 
     </Grid>
