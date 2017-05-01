@@ -2,6 +2,7 @@
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation
 {
@@ -10,7 +11,10 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
         public ITemperatureModel Model { get; }
         protected double LastTemperature { get; set; }
         protected Instant LastTime { get; set; }
-        
+
+        public TemperatureSimulator(ISimulatorModels models, double initialTemperature)
+            : this(models.TimeSource, initialTemperature, models.TemperatureModel) { }
+
         public TemperatureSimulator(ITimeSource timeSource, double initialTemperature, ITemperatureModel model)
         {
             this.Model = model;
@@ -19,28 +23,28 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
             this.LastTemperature = initialTemperature;
         }
 
-        public IEnumerable<ITemperatureDevice> Devices { get; set; } = new List<ITemperatureDevice>();
         public ITimeSource TimeSource { get; }
         public double RoomVolume { get; set; }
 
-        public double Temperature 
+        public double GetTemperature(IRoomStatusMessage status)
         {
-            get
-            {
-                var now = this.TimeSource.Now;
-                var timeDelta = (now - LastTime);
-                LastTime = now;
+            var now = this.TimeSource.Now;
+            var timeDelta = (now - LastTime);
+            LastTime = now;
 
-                LastTemperature += Model.CalculateChange(LastTemperature, Devices, timeDelta, RoomVolume);
-                return LastTemperature;
-            }
+            var temperatureDevices =
+                status.Devices
+                        .Where(dev => dev is ITemperatureDevice)
+                        .Cast<ITemperatureDevice>()
+                        .ToList();
 
-            set
-            {
-                foreach (var device in this.Devices)
-                    device.TurnOff();
-                this.LastTemperature = value;
-            }
+            LastTemperature += Model.CalculateChange(LastTemperature, temperatureDevices, timeDelta, status.Volume);
+            return LastTemperature;
+        }
+
+        public void SetTemperature(double value)
+        {
+            this.LastTemperature = value;
         }
     }
 }

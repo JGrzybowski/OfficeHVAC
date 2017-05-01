@@ -36,13 +36,11 @@
       <HintPath>..\packages\Akka.1.1.3\lib\net45\Akka.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NodaTime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NodaTime.1.3.3\lib\net35-Client\NodaTime.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\NodaTime.1.3.4\lib\net35-Client\NodaTime.dll</HintPath>
     </Reference>
     <Reference Include="NodaTime.Testing, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
       <HintPath>..\packages\NodaTime.Testing.1.3.2\lib\net35-Client\NodaTime.Testing.dll</HintPath>
@@ -63,15 +61,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BridgeActor.cs" />
+    <Compile Include="Devices\DeviceDefinition.cs" />
     <Compile Include="Devices\IMode.cs" />
+    <Compile Include="Devices\ITemperatureDeviceDefinition.cs" />
     <Compile Include="Devices\ITemperatureMode.cs" />
     <Compile Include="Devices\ITemperatureDevice.cs" />
+    <Compile Include="Devices\TemperatureDeviceDefinition.cs" />
     <Compile Include="Devices\TemperatureMode.cs" />
     <Compile Include="Devices\TemperatureDevice.cs" />
     <Compile Include="IRandomValueGenerator.cs" />
     <Compile Include="IRange.cs" />
     <Compile Include="ISensor.cs" />
     <Compile Include="ISensorActorRef.cs" />
+    <Compile Include="SimulatorModels.cs" />
     <Compile Include="ITemperatureModel.cs" />
     <Compile Include="ITimeSource.cs" />
     <Compile Include="Devices\IDevice.cs" />
@@ -80,11 +82,12 @@
     <Compile Include="ParameterValuesCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Range.cs" />
-    <Compile Include="RoomInfo.cs" />
+    <Compile Include="Requirements.cs" />
     <Compile Include="RoomStatus.cs" />
     <Compile Include="Sensor.cs" />
     <Compile Include="SensorActor.cs" />
     <Compile Include="SensorType.cs" />
+    <Compile Include="ISimulatorModels.cs" />
     <Compile Include="TemperatureJob.cs" />
     <Compile Include="TemperatureTask.cs" />
   </ItemGroup>

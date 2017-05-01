@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.TestKit.Xunit2;
+using NSubstitute;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using Shouldly;
@@ -14,9 +15,13 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
 
         private Props RoomActorProps(ActorPath companyActorPath) =>
             Props.Create(() => new RoomSimulator.Actors.RoomActor(
-                new RoomInfo() { Name = TestRoomName },
+                new RoomStatus()
+                {
+                    Name = TestRoomName,
+                    Parameters = new ParameterValuesCollection()
+                },
                 companyActorPath,
-                new ParameterValuesCollection())
+                Substitute.For<ISimulatorModels>())
             );
 
         [Fact]

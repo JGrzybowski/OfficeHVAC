@@ -3,5 +3,7 @@
     public interface ITemperatureMode : IMode
     {
         IRange<double> TemperatureRange { get; set; }
+
+        ITemperatureMode Clone();
     }
 }

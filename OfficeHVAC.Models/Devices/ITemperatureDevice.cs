@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 namespace OfficeHVAC.Models.Devices
 {
-    public interface ITemperatureDevice : IDevice
+    public interface ITemperatureDevice : ITemperatureDeviceDefinition, IDevice
     {
         double EffectivePower { get; }
 
         double DesiredTemperature { get; set; }
 
-        string SetActiveModeByName { get; set; }
+        string GetActiveModeByName();
+        void SetActiveModeByName(string value);
 
         IReadOnlyCollection<string> ModesNames { get; }
 

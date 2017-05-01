@@ -4,13 +4,15 @@ namespace OfficeHVAC.Models
 {
     public class TemperatureTask
     {
-        public double Temperature { get; }
-        public Instant Deadline { get; }
+        public double InitialTemperature { get; }
+        public double DesiredTemperature { get; }
+        public Duration TimeLimit { get; }
 
-        public TemperatureTask(double temperature, Instant deadline)
+        public TemperatureTask(double initialTemperature, double desiredTemperature, Duration timeLimit)
         {
-            Temperature = temperature;
-            Deadline = deadline;
+            InitialTemperature = initialTemperature;
+            DesiredTemperature = desiredTemperature;
+            TimeLimit = timeLimit;
         }
     }
 }

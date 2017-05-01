@@ -13,14 +13,16 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.Factories
         {
             //Arrange
             var temperatureModelFake = Substitute.For<ITemperatureModel>();
-            var simulatorFactory = new TemperatureSimulatorFactory(Substitute.For<ITimeSource>(),temperatureModelFake);
+            var simulatorFactory = new TemperatureSimulatorFactory(Substitute.For<ITimeSource>(), temperatureModelFake);
             simulatorFactory.InitialTemperature = 45;
+            var status = new RoomStatus() { };
+
 
             //Act
             var temperatureSimulator = simulatorFactory.TemperatureSimulator();
 
             //Assert
-            temperatureSimulator.Temperature.ShouldBe(45);
+            temperatureSimulator.GetTemperature(status).ShouldBe(45);
         }
 
         [Fact]
@@ -30,7 +32,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.Factories
             var timeSourceFake = Substitute.For<ITimeSource>();
             var temperatureModelFake = Substitute.For<ITemperatureModel>();
             var simulatorFactory = new TemperatureSimulatorFactory(timeSourceFake, temperatureModelFake);
-            
+
             //Act
             var temperatureSimulator = simulatorFactory.TemperatureSimulator();
 

@@ -9,6 +9,7 @@ using OfficeHVAC.Modules.TemperatureSimulation;
 using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using Shouldly;
 using System;
+using OfficeHVAC.Models;
 using Xunit;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
@@ -26,7 +27,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
             _pathBuilderFake.ActorPath().Returns(blackHoleActor.Path);
 
             ITemperatureSimulator temperatureSimulatorFake = Substitute.For<ITemperatureSimulator>();
-            temperatureSimulatorFake.Temperature.Returns(28f);
+            temperatureSimulatorFake.GetTemperature(Arg.Any<IRoomStatusMessage>()).Returns(28f);
 
             _temperatureSimulatorFactoryFake = Substitute.For<ITemperatureSimulatorFactory>();
             _temperatureSimulatorFactoryFake.TemperatureSimulator().Returns(temperatureSimulatorFake);
@@ -36,7 +37,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
         public void returns_RoomActor_props()
         {
             //Arrange
-            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake) { RoomName = "Room 101" };
+            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake, Substitute.For<ISimulatorModels>()) { RoomName = "Room 101" };
 
             //Act
             var resultProps = propsBuilder.Props();
@@ -50,7 +51,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
         public void constructs_props_using_ActorPathBuilder()
         {
             //Arrange
-            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake) { RoomName = "Room 101" };
+            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake, Substitute.For<ISimulatorModels>()) { RoomName = "Room 101" };
 
             //Act
             var resultProps = propsBuilder.Props();
@@ -65,7 +66,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
         public void throws_ArgumentException_when_RoomName_is_empty(string emptyRoomName)
         {
             //Arrange
-            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake) { RoomName = emptyRoomName };
+            var propsBuilder = new RoomSimulatorActorPropsFactory(_pathBuilderFake, _temperatureSimulatorFactoryFake, Substitute.For<ISimulatorModels>()) { RoomName = emptyRoomName };
 
             //Act
             var ex = Should.Throw<ArgumentException>(() => propsBuilder.Props());

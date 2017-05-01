@@ -1,6 +1,8 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
+using OfficeHVAC.Modules.TemperatureSimulation.Actors;
+using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using System;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
@@ -9,14 +11,28 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
     {
         private ICancelable Scheduler { get; set; }
 
-        public RoomSimulatorActor(string roomName, ActorPath companySupervisorActorPath, ParameterValuesCollection parameters)
-            : base(new RoomInfo() { Name = roomName }, companySupervisorActorPath, parameters)
+        private readonly ITemperatureSimulatorFactory temperatureSimulatorFactory;
+
+        public RoomSimulatorActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath, ITemperatureSimulatorFactory temperatureSimulatorFactory,
+                                  ISimulatorModels models)
+            : base(initialStatus, companySupervisorActorPath, models)
         {
-            this.Sensors.Add(new SensorActorRef(Guid.NewGuid().ToString(), SensorType.Temperature, Self));
+            this.temperatureSimulatorFactory = temperatureSimulatorFactory;
+
+            Sensors.Add(new SensorActorRef(
+                Guid.NewGuid().ToString(),
+                SensorType.Temperature,
+                Context.ActorOf(this.PrepareTemperatureSimulatorActorProps(initialStatus))));
+
+            var tempController = Context.ActorOf(Props.Create(() => new JobScheduler(models)));
+            Controllers.Add(new SensorActorRef(
+                Guid.NewGuid().ToString(),
+                SensorType.Temperature,
+                tempController));
 
             this.Receive<ChangeTemperature>(
-                msg => Parameters[SensorType.Temperature].Value = Convert.ToDouble(Parameters[SensorType.Temperature].Value) + msg.DeltaT, 
-                msg => Parameters.Contains(SensorType.Temperature));
+                msg => Status.Parameters[SensorType.Temperature].Value = Convert.ToDouble(Status.Parameters[SensorType.Temperature].Value) + msg.DeltaT,
+                msg => Status.Parameters.Contains(SensorType.Temperature));
 
 
             //this.Receive<SetDesiredTemperature>(message => {
@@ -43,6 +59,18 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                     Self);
 
             base.PreStart();
+        }
+
+        protected Props PrepareTemperatureSimulatorActorProps(RoomStatus initialStatus)
+        {
+            if (initialStatus.Parameters.Contains(SensorType.Temperature))
+                this.temperatureSimulatorFactory.InitialTemperature = Convert.ToDouble(initialStatus.Parameters[SensorType.Temperature].Value);
+
+            var props = Props.Create(
+                () => new TemperatureSimulatorActor(temperatureSimulatorFactory.TemperatureSimulator())
+            );
+
+            return props;
         }
     }
 }

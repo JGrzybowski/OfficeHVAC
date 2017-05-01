@@ -2,59 +2,81 @@
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using System.Collections.Generic;
+using System.Linq;
+using OfficeHVAC.Modules.TemperatureSimulation.Actors;
+using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
     public class RoomActor : ReceiveActor
     {
-        protected RoomInfo RoomInfo { get; } = new RoomInfo();
-
-        protected ParameterValuesCollection Parameters { get; } = new ParameterValuesCollection();
+        protected RoomStatus Status { get; } = new RoomStatus();
 
         protected ActorPath CompanySupervisorActorPath { get; }
 
         protected HashSet<ISensorActorRef> Sensors { get; } = new HashSet<ISensorActorRef>();
 
+        protected HashSet<ISensorActorRef> Controllers { get; } = new HashSet<ISensorActorRef>();
+
         protected HashSet<IActorRef> Subscribers { get; } = new HashSet<IActorRef>();
 
-        public RoomActor(RoomInfo roomInfo, ActorPath companySupervisorActorPath, ParameterValuesCollection parameters) : this()
+        protected ISimulatorModels Models;
+
+        public RoomActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath, ISimulatorModels models) : this()
         {
-            RoomInfo = roomInfo;
+            Status = initialStatus;
             CompanySupervisorActorPath = companySupervisorActorPath;
-            Parameters = parameters;
+            Models = models;
         }
 
         public RoomActor()
         {
             Receive<ParameterValueMessage>(
-                msg => Parameters[msg.ParamType].Value = msg.Value,
+                msg => Status.Parameters[msg.ParamType].Value = msg.Value,
                 msg => msg.ParamType != SensorType.Unknown
             );
 
             //Subscribtion handling
-            Receive<SubscribeMessage>(message =>
-            {
-                Subscribers.Add(Sender);
-                Sender.Tell(GenerateRoomStatus());
-            });
+            Receive<SubscribeMessage>(message => OnSubscribeMessage());
+            Receive<SubscriptionTriggerMessage>(message => SendSubscribtionNewsletter());
+            Receive<UnsubscribeMessage>(message => OnUnsubscribeMesssage());
 
-            Receive<SubscriptionTriggerMessage>(message =>
-            {
-                var status = GenerateRoomStatus();
-                foreach (var subscriber in Subscribers)
-                    subscriber.Tell(status, Self);
-            });
-
-            Receive<UnsubscribeMessage>(message =>
-            {
-                Subscribers.Remove(Sender);
-            });
+            Receive<ParameterValue>(message => this.Status.Parameters[message.ParameterType].Value = message.Value);
 
             Receive<RoomStatus.Request>(message =>
             {
                 var status = GenerateRoomStatus();
                 Sender.Tell(status, Self);
             });
+
+            Receive<Requirements>(message =>
+            {
+                Controllers.Single(s => s.Type == SensorType.Temperature).Actor.Tell(message);
+            });
+
+            Receive<TemperatureJob>(message =>
+            {
+                foreach (var device in Status.Devices.Where(dev => dev is ITemperatureDevice).Cast<ITemperatureDevice>())
+                    device.SetActiveModeByName(message.ModeName);
+            });
+        }
+
+        protected virtual void OnUnsubscribeMesssage()
+        {
+            Subscribers.Remove(Sender);
+        }
+
+        protected virtual void SendSubscribtionNewsletter()
+        {
+            var status = GenerateRoomStatus();
+            foreach (var subscriber in Subscribers)
+                subscriber.Tell(status, Self);
+        }
+
+        protected virtual void OnSubscribeMessage()
+        {
+            Subscribers.Add(Sender);
+            Sender.Tell(GenerateRoomStatus());
         }
 
         protected override void PreStart()
@@ -66,14 +88,11 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected virtual IRoomStatusMessage GenerateRoomStatus()
         {
-            var status = new RoomStatus()
-            {
-                RoomInfo = RoomInfo,
-                Parameters = Parameters,
-                Sensors = new List<ISensorActorRef>()
-            };
-            return status.ToMessage();
-        }
+            //TODO To remove
+            foreach (var sensor in Sensors)
+                sensor.Actor.Tell(new ParameterValue.Request(sensor.Type));
 
+            return Status.ToMessage();
+        }
     }
 }

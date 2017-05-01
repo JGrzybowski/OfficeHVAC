@@ -10,6 +10,7 @@ using OfficeHVAC.Modules.TemperatureSimulation;
 using Shouldly;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using Xunit;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
@@ -19,27 +20,30 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
         private const string TestRoomName = "Room 101";
         private const float TemperatureInRoom = 20f;
 
-        private class TemperatureSimulatorFake : ITemperatureSimulator
+        private static ITemperatureSimulatorFactory GenerateTemperatureSimulatorFake()
         {
-            public double Temperature { get; set; }
-            public IEnumerable<ITemperatureDevice> Devices { get; set; }
-            public ITimeSource TimeSource { get; }
-            public ITemperatureModel Model { get; }
-            public double RoomVolume { get; set; }
-        }
+            var simulatorFake = Substitute.For<ITemperatureSimulator>();
+            simulatorFake.GetTemperature(Arg.Any<IRoomStatusMessage>()).Returns(TemperatureInRoom);
 
-        private static ITemperatureSimulator GenerateTemperatureSimulatorFake()
-        {
-            var fake = Substitute.For<ITemperatureSimulator>();
-            fake.Temperature.Returns(TemperatureInRoom);
-            return fake;
+            var factoryFake = Substitute.For<ITemperatureSimulatorFactory>();
+            factoryFake.TemperatureSimulator().Returns(simulatorFake);
+
+            return factoryFake;
         }
 
         private Props SimulatorActorProps() =>
             Props.Create(() => new RoomSimulatorActor(
-                TestRoomName,
+                new RoomStatus()
+                {
+                    Name = TestRoomName,
+                    Parameters = new ParameterValuesCollection()
+                    {
+                        new ParameterValue(SensorType.Temperature, TemperatureInRoom)
+                    }
+                },
                 ActorOf(BlackHoleActor.Props).Path,
-                new ParameterValuesCollection() { new ParameterValue(SensorType.Temperature, TemperatureInRoom) }
+                GenerateTemperatureSimulatorFake(),
+                Substitute.For<ISimulatorModels>()
             ));
 
         [Theory]

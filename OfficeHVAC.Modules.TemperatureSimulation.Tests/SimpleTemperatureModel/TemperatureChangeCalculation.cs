@@ -1,28 +1,28 @@
-﻿using NodaTime;
+﻿using System.Collections.Generic;
+using NodaTime;
 using OfficeHVAC.Models.Devices;
 using Shouldly;
-using System.Collections.Generic;
 using Xunit;
 
-namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
+namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.SimpleTemperatureModel
 {
-    public class SimpleTemperatureModelChangeCalculation
+    public class TemperatureChangeCalculation
     {
         private static readonly double StartingTemperature = 36.6f;
         private static readonly Duration FiveMinutes = Duration.FromMinutes(5);
-        
+
         [Fact]
         public void returns_0_when_devices_are_turned_off()
         {
             //Arrange
-            var temperatureModel = new SimpleTemperatureModel();
-            var devices = new List<ITemperatureDevice> {new TemperatureDeviceFake() {MaxPower = 40}};
+            var temperatureModel = new TemperatureSimulation.SimpleTemperatureModel();
+            var devices = new List<ITemperatureDevice> { new TemperatureDeviceFake() { MaxPower = 40 } };
 
             //Act
             var temperatureDelta = temperatureModel.CalculateChange(StartingTemperature, devices, FiveMinutes, 250);
-            
+
             //Assert
-            temperatureDelta.ShouldBe(0); 
+            temperatureDelta.ShouldBe(0);
         }
 
         [Theory]
@@ -31,7 +31,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
         public void returns_non_zero_value_when_devices_are_turned_on(int desiredTemperatureDelta)
         {
             //Arrange
-            var temperatureModel = new SimpleTemperatureModel();
+            var temperatureModel = new TemperatureSimulation.SimpleTemperatureModel();
             var devices = new List<ITemperatureDevice>
             {
                 new TemperatureDeviceFake()
@@ -56,7 +56,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
         public void returns_zero_when_time_does_not_change(float desiredTemperatureDelta)
         {
             //Arrange
-            var temperatureModel = new SimpleTemperatureModel();
+            var temperatureModel = new TemperatureSimulation.SimpleTemperatureModel();
             var devices = new List<ITemperatureDevice>
             {
                 new TemperatureDeviceFake()

@@ -8,7 +8,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Factories
         private readonly ITimeSource timeSource;
         private readonly ITemperatureModel model;
 
-        public float InitialTemperature { get; set; }
+        public double InitialTemperature { get; set; }
 
         public TemperatureSimulatorFactory(ITimeSource timeSource, ITemperatureModel model)
         {
@@ -18,13 +18,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Factories
 
         public ITemperatureSimulator TemperatureSimulator()
         {
-            return new TemperatureSimulator(timeSource, InitialTemperature, model)
-            {
-                Devices = new ITemperatureDevice[]
-                {
-                    new TemperatureDevice() { MaxPower = 2000 }
-                }
-            };
+            return new TemperatureSimulator(timeSource, InitialTemperature, model);
         }
     }
 }
