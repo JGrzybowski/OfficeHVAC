@@ -4,6 +4,7 @@ using OfficeHVAC.Modules.TimeSimulation;
 using Prism.Autofac;
 using Prism.Modularity;
 using System.Windows;
+using OfficeHVAC.Modules.ServerSimulator;
 
 namespace OfficeHVAC.Applications.RoomSimulator
 {
@@ -16,6 +17,7 @@ namespace OfficeHVAC.Applications.RoomSimulator
 
             TimeSimulationModule.InitializeDependencies(containerBuilder);
             RoomSimulatorModule.InitializeDependencies(containerBuilder);
+            ServerSimulatorModule.InitializeDependencies(containerBuilder);
         }
 
         //TODO: 02. Override the CreateShell returning an instance of your shell.
@@ -36,6 +38,7 @@ namespace OfficeHVAC.Applications.RoomSimulator
             ModuleCatalog catalog = (ModuleCatalog)ModuleCatalog;
             catalog.AddModule(typeof(TimeSimulationModule));
             catalog.AddModule(typeof(RoomSimulatorModule));
+            catalog.AddModule(typeof(ServerSimulatorModule));
         }
     }
 }

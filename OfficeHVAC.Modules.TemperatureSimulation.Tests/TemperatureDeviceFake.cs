@@ -20,29 +20,23 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
 
         public void TurnOff() => PowerConsumption = 0;
 
-        private string setActiveModeByName;
+        public ITemperatureMode ActiveMode { get; set; }
 
-        public string GetActiveModeByName()
+        public void SetActiveMode(TemperatureModeType modeType)
         {
-            return setActiveModeByName;
+            ActiveMode = Modes.Single(m => m.Type == modeType);
         }
-
-        public void SetActiveModeByName(string value)
-        {
-            setActiveModeByName = value;
-        }
-
-        public IReadOnlyCollection<string> ModesNames { get; set; }
 
         public ICollection<ITemperatureMode> Modes { get; set; }
 
         public double DesiredTemperature { get; set; }
 
-        public Func<string, Duration, double> CalculatePowerConsumptionFunction { get; set; }
+        public Func<TemperatureModeType, Duration, double> CalculatePowerConsumptionFunction { get; set; }
 
-        public double CalculatePowerConsumption(string name, Duration time) => CalculatePowerConsumptionFunction(name, time);
+        public double CalculatePowerConsumption(TemperatureModeType modeType, Duration time) => CalculatePowerConsumptionFunction(modeType, time);
 
         IEnumerable<ITemperatureMode> ITemperatureDeviceDefinition.Modes => this.Modes;
+
         public IDevice Clone() => new TemperatureDeviceFake()
         {
             Id = Id,

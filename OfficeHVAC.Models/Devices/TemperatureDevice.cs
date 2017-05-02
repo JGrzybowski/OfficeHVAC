@@ -1,6 +1,7 @@
 ﻿using NodaTime;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace OfficeHVAC.Models.Devices
@@ -16,19 +17,18 @@ namespace OfficeHVAC.Models.Devices
                 PowerEfficiency = 0,
                 TemperatureRange = new Range<double>(double.NegativeInfinity, double.PositiveInfinity)
             };
-            Modes = new HashSet<ITemperatureMode>() { offMode };
-            this.SetActiveModeByName(offMode.Name);
+            Modes = new ModesCollection() { offMode };
+            this.SetActiveMode(TemperatureModeType.Off);
         }
 
         public string Id { get; set; }
-
-        public enum Mode { Off, StandBy, Eco, Normal, Turbo, Stabilization }
 
         public bool IsTurnedOn => PowerConsumption > 0;
 
         public int MaxPower { get; set; }
 
-        public ITemperatureMode ActiveMode { get; private set; }
+        private TemperatureModeType activeMode;
+        public ITemperatureMode ActiveMode => Modes[activeMode];
 
         public IDevice Clone()
         {
@@ -36,10 +36,10 @@ namespace OfficeHVAC.Models.Devices
             {
                 Id = this.Id,
                 DesiredTemperature = this.DesiredTemperature,
-                Modes = this.Modes.Select(m => m.Clone()).ToList(),
+                Modes = new ModesCollection(this.Modes.Select(m => m.Clone())),
                 MaxPower = this.MaxPower
             };
-            clone.ActiveMode = clone.Modes.Single(m => m.Name == this.ActiveMode.Name);
+            clone.SetActiveMode(this.ActiveMode.Type);
             return clone;
         }
 
@@ -47,32 +47,23 @@ namespace OfficeHVAC.Models.Devices
 
         public double PowerConsumption => MaxPower * Math.Abs(EffectivePower);
 
-        public void TurnOff() => SetActiveModeByName(nameof(Mode.Off));
+        public void TurnOff() => SetActiveMode(TemperatureModeType.Off);
 
-        public string GetActiveModeByName()
+        public void SetActiveMode(TemperatureModeType value)
         {
-            return ActiveMode.Name;
-        }
-
-        public void SetActiveModeByName(string value)
-        {
-            if (Modes.Any(m => m.Name == value))
-            {
-                ActiveMode = Modes.Single(m => m.Name == value);
-            }
+            if (Modes.Contains(value))
+                activeMode = value;
             else
                 throw new ArgumentOutOfRangeException(nameof(value), value,
-                    "Provided mode name is not a valid one. Use Modes property to find out valid Mode Names");
+                    "Provided mode type is not a valid one. Use Modes property to find out avaliable mode tpyes");
         }
 
-        public IReadOnlyCollection<string> ModesNames => Modes.Select(mode => mode.Name).ToList();
-        public ICollection<ITemperatureMode> Modes { get; set; }
+        public KeyedCollection<TemperatureModeType, ITemperatureMode> Modes { get; set; }
 
         public double DesiredTemperature { get; set; }
 
-        public double CalculatePowerConsumption(string name, Duration time) =>
-            this.Modes.Single(m => m.Name == name)
-                .CalculateEffectivePower(MaxPower) * time.ToTimeSpan().TotalSeconds;
+        public double CalculatePowerConsumption(TemperatureModeType modeType, Duration time) =>
+            this.Modes[modeType].CalculateEffectivePower(MaxPower) * time.ToTimeSpan().TotalSeconds;
 
         IEnumerable<ITemperatureMode> ITemperatureDeviceDefinition.Modes => this.Modes;
     }

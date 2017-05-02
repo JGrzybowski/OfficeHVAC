@@ -66,6 +66,9 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NodaTime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NodaTime.1.3.4\lib\net35-Client\NodaTime.dll</HintPath>
+    </Reference>
     <Reference Include="Prism, Version=6.2.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.2.0\lib\net45\Prism.dll</HintPath>
       <Private>True</Private>
@@ -166,6 +169,10 @@
     <ProjectReference Include="..\OfficeHVAC.Models\OfficeHVAC.Models.csproj">
       <Project>{584598C9-E1CD-4592-9A88-24F34D23D282}</Project>
       <Name>OfficeHVAC.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OfficeHVAC.Modules.ServerSimulator\OfficeHVAC.Modules.ServerSimulator.csproj">
+      <Project>{4C73AC09-6B2F-405E-AD3F-7FC40D43105D}</Project>
+      <Name>OfficeHVAC.Modules.ServerSimulator</Name>
     </ProjectReference>
     <ProjectReference Include="..\OfficeHVAC.Modules.TimeSimulation\OfficeHVAC.Modules.TimeSimulation.csproj">
       <Project>{641B89A7-EC7A-480F-858E-93B40A7C9197}</Project>

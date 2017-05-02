@@ -14,7 +14,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerAc
             var fake = Substitute.For<ITemperatureModel>();
             fake.CalculateChange(Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<Duration>(), Arg.Any<double>())
                 .ReturnsForAnyArgs(temperatureChange);
-            fake.CalculateNeededTime(Arg.Any<double>(), Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<string>(), Arg.Any<double>())
+            fake.CalculateNeededTime(Arg.Any<double>(), Arg.Any<double>(), Arg.Any<IEnumerable<ITemperatureDevice>>(), Arg.Any<TemperatureModeType>(), Arg.Any<double>())
                 .ReturnsForAnyArgs(neededTime);
             return fake;
         }

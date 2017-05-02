@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Akka.Actor;
-using NodaTime;
+﻿using NodaTime;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
+using System.Collections.Generic;
 using Xunit;
+
 namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerActor
 {
     public class OnTemperatureTask : TemperatureControllerActorTest

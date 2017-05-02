@@ -66,6 +66,8 @@
     <Compile Include="Devices\ITemperatureDeviceDefinition.cs" />
     <Compile Include="Devices\ITemperatureMode.cs" />
     <Compile Include="Devices\ITemperatureDevice.cs" />
+    <Compile Include="Devices\ModesCollection.cs" />
+    <Compile Include="Devices\TemperatureModeType.cs" />
     <Compile Include="Devices\TemperatureDeviceDefinition.cs" />
     <Compile Include="Devices\TemperatureMode.cs" />
     <Compile Include="Devices\TemperatureDevice.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="IRange.cs" />
     <Compile Include="ISensor.cs" />
     <Compile Include="ISensorActorRef.cs" />
+    <Compile Include="ObservableKeyedCollection.cs" />
     <Compile Include="SimulatorModels.cs" />
     <Compile Include="ITemperatureModel.cs" />
     <Compile Include="ITimeSource.cs" />

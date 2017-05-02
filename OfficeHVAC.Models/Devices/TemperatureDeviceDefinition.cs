@@ -21,8 +21,8 @@ namespace OfficeHVAC.Models.Devices
 
         public ITemperatureDeviceDefinition ToMessage() => Clone();
 
-        public double CalculatePowerConsumption(string name, Duration time) =>
-            this.Modes.Single(m => m.Name == name)
+        public double CalculatePowerConsumption(TemperatureModeType modeType, Duration time) =>
+            this.Modes.Single(m => m.Type == modeType)
                 .CalculateEffectivePower(MaxPower) * time.ToTimeSpan().TotalSeconds;
     }
 }

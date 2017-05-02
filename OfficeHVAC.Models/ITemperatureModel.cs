@@ -10,9 +10,9 @@ namespace OfficeHVAC.Models
                                 Duration timeDelta, double volume);
 
         Duration CalculateNeededTime(double initialTemperature, double desiredTemperature,
-                                     IEnumerable<ITemperatureDeviceDefinition> devices, string mode, double volume);
+                                     IEnumerable<ITemperatureDeviceDefinition> devices, TemperatureModeType modeType, double volume);
 
-        string FindMostEfficientCombination(TemperatureTask task, IRoomStatusMessage status,
+        TemperatureModeType FindMostEfficientCombination(TemperatureTask task, IRoomStatusMessage status,
                                                     IEnumerable<ITemperatureDeviceDefinition> devices);
     }
 }

@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using NodaTime;
+using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Models
 {
     public class TemperatureJob
     {
-        public TemperatureJob(string modeName, double desiredTemperature, Instant startTime, Instant endTime)
+        public TemperatureJob(TemperatureModeType temperatureModeType, double desiredTemperature, Instant startTime, Instant endTime)
         {
-            ModeName = modeName;
+            ModeType = temperatureModeType;
             DesiredTemperature = desiredTemperature;
             StartTime = startTime;
             EndTime = endTime;
         }
 
-        public string ModeName { get; }
+        public TemperatureModeType ModeType { get; }
 
         public double DesiredTemperature { get; }
 

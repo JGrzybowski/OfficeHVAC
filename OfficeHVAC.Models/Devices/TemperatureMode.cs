@@ -4,6 +4,8 @@
     {
         public string Name { get; set; }
 
+        public TemperatureModeType Type { get; set; }
+
         public double PowerConsumption { get; set; }
 
         public double PowerEfficiency { get; set; }
@@ -16,6 +18,7 @@
             new TemperatureMode()
             {
                 Name = Name,
+                Type = Type,
                 PowerConsumption = PowerConsumption,
                 PowerEfficiency = PowerEfficiency,
                 TemperatureRange = new Range<double>(TemperatureRange.Min, TemperatureRange.Max)

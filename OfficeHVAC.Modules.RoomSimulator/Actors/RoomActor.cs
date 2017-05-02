@@ -1,10 +1,10 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
+using OfficeHVAC.Models.Devices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using OfficeHVAC.Modules.TemperatureSimulation.Actors;
-using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -19,6 +19,10 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         protected HashSet<ISensorActorRef> Controllers { get; } = new HashSet<ISensorActorRef>();
 
         protected HashSet<IActorRef> Subscribers { get; } = new HashSet<IActorRef>();
+
+        protected List<TemperatureJob> Jobs { get; } = new List<TemperatureJob>();
+
+        protected double StabilizationThreshold = 1.0;
 
         protected ISimulatorModels Models;
 
@@ -41,7 +45,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             Receive<SubscriptionTriggerMessage>(message => SendSubscribtionNewsletter());
             Receive<UnsubscribeMessage>(message => OnUnsubscribeMesssage());
 
-            Receive<ParameterValue>(message => this.Status.Parameters[message.ParameterType].Value = message.Value);
+            Receive<ParameterValue>(message => UpdateParameter(message));
 
             Receive<RoomStatus.Request>(message =>
             {
@@ -56,8 +60,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
             Receive<TemperatureJob>(message =>
             {
-                foreach (var device in Status.Devices.Where(dev => dev is ITemperatureDevice).Cast<ITemperatureDevice>())
-                    device.SetActiveModeByName(message.ModeName);
+                Jobs.Add(message);
+                ActivateTemperatureMode(message.ModeType, message.DesiredTemperature);
             });
         }
 
@@ -77,6 +81,26 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         {
             Subscribers.Add(Sender);
             Sender.Tell(GenerateRoomStatus());
+        }
+
+        protected virtual void UpdateParameter(ParameterValue paramValue)
+        {
+            this.Status.Parameters[paramValue.ParameterType].Value = paramValue.Value;
+            if (paramValue.ParameterType == SensorType.Temperature)
+            {
+                var temperature = Convert.ToDouble(paramValue.Value);
+                if (Jobs.Any() && Math.Abs(Jobs.First().DesiredTemperature - temperature) < StabilizationThreshold)
+                    ActivateTemperatureMode(TemperatureModeType.Stabilization, Jobs.First().DesiredTemperature);
+            }
+        }
+
+        protected virtual void ActivateTemperatureMode(TemperatureModeType mode, double desiredTemperature)
+        {
+            foreach (var device in Status.Devices.Where(dev => dev is ITemperatureDevice).Cast<ITemperatureDevice>())
+            {
+                device.SetActiveMode(mode);
+                device.DesiredTemperature = desiredTemperature;
+            }
         }
 
         protected override void PreStart()

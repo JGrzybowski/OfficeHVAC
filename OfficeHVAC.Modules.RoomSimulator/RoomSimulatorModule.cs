@@ -42,7 +42,7 @@ namespace OfficeHVAC.Modules.RoomSimulator
             containerBuilder.RegisterType<RemoteActorPathBuilder>()
                 .WithProperties(new Parameter[]
                 {
-                    new NamedPropertyParameter(nameof(RemoteActorPathBuilder.CompanyActorName), "Logger"),
+                    new NamedPropertyParameter(nameof(RemoteActorPathBuilder.CompanyActorName), "bridge/Logger"),
                     new NamedPropertyParameter(nameof(RemoteActorPathBuilder.ServerAddress), "localhost"),
                     new NamedPropertyParameter(nameof(RemoteActorPathBuilder.ServerPort), 8000)
                 })
