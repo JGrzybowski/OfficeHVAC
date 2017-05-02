@@ -20,7 +20,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
             set
             {
                 _controlledTimeSource.Speed = value;
-                this.OnPropertyChanged();
+                this.RaisePropertyChanged();
             }
         }
 
@@ -42,25 +42,25 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
             else
                 _timer.Start();
 
-            OnPropertyChanged(nameof(IsRunning));
+            RaisePropertyChanged(nameof(IsRunning));
         }
 
         public void AddMinutes(long minutes)
         {
             _controlledTimeSource.AddMinutes(minutes);
-            OnPropertyChanged(nameof(TimeText));
+            RaisePropertyChanged(nameof(TimeText));
         }
 
         public void TickManually()
         {
             _controlledTimeSource.UpdateClock();
-            OnPropertyChanged(nameof(TimeText));
+            RaisePropertyChanged(nameof(TimeText));
         }
 
         public void Reset()
         {
             _controlledTimeSource.Reset(ResetTime);
-            OnPropertyChanged(nameof(TimeText));
+            RaisePropertyChanged(nameof(TimeText));
         }
     }
 }
