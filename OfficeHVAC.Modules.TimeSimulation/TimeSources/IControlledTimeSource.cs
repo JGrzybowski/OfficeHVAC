@@ -7,7 +7,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
     {
         double Speed { get; set; }
 
-        void AddHours(long hours);
+        void AddHours(int hours);
         void AddMinutes(long minutes);
         void AddSeconds(long seconds);
 

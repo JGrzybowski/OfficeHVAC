@@ -2,5 +2,8 @@
 
 namespace OfficeHVAC.Models
 {
-    public interface ITimeSource : IClock { }
+    public interface ITimeSource
+    {
+        Instant Now { get; }
+    }
 }

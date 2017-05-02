@@ -6,7 +6,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
 {
     public class ControlledTimeSource : IControlledTimeSource
     {
-        private static readonly long TicksInSecond = Duration.FromSeconds(1).Ticks;
+        private static readonly long TicksInSecond = Duration.FromSeconds(1).BclCompatibleTicks;
 
         private readonly FakeClock _internalClock;
 
@@ -22,14 +22,14 @@ namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
             }
         }
 
-        public Instant Now => _internalClock.Now;
-        
+        public Instant Now => _internalClock.GetCurrentInstant();
+
         public ControlledTimeSource(Instant initial)
         {
             _internalClock = new FakeClock(initial);
         }
 
-        public void AddHours(long hours)
+        public void AddHours(int hours)
         {
             _internalClock.AdvanceHours(hours);
         }
