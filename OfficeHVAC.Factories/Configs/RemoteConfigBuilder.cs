@@ -16,7 +16,15 @@ namespace OfficeHVAC.Factories.Configs
         {
             string configString =
                 @"akka {
-                    actor { provider = ""Akka.Remote.RemoteActorRefProvider, Akka.Remote"" }
+                    actor { 
+                        provider = ""Akka.Remote.RemoteActorRefProvider, Akka.Remote""
+                        serializers {
+                            hyperion = ""Akka.Serialization.HyperionSerializer, Akka.Serialization.Hyperion""
+                        }
+                        serialization-bindings {
+                            ""System.Object"" = hyperion
+                        }
+                    }
                     remote {
                         helios.tcp {" +
                             $"port = {Port}," +

@@ -29,7 +29,7 @@ namespace OfficeHVAC.Models
         {
             public int Compare(TemperatureJob x, TemperatureJob y)
             {
-                return Math.Sign((x.StartTime - y.StartTime).Ticks);
+                return Math.Sign((x.StartTime - y.StartTime).BclCompatibleTicks);
             }
         }
     }
