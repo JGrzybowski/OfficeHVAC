@@ -1,14 +1,12 @@
 ﻿using NodaTime;
-using NodaTime.Testing;
 using System;
+using TimeSimulator.NodaTime;
 
 namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
 {
-    public class ControlledTimeSource : IControlledTimeSource
+    public class ControlledTimeSource : NodaTimeControllableClock, IControlledTimeSource
     {
         private static readonly long TicksInSecond = Duration.FromSeconds(1).BclCompatibleTicks;
-
-        private readonly FakeClock _internalClock;
 
         private double _speed = 1;
         public double Speed
@@ -22,37 +20,23 @@ namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
             }
         }
 
-        public Instant Now => _internalClock.GetCurrentInstant();
-
         public ControlledTimeSource(Instant initial)
         {
-            _internalClock = new FakeClock(initial);
+            Now = initial;
         }
 
-        public void AddHours(int hours)
-        {
-            _internalClock.AdvanceHours(hours);
-        }
+        public void AddHours(int hours) => AddInterval(Duration.FromHours(hours));
 
-        public void AddMinutes(long minutes)
-        {
-            _internalClock.AdvanceMinutes(minutes);
-        }
+        public void AddMinutes(long minutes) => AddInterval(Duration.FromMinutes(minutes));
 
-        public void AddSeconds(long seconds)
-        {
-            _internalClock.AdvanceSeconds(seconds);
-        }
+        public void AddSeconds(long seconds) => AddInterval(Duration.FromSeconds(seconds));
 
         public void UpdateClock()
         {
             var delta = (long)(TicksInSecond * Speed);
-            _internalClock.AdvanceTicks(delta);
+            AddInterval(Duration.FromTicks(delta));
         }
 
-        public void Reset(Instant instant)
-        {
-            _internalClock.Reset(instant);
-        }
+        public void Reset(Instant instant) => Now = instant;
     }
 }
