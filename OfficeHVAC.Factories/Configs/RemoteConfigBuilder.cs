@@ -31,7 +31,8 @@ namespace OfficeHVAC.Factories.Configs
                             @"hostname = localhost
                         }
                     }
-                }";
+                }
+                akka.scheduler.implementation = ""Akka.TestKit.TestScheduler, Akka.TestKit""";
             return ConfigurationFactory.ParseString(configString);
         }
     }

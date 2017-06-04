@@ -36,6 +36,9 @@
     <Reference Include="Akka.Remote, Version=1.2.0.33, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Akka.Remote.1.2.0\lib\net45\Akka.Remote.dll</HintPath>
     </Reference>
+    <Reference Include="Akka.TestKit, Version=1.2.0.33, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Akka.TestKit.1.2.0\lib\net45\Akka.TestKit.dll</HintPath>
+    </Reference>
     <Reference Include="Autofac, Version=4.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.5.0\lib\net45\Autofac.dll</HintPath>
     </Reference>

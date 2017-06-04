@@ -4,7 +4,11 @@ using OfficeHVAC.Modules.TimeSimulation;
 using Prism.Autofac;
 using Prism.Modularity;
 using System.Windows;
+using Akka.Actor;
+using Akka.Configuration;
+using Akka.TestKit;
 using OfficeHVAC.Modules.ServerSimulator;
+using OfficeHVAC.Modules.TimeSimulation.TimeSources;
 
 namespace OfficeHVAC.Applications.RoomSimulator
 {
@@ -16,8 +20,26 @@ namespace OfficeHVAC.Applications.RoomSimulator
             base.ConfigureContainerBuilder(containerBuilder);
 
             TimeSimulationModule.InitializeDependencies(containerBuilder);
-            RoomSimulatorModule.InitializeDependencies(containerBuilder);
+
+            var actorSystem = ActorSystem.Create(
+                "OfficeHVAC"
+                ,ConfigurationFactory.ParseString(@"akka.scheduler.implementation = ""Akka.TestKit.TestScheduler, Akka.TestKit""")
+            );
+
+            containerBuilder.RegisterInstance(actorSystem)
+                .As<ActorSystem>()
+                .SingleInstance();
+
+            containerBuilder.Register(ctx =>
+            {
+                var scheduler = ctx.Resolve<ActorSystem>().Scheduler as TestScheduler;
+                return scheduler;
+            })
+            .As<TestScheduler>()
+            .SingleInstance();
+
             ServerSimulatorModule.InitializeDependencies(containerBuilder);
+            RoomSimulatorModule.InitializeDependencies(containerBuilder);
         }
 
         //TODO: 02. Override the CreateShell returning an instance of your shell.
