@@ -10,45 +10,26 @@
     <Grid Background="CornflowerBlue">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="25*"/>
+            <RowDefinition Height="12"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="4,0"
-                    VerticalAlignment="Center" HorizontalAlignment="Right">
-            <Label Content="Server Address:" Target="{Binding ElementName=ServerAddressTextBlock}" />
-            <TextBox x:Name="ServerAddressTextBlock" Width="200" Text="{Binding BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.CompanyPathBuilder.ServerAddress}"/>
-            <Label Content="Server port:" Target="{Binding ElementName=ServerPortTextBlock}"/>
-            <TextBox x:Name="ServerPortTextBlock" Width="50" Text="{Binding BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.CompanyPathBuilder.ServerPort}"/>
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Label Content="Temperature" VerticalContentAlignment="Center"/>
+            <TextBox Text="{Binding Temperature, Mode=TwoWay, StringFormat={}{0}°C}" Width ="150"/>
+            <Button Height="40" Width="40" Content="+" Command="{Binding IncreaseCommand}"/>
+            <Button Height="40" Width="40" Content="-" Command="{Binding DecreaseCommand}"/>
         </StackPanel>
-        
-        <Grid Grid.Row="1" Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Label Content="Temperature"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Text="{Binding Temperature, Mode=TwoWay, StringFormat={}{0}°C}" FontSize="48"/>
-            <Button Grid.Row="1" Grid.Column="1" Height="40" Width="40" Margin="0,12" Content="+" Command="{Binding IncreaseCommand}"/>
-            <Button Grid.Row="2" Grid.Column="1" Height="40" Width="40" Margin="0,12" Content="-" Command="{Binding DecreaseCommand}"/>
-        </Grid>
 
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="4,0"
                     HorizontalAlignment="Right" VerticalAlignment="Center">
-            <Button x:Name="InitializationButton" Width ="60" Content="RUN!" Command="{Binding InitializeCommand}"/>
+            <Button x:Name="InitializationButton" Width ="60" Content="RUN!" Command="{Binding InitializeCommand}" />
             <Label Content="Room Name:" Target="{Binding ElementName=RoomNameTextBox}"/>
-            <TextBox x:Name="RoomNameTextBox" Width="150" Text="{Binding BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.RoomName}"/>
-            <Label Content="Local port:" Target="{Binding ElementName=LocalPortTextBox}"/>
-            <TextBox x:Name="LocalPortTextBox" Width="50" Text="{Binding ConfigBuilder.Port}"/>
+            <TextBox x:Name="RoomNameTextBox" Width="150" Text="{Binding BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.RoomName}" />
         </StackPanel>
     </Grid>
 

@@ -92,6 +92,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 if (Jobs.Any() && Math.Abs(Jobs.First().DesiredTemperature - temperature) < StabilizationThreshold)
                     ActivateTemperatureMode(TemperatureModeType.Stabilization, Jobs.First().DesiredTemperature);
             }
+            SendSubscribtionNewsletter();
         }
 
         protected virtual void ActivateTemperatureMode(TemperatureModeType mode, double desiredTemperature)
@@ -112,10 +113,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected virtual IRoomStatusMessage GenerateRoomStatus()
         {
-            //TODO To remove
-            foreach (var sensor in Sensors)
-                sensor.Actor.Tell(new ParameterValue.Request(sensor.Type));
-
             return Status.ToMessage();
         }
     }

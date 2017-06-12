@@ -49,15 +49,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected override void PreStart()
         {
-            Scheduler = Context.System
-                .Scheduler
-                .ScheduleTellRepeatedlyCancelable(
-                    TimeSpan.FromMilliseconds(1000),
-                    TimeSpan.FromMilliseconds(1000),
-                    Self,
-                    new SubscriptionTriggerMessage(),
-                    Self);
-
+            //Get Requirements List
             base.PreStart();
         }
 

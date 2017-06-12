@@ -1,11 +1,13 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
     public class TemperatureSimulatorActor : ReceiveActor
     {
+        private ICancelable Scheduler { get; set; }
         private ITemperatureSimulator temperatureSimulator { get; }
 
         public TemperatureSimulatorActor(ITemperatureSimulator temperatureSimulator)
@@ -16,6 +18,20 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                 async msg => Sender.Tell(await CheckTemperature()),
                 msg => msg.ParameterType == SensorType.Temperature
             );
+        }
+
+        protected override void PreStart()
+        {
+            Scheduler = Context.System
+                .Scheduler
+                .ScheduleTellRepeatedlyCancelable(
+                    TimeSpan.FromMilliseconds(1000),
+                    TimeSpan.FromMilliseconds(15000),
+                    Self,
+                    new ParameterValue.Request(SensorType.Temperature),
+                    Context.Parent);
+
+            base.PreStart();
         }
 
         private async Task<IParameterValueMessage> CheckTemperature()

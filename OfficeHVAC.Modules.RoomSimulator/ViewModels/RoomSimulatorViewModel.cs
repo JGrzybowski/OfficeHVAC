@@ -1,7 +1,4 @@
 ﻿using Akka.Actor;
-using Akka.Configuration;
-using OfficeHVAC.Factories.Configs;
-using OfficeHVAC.Messages;
 using OfficeHVAC.Modules.RoomSimulator.Factories;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -14,11 +11,9 @@ namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
     public class RoomSimulatorViewModel : BindableBase, IRoomViewModel
     {
         //Constants 
-        public const string BridgeActorName = "bridge";
-        public string ActorSystemName { get; } = "OfficeHVAC";
+        public const string BridgeActorNamePostxix = "bridge";
 
         // Dependencies
-        public IConfigBuilder ConfigBuilder { get; }
         public IBridgeRoomActorPropsFactory BridgeRoomActorPropsFactory { get; }
 
         // Actor System fields
@@ -40,31 +35,28 @@ namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
             private set { SetProperty(ref _isConnected, value); }
         }
 
-        public ICommand IncreaseCommand { get; }
-        public ICommand DecreaseCommand { get; }
         public ICommand InitializeCommand { get; }
-
         // Constructor
-        public RoomSimulatorViewModel(IConfigBuilder configBuilder, IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory)
+        public RoomSimulatorViewModel(IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory, ActorSystem actorSystem)
         {
-            this.ConfigBuilder = configBuilder;
-            this.ConfigBuilder.Port = 8080;
+            this.LocalActorSystem = actorSystem;
+
             this.BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
             this.BridgeRoomActorPropsFactory.ViewModel = this;
-            this.BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.RoomName = "Room 101";
+            this.BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.RoomName = "Room101";
 
-            IncreaseCommand = new DelegateCommand(
-                    () => BridgeActor.Tell(new ChangeTemperature(1)),
-                    () => this.IsConnected)
-                .ObservesProperty(() => IsConnected);
+            //IncreaseCommand = new DelegateCommand(
+            //        () => BridgeActor.Tell(new ChangeTemperature(1)),
+            //        () => this.IsConnected)
+            //    .ObservesProperty(() => IsConnected);
 
-            DecreaseCommand = new DelegateCommand(
-                    () => BridgeActor.Tell(new ChangeTemperature(-1)),
-                    () => this.IsConnected)
-                .ObservesProperty(() => IsConnected);
+            //DecreaseCommand = new DelegateCommand(
+            //        () => BridgeActor.Tell(new ChangeTemperature(-1)),
+            //        () => this.IsConnected)
+            //    .ObservesProperty(() => IsConnected);
 
-            InitializeCommand = new DelegateCommand(InitializeSimulator, () => !IsConnected).ObservesProperty(() => IsConnected);
-
+            InitializeCommand =
+                new DelegateCommand(InitializeSimulator, () => !IsConnected).ObservesProperty(() => IsConnected);
         }
 
         public void InitializeSimulator()
@@ -72,16 +64,12 @@ namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
             IsConnected = true;
             try
             {
-                Config actorSystemConfig = this.ConfigBuilder.Config();
                 var bridgeProps = this.BridgeRoomActorPropsFactory.Props();
-
-                this.LocalActorSystem = ActorSystem.Create(this.ActorSystemName, actorSystemConfig);
-                this.BridgeActor = this.LocalActorSystem.ActorOf(bridgeProps, BridgeActorName);
+                var bridgeActorName = $"{BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.RoomName}-{BridgeActorNamePostxix}";
+                this.BridgeActor = this.LocalActorSystem.ActorOf(bridgeProps, bridgeActorName);
             }
             catch (Exception)
             {
-                // TODO Log exception
-                this.LocalActorSystem?.Terminate();
                 this.IsConnected = false;
                 this.LocalActorSystem = null;
             }
@@ -89,9 +77,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
 
         public async Task ShutdownSimulator()
         {
+            BridgeActor.Tell(PoisonPill.Instance);
             this.BridgeActor = null;
-            await this.LocalActorSystem.Terminate();
-            this.LocalActorSystem = null;
             this.IsConnected = false;
         }
     }

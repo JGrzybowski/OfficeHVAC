@@ -37,16 +37,17 @@ namespace OfficeHVAC.Factories.ActorPaths
         {
             ServerAddress = ServerAddress?.Trim();
 
-            return new ChildActorPath(
-                new RootActorPath(
-                    new Address(
-                        protocol: "akka.tcp",
-                        system: SystemName,
-                        host: ServerAddress,
-                        port: ServerPort
-                    )
-                ),
-                $"user/{CompanyActorName}", 0);
+            return 
+                new ChildActorPath(
+                    new ChildActorPath(
+                        new RootActorPath(
+                            new Address(
+                                protocol: "akka",
+                                system: SystemName
+                            )
+                        ), 
+                        "user",0),
+                    CompanyActorName, 0);
         }
     }
 }
