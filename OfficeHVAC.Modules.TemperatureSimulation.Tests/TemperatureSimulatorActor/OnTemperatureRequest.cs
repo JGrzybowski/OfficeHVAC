@@ -3,7 +3,6 @@ using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Models;
 using Shouldly;
-using System.Collections.Generic;
 using Xunit;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorActor
@@ -40,13 +39,10 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
                 new ParameterValue(SensorType.Temperature, 25)
             };
 
-            var sensors = new List<ISensorActorRef>() { };
-
             var status = new RoomStatus()
             {
                 Parameters = parameters,
                 Volume = 20,
-                Sensors = sensors
             };
 
             //Act

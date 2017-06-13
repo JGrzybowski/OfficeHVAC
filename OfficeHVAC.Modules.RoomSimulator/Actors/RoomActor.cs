@@ -22,6 +22,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected List<TemperatureJob> Jobs { get; } = new List<TemperatureJob>();
 
+        protected HashSet<Requirements> Events { get; } = new HashSet<Requirements>();
+
         protected double StabilizationThreshold = 1.0;
 
         protected ISimulatorModels Models;
@@ -55,13 +57,15 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
             Receive<Requirements>(message =>
             {
+                Events.Add(message);
                 Controllers.Single(s => s.Type == SensorType.Temperature).Actor.Tell(message);
             });
 
             Receive<TemperatureJob>(message =>
             {
                 Jobs.Add(message);
-                ActivateTemperatureMode(message.ModeType, message.DesiredTemperature);
+                var job = Jobs.OrderBy(j => j.EndTime).First();
+                ActivateTemperatureMode(job.ModeType, job.DesiredTemperature);
             });
         }
 

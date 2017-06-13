@@ -30,6 +30,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
         {
             _internalClock = new FakeClock(initial);
             this.scheduler = scheduler;
+            this.Reset(initial);
         }
 
         public void AddHours(int hours)      => AdvanceClock(Duration.FromHours(hours));
@@ -51,6 +52,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
         public void Reset(Instant instant)
         {
             _internalClock.Reset(instant);
+            scheduler?.AdvanceTo(Now.ToDateTimeOffset());
         }
     }
 }
