@@ -73,6 +73,7 @@
     <Compile Include="IRange.cs" />
     <Compile Include="ISensor.cs" />
     <Compile Include="ISensorActorRef.cs" />
+    <Compile Include="Subscription\ISubscription.cs" />
     <Compile Include="ObservableKeyedCollection.cs" />
     <Compile Include="SimulatorModels.cs" />
     <Compile Include="ITemperatureModel.cs" />
@@ -89,8 +90,11 @@
     <Compile Include="SensorActor.cs" />
     <Compile Include="SensorType.cs" />
     <Compile Include="ISimulatorModels.cs" />
+    <Compile Include="Subscription\Subscription.cs" />
+    <Compile Include="Subscription\SubscriptionMessage.cs" />
     <Compile Include="TemperatureJob.cs" />
     <Compile Include="TemperatureTask.cs" />
+    <Compile Include="Subscription\UnsubscriptionMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

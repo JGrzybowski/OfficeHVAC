@@ -10,6 +10,8 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
 
         bool IsRunning { get; }
 
+        string TimeText { get; set; }
+
         void AddMinutes(long minutes);
         void Reset();
         void TickManually();

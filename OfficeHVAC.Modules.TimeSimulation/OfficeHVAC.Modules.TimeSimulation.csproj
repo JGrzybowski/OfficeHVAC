@@ -81,6 +81,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\AddMinutesMessage.cs" />
+    <Compile Include="Messages\SetSpeedMessage.cs" />
+    <Compile Include="Messages\TickClockMessage.cs" />
+    <Compile Include="Messages\TimeChangedMessage.cs" />
+    <Compile Include="TimeSimulatorActor.cs" />
+    <Compile Include="TimeSimulatorBridgeActor.cs" />
     <Compile Include="TimeSources\ControlledTimeSource.cs" />
     <Compile Include="Views\TimeControl.xaml.cs">
       <DependentUpon>TimeControl.xaml</DependentUpon>
