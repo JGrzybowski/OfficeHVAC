@@ -7,6 +7,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
     public class TemperatureSimulatorActor : ReceiveActor
     {
+        private IRoomStatusMessage roomStatus;
+
         private ICancelable Scheduler { get; set; }
         private ITemperatureSimulator temperatureSimulator { get; }
 
@@ -18,6 +20,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                 async msg => Sender.Tell(await CheckTemperature()),
                 msg => msg.ParameterType == SensorType.Temperature
             );
+
+            Receive<IRoomStatusMessage>(msg => roomStatus = msg);
         }
 
         protected override void PreStart()
@@ -36,8 +40,6 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
         private async Task<IParameterValueMessage> CheckTemperature()
         {
-            var roomStatus = await Sender.Ask<IRoomStatusMessage>(new RoomStatus.Request());
-
             temperatureSimulator.RoomVolume = roomStatus.Volume;
             var temperature = temperatureSimulator.GetTemperature(roomStatus);
 

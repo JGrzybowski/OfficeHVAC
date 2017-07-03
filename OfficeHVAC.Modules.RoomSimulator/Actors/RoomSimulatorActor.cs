@@ -4,6 +4,7 @@ using OfficeHVAC.Models;
 using OfficeHVAC.Modules.TemperatureSimulation.Actors;
 using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using System;
+using System.Linq;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -49,7 +50,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected override void PreStart()
         {
-            //Get Requirements List
+            Subscribers.Add(Sensors.Single(s => s.Type == SensorType.Temperature).Actor);
+            SendSubscribtionNewsletter();
             base.PreStart();
         }
 

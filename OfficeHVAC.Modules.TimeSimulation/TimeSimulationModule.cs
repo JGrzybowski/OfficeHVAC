@@ -26,7 +26,7 @@ namespace OfficeHVAC.Modules.TimeSimulation
 
         public static void InitializeDependencies (ContainerBuilder containerBuilder)
         {
-            var now = Instant.FromDateTimeUtc(DateTime.UtcNow);
+            var now = Instant.FromDateTimeUtc(DateTime.UtcNow.AddDays(5).Date);
 
             containerBuilder.Register(context => now).As<Instant>();
             containerBuilder.RegisterType<ControlledTimeSource>()

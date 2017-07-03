@@ -10,7 +10,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
     public class RoomActor : ReceiveActor
     {
-        protected RoomStatus Status { get; } = new RoomStatus();
+        public RoomStatus Status { get; } = new RoomStatus();
 
         protected ActorPath CompanySupervisorActorPath { get; }
 
@@ -64,8 +64,10 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             Receive<TemperatureJob>(message =>
             {
                 Jobs.Add(message);
-                var job = Jobs.OrderBy(j => j.EndTime).First();
+                //var job = Jobs.OrderBy(j => j.EndTime).First();
+                var job = message;
                 ActivateTemperatureMode(job.ModeType, job.DesiredTemperature);
+                SendSubscribtionNewsletter();
             });
         }
 
@@ -112,8 +114,11 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         {
             var selection = Context.System.ActorSelection(CompanySupervisorActorPath.ToString());
             selection.Tell(new RoomAvaliabilityMessage(Self));
+
             base.PreStart();
         }
+
+        protected override void PostRestart(Exception reason) { }
 
         protected virtual IRoomStatusMessage GenerateRoomStatus()
         {

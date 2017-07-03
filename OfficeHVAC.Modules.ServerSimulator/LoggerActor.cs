@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Akka.Actor;
+﻿using Akka.Actor;
 using NodaTime;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace OfficeHVAC.Modules.ServerSimulator
 {
@@ -12,9 +11,12 @@ namespace OfficeHVAC.Modules.ServerSimulator
     {
         private List<IActorRef> rooms = new List<IActorRef>();
 
-        public LoggerActor()
+        private ITimeSource clock;
+
+        public LoggerActor(ITimeSource clock)
         {
             Debug.WriteLine($"Starting Logger on {Context.Self.Path}");
+            this.clock = clock;
 
             Receive<RoomAvaliabilityMessage>(msg =>
             {
@@ -26,7 +28,7 @@ namespace OfficeHVAC.Modules.ServerSimulator
 
                 Sender.Tell(
                     new Requirements(
-                        Instant.FromDateTimeUtc(DateTime.UtcNow) + Duration.FromHours(12),
+                        clock.Now + Duration.FromHours(12),
                         new ParameterValuesCollection
                         {
                             new ParameterValue(SensorType.Temperature, 18)

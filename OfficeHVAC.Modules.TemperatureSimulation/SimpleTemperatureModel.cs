@@ -1,8 +1,8 @@
-﻿using System;
-using MoreLinq;
+﻿using MoreLinq;
 using NodaTime;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,8 +10,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
 {
     public class SimpleTemperatureModel : ITemperatureModel
     {
-        private const double AirsSpecificHeat = 1005;   //  W / kg*K*s
-        private const double AirsDensity = 1.200;        // kg / m^3
+        private const double AirsSpecificHeat = 1005;   //  W / kg*C*s
+        private const double AirsDensity = 1.2;         // kg / m^3
 
         public virtual double CalculateChange(double temperature, IEnumerable<ITemperatureDevice> devices, Duration timeDelta, double volume)
         {

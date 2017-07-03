@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Akka.Actor;
+using Akka.TestKit;
+using OfficeHVAC.Models;
+using Prism.Mvvm;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
-using Akka.Actor;
-using Akka.Configuration;
-using Akka.TestKit;
-using OfficeHVAC.Factories.Configs;
-using Prism.Commands;
-using Prism.Mvvm;
 
 namespace OfficeHVAC.Modules.ServerSimulator.ViewModels
 {
@@ -20,6 +17,8 @@ namespace OfficeHVAC.Modules.ServerSimulator.ViewModels
 
         // Dependencies
         public ActorSystem LocalActorSystem { get; set; }
+
+        public ITimeSource TimeSource;
 
         // Actor System fields
         public IActorRef BridgeActor { get; private set; }
@@ -35,9 +34,10 @@ namespace OfficeHVAC.Modules.ServerSimulator.ViewModels
 
         public ICommand InitializeCommand { get; }
 
-        public ServerLogViewModel(ActorSystem actorSystem, TestScheduler scheduler)
+        public ServerLogViewModel(ActorSystem actorSystem, TestScheduler scheduler, ITimeSource timeSource)
         {
             this.LocalActorSystem = actorSystem;
+            this.TimeSource = timeSource;
             BindingOperations.EnableCollectionSynchronization(Logs, _lock);
             InitializeSimulator();
         }
@@ -54,7 +54,7 @@ namespace OfficeHVAC.Modules.ServerSimulator.ViewModels
             IsConnected = true;
             try
             {
-                var logactorProps = Props.Create(() => new LoggerActor());
+                var logactorProps = Props.Create(() => new LoggerActor(this.TimeSource));
                 var bridgeProps = Props.Create(() => new ServerBridgeActor(this, logactorProps));
                 this.BridgeActor = this.LocalActorSystem.ActorOf(bridgeProps, BridgeActorName);
             }
