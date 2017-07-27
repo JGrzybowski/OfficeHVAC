@@ -1,27 +1,22 @@
 ﻿using Akka.Actor;
 using MoreLinq;
-using OfficeHVAC.Factories.Propses;
-using OfficeHVAC.Messages;
+using NodaTime;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting;
 using System.Threading.Tasks;
-using NodaTime;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
     public class JobScheduler : ReceiveActor
     {
-        private readonly ITimeSource timeSource;
+        private readonly Instant lastTime;
 
         private readonly ITemperatureModel temperatureModel;
 
-        public JobScheduler(ISimulatorModels models)
+        public JobScheduler(ISimulatorModels models, Instant initialTime)
         {
-            this.timeSource = models.TimeSource;
             this.temperatureModel = models.TemperatureModel;
 
             ReceiveAsync<Requirements>(
@@ -41,11 +36,11 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             if (preJob == null)
                 task = new TemperatureTask(Convert.ToDouble(status.Parameters[SensorType.Temperature].Value),
                                            desiredTemperature,
-                                           requirements.Deadline - timeSource.Now);
+                                           requirements.Deadline - lastTime);
             else
                 task = new TemperatureTask(preJob.DesiredTemperature,
                                     desiredTemperature,
-                                    preJob.EndTime - timeSource.Now);
+                                    preJob.EndTime - lastTime);
 
             var temperatureDevices =
                 status.Devices
@@ -65,6 +60,9 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         {
             return await Context.Sender.Ask<RoomStatus>(new RoomStatus.Request());
         }
+
+        public static Props Props(ISimulatorModels models, Instant initialTime) => 
+            Akka.Actor.Props.Create(() => new JobScheduler(models, initialTime));
     }
 }
 

@@ -1,14 +1,13 @@
-﻿using Autofac;
+﻿using Akka.Actor;
+using Akka.Configuration;
+using Akka.TestKit;
+using Autofac;
 using OfficeHVAC.Modules.RoomSimulator;
+using OfficeHVAC.Modules.ServerSimulator;
 using OfficeHVAC.Modules.TimeSimulation;
 using Prism.Autofac;
 using Prism.Modularity;
 using System.Windows;
-using Akka.Actor;
-using Akka.Configuration;
-using Akka.TestKit;
-using OfficeHVAC.Modules.ServerSimulator;
-using OfficeHVAC.Modules.TimeSimulation.TimeSources;
 
 namespace OfficeHVAC.Applications.RoomSimulator
 {

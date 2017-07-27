@@ -1,5 +1,4 @@
 ﻿using OfficeHVAC.Models;
-using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Factories
 {
@@ -18,7 +17,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Factories
 
         public ITemperatureSimulator TemperatureSimulator()
         {
-            return new TemperatureSimulator(timeSource, InitialTemperature, model);
+            return new TemperatureSimulator(InitialTemperature, model);
         }
     }
 }

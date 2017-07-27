@@ -22,22 +22,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.Factories
             var temperatureSimulator = simulatorFactory.TemperatureSimulator();
 
             //Assert
-            temperatureSimulator.GetTemperature(status).ShouldBe(45);
-        }
-
-        [Fact]
-        public void should_create_simulator_with_timeSource()
-        {
-            //Arrange
-            var timeSourceFake = Substitute.For<ITimeSource>();
-            var temperatureModelFake = Substitute.For<ITemperatureModel>();
-            var simulatorFactory = new TemperatureSimulatorFactory(timeSourceFake, temperatureModelFake);
-
-            //Act
-            var temperatureSimulator = simulatorFactory.TemperatureSimulator();
-
-            //Assert
-            temperatureSimulator.TimeSource.ShouldBe(timeSourceFake);
+            temperatureSimulator.Temperature.ShouldBe(45);
         }
     }
 }

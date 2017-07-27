@@ -1,4 +1,5 @@
-﻿using OfficeHVAC.Models.Devices;
+﻿using NodaTime;
+using OfficeHVAC.Models.Devices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace OfficeHVAC.Models
         public string Name { get; set; }
 
         public double Volume { get; set; }
+
+        public Instant TimeStamp { get; set; }
 
         public IEnumerable<ISensorActorRef> Sensors { get; set; } = new HashSet<ISensorActorRef>();
 
@@ -28,7 +31,7 @@ namespace OfficeHVAC.Models
 
         public IRoomStatusMessage ToMessage() => this.Clone() as IRoomStatusMessage;
 
-        public object Clone()
+        public RoomStatus Clone()
         {
             return new RoomStatus()
             {
@@ -44,6 +47,8 @@ namespace OfficeHVAC.Models
             };
         }
 
+        object ICloneable.Clone() => this.Clone();
+
         public class Request { }
     }
 
@@ -54,6 +59,8 @@ namespace OfficeHVAC.Models
         string Name { get; }
 
         double Volume { get; }
+
+        Instant TimeStamp { get; }
 
         IEnumerable<IDevice> Devices { get; }
 

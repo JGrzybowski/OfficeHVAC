@@ -12,8 +12,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
     {
         public RoomStatus Status { get; } = new RoomStatus();
 
-        protected ActorPath CompanySupervisorActorPath { get; }
-
         protected HashSet<ISensorActorRef> Sensors { get; } = new HashSet<ISensorActorRef>();
 
         protected HashSet<ISensorActorRef> Controllers { get; } = new HashSet<ISensorActorRef>();
@@ -28,10 +26,9 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected ISimulatorModels Models;
 
-        public RoomActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath, ISimulatorModels models) : this()
+        public RoomActor(RoomStatus initialStatus, ISimulatorModels models) : this()
         {
             Status = initialStatus;
-            CompanySupervisorActorPath = companySupervisorActorPath;
             Models = models;
         }
 
@@ -112,8 +109,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected override void PreStart()
         {
-            var selection = Context.System.ActorSelection(CompanySupervisorActorPath.ToString());
-            selection.Tell(new RoomAvaliabilityMessage(Self));
+            //var selection = Context.System.ActorSelection(CompanySupervisorActorPath.ToString());
+            //selection.Tell(new RoomAvaliabilityMessage(Self));
 
             base.PreStart();
         }
@@ -124,5 +121,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         {
             return Status.ToMessage();
         }
+
+        public static Props Props(RoomStatus status, ISimulatorModels modelParams)
+            => Akka.Actor.Props.Create(() => new RoomActor(status.Clone(), modelParams));
     }
 }

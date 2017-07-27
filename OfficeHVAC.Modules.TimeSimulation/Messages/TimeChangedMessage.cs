@@ -2,7 +2,7 @@
 
 namespace OfficeHVAC.Modules.TimeSimulation.Messages
 {
-    internal class TimeChangedMessage
+    public class TimeChangedMessage
     {
         public Duration TimeDelta { get; }
         public Instant Now { get; }

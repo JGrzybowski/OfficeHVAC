@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Models", "OfficeHVAC.Models\OfficeHVAC.Models.csproj", "{584598C9-E1CD-4592-9A88-24F34D23D282}"
 EndProject
@@ -41,6 +41,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Modules.ServerSimulator", "OfficeHVAC.Modules.ServerSimulator\OfficeHVAC.Modules.ServerSimulator.csproj", "{4C73AC09-6B2F-405E-AD3F-7FC40D43105D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.TestScenarios", "OfficeHVAC.TestScenarios\OfficeHVAC.TestScenarios.csproj", "{F42C8A00-38E2-45F2-8B65-E83FB568D9EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Applications.BuildingSimulator", "OfficeHVAC.Applications.BuildingSimulator\OfficeHVAC.Applications.BuildingSimulator.csproj", "{69AFDFB9-8E33-4F11-88D5-2C1D51E22279}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -104,6 +106,10 @@ Global
 		{F42C8A00-38E2-45F2-8B65-E83FB568D9EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F42C8A00-38E2-45F2-8B65-E83FB568D9EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F42C8A00-38E2-45F2-8B65-E83FB568D9EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69AFDFB9-8E33-4F11-88D5-2C1D51E22279}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69AFDFB9-8E33-4F11-88D5-2C1D51E22279}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69AFDFB9-8E33-4F11-88D5-2C1D51E22279}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69AFDFB9-8E33-4F11-88D5-2C1D51E22279}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,5 +123,6 @@ Global
 		{9CF90BD2-370B-4464-B4E6-3BFF8CD01BE1} = {794AA963-4C54-46F7-8191-F03A303355E3}
 		{F3629AC1-D17D-42EB-9130-BA68373AF798} = {794AA963-4C54-46F7-8191-F03A303355E3}
 		{4C73AC09-6B2F-405E-AD3F-7FC40D43105D} = {794AA963-4C54-46F7-8191-F03A303355E3}
+		{69AFDFB9-8E33-4F11-88D5-2C1D51E22279} = {2E0A7F95-5F26-40DE-81A5-79FE112AAC85}
 	EndGlobalSection
 EndGlobal

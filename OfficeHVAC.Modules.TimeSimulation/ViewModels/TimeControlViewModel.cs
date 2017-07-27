@@ -29,7 +29,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
 
         public string TimeText
         {
-            get => _timeText;
+            get => this._controlledTimeSource.Now.ToString("hh:MM:ss", null);
             set => SetProperty(ref _timeText, value);
         }
 
@@ -37,6 +37,8 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
         {
             var bridgeProps = Props.Create(() => new TimeSimulatorBridgeActor(this, controlledTimeSource));
             this.Bridge = actorSystem.ActorOf(bridgeProps, "timeBridge");
+
+            _controlledTimeSource = controlledTimeSource;
 
             _timer = new Timer(timerRefreshRate) { AutoReset = true };
             _timer.Elapsed += TimerTick;

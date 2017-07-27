@@ -1,19 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using NodaTime;
 using OfficeHVAC.Models;
-using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation
 {
     public interface ITemperatureSimulator
     {
-        double RoomVolume { get; set; }
+        double ChangeTemperature(IRoomStatusMessage status, Duration timeDelta);
 
-        double GetTemperature(IRoomStatusMessage status);
-
-        void SetTemperature(double value);
-
-        ITemperatureModel Model { get; }
-
-        ITimeSource TimeSource { get; }
+        double Temperature { get; set; }
     }
 }

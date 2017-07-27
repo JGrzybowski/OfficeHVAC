@@ -3,13 +3,14 @@ using OfficeHVAC.Modules.TimeSimulation.TimeSources;
 using OfficeHVAC.Modules.TimeSimulation.ViewModels;
 using Shouldly;
 using System.ComponentModel;
+using Akka.TestKit.Xunit2;
 using Xunit;
 
 namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
 {
     public class Timer
     {
-        public class SpeedProperty
+        public class SpeedProperty : TestKit
         {
             [Fact]
             public void notifies_UI()
@@ -19,7 +20,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
                 PropertyChangedEventArgs notificationArgs = null;
 
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock);
+                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
 
                 vm.PropertyChanged += (sender, args) =>
                 {
@@ -41,7 +42,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock);
+                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
 
                 //Act
                 vm.Speed = 3;
@@ -56,7 +57,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
                 timeSourceMock.Speed.Returns(5);
-                var vm = new TimeControlViewModel(timeSourceMock);
+                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
 
                 //Act
                 var s = vm.Speed;
@@ -66,15 +67,15 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
             }
         }
 
-        public class TimerTick
+        public class TimerTick : TestKit
         {
             [Fact]
             public void updates_time_source_Now()
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock);
-                
+                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+
                 //Act
                 vm.TimerTick(null, null);
 

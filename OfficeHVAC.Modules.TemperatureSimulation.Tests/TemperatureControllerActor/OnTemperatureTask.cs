@@ -35,9 +35,9 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerAc
                 new TemperatureDeviceDefinition() { Id = "Id1", Modes = new[] { offMode, ecoMode, turboMode } }
             };
 
-            var models = new SimulatorModels(new TimeSourceFake(new Instant()), modelFake);
+            //var models = new SimulatorModels(modelFake);
 
-            var controller = ActorOfAsTestActorRef(() => new Actors.JobScheduler(models));
+            //var controller = ActorOfAsTestActorRef(() => new Actors.JobScheduler(models));
 
             //Act
             //controller.Ask<RoomStatus.Request>(new TemperatureTask(desiredTemperature, new Instant() + Duration.FromHours(36)), TimeSpan.FromSeconds(3));

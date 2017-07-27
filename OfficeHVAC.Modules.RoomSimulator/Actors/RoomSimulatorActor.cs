@@ -16,7 +16,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         public RoomSimulatorActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath, ITemperatureSimulatorFactory temperatureSimulatorFactory,
                                   ISimulatorModels models)
-            : base(initialStatus, companySupervisorActorPath, models)
+            : base(initialStatus, models)
         {
             this.temperatureSimulatorFactory = temperatureSimulatorFactory;
 
@@ -25,7 +25,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 SensorType.Temperature,
                 Context.ActorOf(this.PrepareTemperatureSimulatorActorProps(initialStatus))));
 
-            var tempController = Context.ActorOf(Props.Create(() => new JobScheduler(models)));
+            var tempController = Context.ActorOf(JobScheduler.Props(models, initialStatus.TimeStamp));
             Controllers.Add(new SensorActorRef(
                 Guid.NewGuid().ToString(),
                 SensorType.Temperature,
@@ -35,6 +35,10 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 msg => Status.Parameters[SensorType.Temperature].Value = Convert.ToDouble(Status.Parameters[SensorType.Temperature].Value) + msg.DeltaT,
                 msg => Status.Parameters.Contains(SensorType.Temperature));
 
+            //this.Receive<TimeChangedMessage>(
+            //    msg => , 
+            //    msg =>
+            //);
 
             //this.Receive<SetDesiredTemperature>(message => {
             //    foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
@@ -60,9 +64,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             if (initialStatus.Parameters.Contains(SensorType.Temperature))
                 this.temperatureSimulatorFactory.InitialTemperature = Convert.ToDouble(initialStatus.Parameters[SensorType.Temperature].Value);
 
-            var props = Props.Create(
-                () => new TemperatureSimulatorActor(temperatureSimulatorFactory.TemperatureSimulator())
-            );
+            var props = TemperatureSimulatorActor.Props(this.Status, new object() as ISimulatorModels);
 
             return props;
         }
