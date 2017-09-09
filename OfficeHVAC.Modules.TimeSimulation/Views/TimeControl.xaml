@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OfficeHVAC.Modules.TimeSimulation.Views"
              mc:Ignorable="d" 
-             xmlns:mvvm="http://prismlibrary.com/"
-             mvvm:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="50" d:DesignWidth="600">
+             <!--xmlns:mvvm="http://prismlibrary.com/"-->
+             <!--mvvm:ViewModelLocator.AutoWireViewModel="True"-->
     <UserControl.Resources>
         <Style x:Key="TimeControlButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="BorderThickness" Value="1"/>

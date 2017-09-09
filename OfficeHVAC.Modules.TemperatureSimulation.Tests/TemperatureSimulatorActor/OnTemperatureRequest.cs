@@ -10,21 +10,6 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
     public class OnTemperatureRequest : TestKit
     {
         [Fact]
-        public void sends_room_status_request()
-        {
-            //Arrange
-            var temperatureSimulatorFake = Substitute.For<ITemperatureSimulator>();
-            var actor = ActorOfAsTestActorRef<Actors.TemperatureSimulatorActor>(
-                Props.Create<Actors.TemperatureSimulatorActor>(temperatureSimulatorFake));
-
-            //Act		
-            actor.Tell(new ParameterValue.Request(SensorType.Temperature));
-
-            //Assert
-            ExpectMsg<RoomStatus.Request>();
-        }
-
-        [Fact]
         public void sends_data_based_on_TemperatureSimulator()
         {
             //Arrange

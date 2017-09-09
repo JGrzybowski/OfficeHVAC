@@ -1,4 +1,4 @@
-﻿using OfficeHVAC.Modules.TimeSimulation.TimeSources;
+﻿using OfficeHVAC.Modules.TimeSimulation.ViewModels;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -11,20 +11,20 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
     {
         public ObservableCollection<CompanyViewModel> Companies { get; set; } =
             new ObservableCollection<CompanyViewModel>();
-
-        private IControlledTimeSource timeSource;
-        public IControlledTimeSource TimeSource
-        {
-            get => timeSource;
-            set => SetProperty(ref timeSource, value);
-        }
-
+        
         public string NewCompanyName { get; set; }
 
         public CompanyViewModel SelectedCompany { get; set; }
 
         public ICommand AddCompanyCommand { get; set; }
         public ICommand RemoveCompanyCommand { get; set; }
+
+        private TimeControlViewModel timeControlViewModel;
+        public TimeControlViewModel TimeControlViewModel
+        {
+            get => timeControlViewModel;
+            set => SetProperty(ref timeControlViewModel, value);
+        }
 
 
         public BuildingViewModel()

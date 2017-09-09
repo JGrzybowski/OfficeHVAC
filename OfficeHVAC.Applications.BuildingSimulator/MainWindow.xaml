@@ -23,6 +23,7 @@
             <MenuItem Header="Company"/>
             <MenuItem>Company</MenuItem>
         </Menu>
+        <time:TimeControl DockPanel.Dock="Bottom" DataContext="{Binding TimeControlViewModel}" />
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -42,7 +43,6 @@
             </StackPanel>
         </Grid>
 
-        <time:TimeControl DataContext="{Binding TimeSource}" />
     </DockPanel>
 </Window>
 
