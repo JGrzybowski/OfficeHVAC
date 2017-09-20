@@ -1,25 +1,31 @@
 ﻿using Prism.Mvvm;
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 {
-    public class CompanyViewModel : BindableBase
+    public class CompanyViewModel : BindableBase, ITreeElement
     {
-        private string name;
+        public string Id { get; } = Guid.NewGuid().ToString();
 
+        private string name;
         public string Name
         {
             get => name;
             set => SetProperty(ref name, value);
         }
 
-        public ObservableCollection<RoomViewModel> Rooms { get; set; } = new ObservableCollection<RoomViewModel>();
+        public ObservableCollection<ITreeElement> SubItems { get; } = new ObservableCollection<ITreeElement>();
 
-        public CompanyViewModel(string name)
+        public void AddRoom(RoomViewModel room)
         {
-            Name = name;
+            SubItems.Add(room);
+        }
 
-            for (int i = 0; i < 3; i++) Rooms.Add(new RoomViewModel());
+        public void RemoveRoom(string id)
+        {
+            SubItems.Remove(SubItems.Single(room => room.Id == id));
         }
     }
 }

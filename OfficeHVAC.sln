@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Models", "OfficeHVAC.Models\OfficeHVAC.Models.csproj", "{584598C9-E1CD-4592-9A88-24F34D23D282}"
 EndProject
@@ -124,5 +124,8 @@ Global
 		{F3629AC1-D17D-42EB-9130-BA68373AF798} = {794AA963-4C54-46F7-8191-F03A303355E3}
 		{4C73AC09-6B2F-405E-AD3F-7FC40D43105D} = {794AA963-4C54-46F7-8191-F03A303355E3}
 		{69AFDFB9-8E33-4F11-88D5-2C1D51E22279} = {2E0A7F95-5F26-40DE-81A5-79FE112AAC85}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F768D1B6-CD50-476F-9E07-1DE548B32829}
 	EndGlobalSection
 EndGlobal
