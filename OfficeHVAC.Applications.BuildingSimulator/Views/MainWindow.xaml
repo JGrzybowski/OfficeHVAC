@@ -22,8 +22,8 @@
                     <syncfusion:RibbonButton Label="-Company" SizeForm="Large" Command="{Binding DeleteCompanyCommand}"/>
                     <syncfusion:RibbonButton Label="+Room"    SizeForm="Large" Command="{Binding AddRoomCommand}"/>
                     <syncfusion:RibbonButton Label="-Room"    SizeForm="Large" Command="{Binding RemoveRoomCommand}" />
-                    <!--<syncfusion:RibbonButton Label="+Device"  SizeForm="Large" Command="{Binding AddDevice}"/>-->
-                    <!--<syncfusion:RibbonButton Label="-Device"  SizeForm="Large" Command="{Binding RemoveDevice}" />-->
+                    <syncfusion:RibbonButton Label="+Device"  SizeForm="Large" Command="{Binding AddDeviceCommand}"/>
+                    <syncfusion:RibbonButton Label="-Device"  SizeForm="Large" Command="{Binding RemoveDeviceCommand}" />
                 </syncfusion:RibbonBar>
             </syncfusion:RibbonTab>
         </syncfusion:Ribbon>

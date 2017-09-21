@@ -39,6 +39,9 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         public ICommand AddRoomCommand { get; set; }
         public ICommand RemoveRoomCommand { get; set; }
 
+        public ICommand AddDeviceCommand { get; set; }
+        public ICommand RemoveDeviceCommand { get; set; }
+
         public MainWindowViewModel()
         {
             AddCompanyCommand = new DelegateCommand(
@@ -72,7 +75,29 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
                 .ObservesProperty(() => SelectedItem)
                 .ObservesProperty(() => IsSimulatorStopped);
 
-            //SeedData();
+            AddDeviceCommand = new DelegateCommand(
+                () => (SelectedItem as RoomViewModel).AddDevice(new DeviceViewModel {Name = "New Device"}),
+                () => IsSimulatorStopped && SelectedItem is RoomViewModel
+            )
+            .ObservesProperty(() => SelectedItem)
+            .ObservesProperty(()=> IsSimulatorStopped);
+
+            RemoveDeviceCommand = new DelegateCommand
+                (
+                    () =>
+                    {
+                        var deviceId = (SelectedItem as DeviceViewModel).Id;
+                        var room = Companies.SelectMany(c => c.SubItems)
+                                            .Single(r => r.SubItems.Any(dev => dev.Id == deviceId))
+                                            as RoomViewModel;
+                        room.RemoveDevice(deviceId);
+                    },
+                    () => IsSimulatorStopped && SelectedItem is DeviceViewModel
+                )
+                .ObservesProperty(() => SelectedItem)
+                .ObservesProperty(() => IsSimulatorStopped);
+
+            SeedData();
         }
 
         private void SeedData()
