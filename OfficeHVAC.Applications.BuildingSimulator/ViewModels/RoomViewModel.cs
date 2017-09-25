@@ -3,6 +3,8 @@ using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using Akka.Actor;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 {
@@ -28,6 +30,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 
         public double Temperature { get; set; } = 20.0;
         public double Volume { get; set; } = 300;
+        public IActorRef Actor { get; set; }
 
         public void AddDevice(DeviceViewModel device) => SubItems.Add(device);
 
