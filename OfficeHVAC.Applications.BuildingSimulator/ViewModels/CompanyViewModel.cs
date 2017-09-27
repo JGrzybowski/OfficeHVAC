@@ -17,7 +17,11 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         public string Name
         {
             get => name;
-            set => SetProperty(ref name, value);
+            set
+            {
+                SetProperty(ref name, value);
+                Actor?.Tell(new ChangeNameMessage(value));
+            }
         }
 
         public IActorRef Actor { get; set; }
@@ -46,5 +50,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             this.Actor.Tell(new RemoveRoomMessage() {Id = roomVm.Id});
             SubItems.Remove(roomVm);
         }
+
+        public void PushName(string value) => SetProperty(ref name, value, nameof(Name));
     }
 }

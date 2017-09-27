@@ -111,10 +111,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Actors\ChangeNameMessage.cs" />
     <Compile Include="Actors\CompanyActor.cs" />
     <Compile Include="Actors\CompanyBridgeActor.cs" />
     <Compile Include="Actors\CreateRoomMessage.cs" />
     <Compile Include="Actors\RemoveRoomMessage.cs" />
+    <Compile Include="Actors\UpdateCompanyMessage.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="ViewModels\CompanyViewModel.cs" />
     <Compile Include="ViewModels\DeviceViewModel.cs" />
