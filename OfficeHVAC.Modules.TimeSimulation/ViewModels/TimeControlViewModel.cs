@@ -29,7 +29,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
 
         public string TimeText
         {
-            get => this._controlledTimeSource.Now.ToString("hh:MM:ss", null);
+            get => this._controlledTimeSource.Now.ToString("hh:mm:ss", null);
             set => SetProperty(ref _timeText, value);
         }
 

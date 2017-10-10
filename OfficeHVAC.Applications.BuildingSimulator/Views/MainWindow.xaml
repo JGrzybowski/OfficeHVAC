@@ -5,6 +5,7 @@
                          prism:ViewModelLocator.AutoWireViewModel="True"
                          xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
                          xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+                         xmlns:views="clr-namespace:OfficeHVAC.Modules.TimeSimulation.Views;assembly=OfficeHVAC.Modules.TimeSimulation"
                          syncfusionskin:SfSkinManager.VisualStyle="Office2016White"
                          Title="HVAC Simulator" Height="600" Width="800"
 >
@@ -16,7 +17,7 @@
         </Grid.RowDefinitions> -->
 
         <syncfusion:Ribbon DockPanel.Dock="Top" Grid.ColumnSpan="2" VerticalAlignment="Top" >
-            <syncfusion:RibbonTab Caption="Building">
+            <syncfusion:RibbonTab Caption="Building" DataContext="{Binding Building}">
                 <syncfusion:RibbonBar Header="Add &amp; Remove">
                     <syncfusion:RibbonButton Label="+Company" SizeForm="Large" Command="{Binding AddCompanyCommand}"/>
                     <syncfusion:RibbonButton Label="-Company" SizeForm="Large" Command="{Binding DeleteCompanyCommand}"/>
@@ -28,11 +29,12 @@
             </syncfusion:RibbonTab>
         </syncfusion:Ribbon>
 
-        <StackPanel DockPanel.Dock="Bottom" Grid.Row="2" Orientation="Horizontal">
+        <views:TimeControl DataContext="{Binding Time}" DockPanel.Dock="Bottom"/>
+        <!--<StackPanel DockPanel.Dock="Bottom" Grid.Row="2" Orientation="Horizontal">
             <Button Content="Play" Click="PlayButton_Click"/>
             <Button Content="Stop" Click="StopButton_Click"/>
             <syncfusion:SfBusyIndicator IsBusy="{Binding IsSimulatorRunning}" Width="35" AnimationType="Gear" />
-        </StackPanel>
+        </StackPanel>-->
 
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
@@ -40,7 +42,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <syncfusion:TreeViewAdv x:Name="Tree" ItemsSource="{Binding Companies}" SelectedTreeItem="{Binding SelectedItem}">
+            <syncfusion:TreeViewAdv x:Name="Tree" ItemsSource="{Binding Building.Companies}" SelectedTreeItem="{Binding Building.SelectedItem}">
                 <syncfusion:TreeViewAdv.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding SubItems}" >
                         <TextBlock Text="{Binding Name, Mode=TwoWay}" />
@@ -50,7 +52,7 @@
 
             <syncfusion:PropertyGrid x:Name="PropertiesEditor" IsEnabled="{Binding IsSimulatorStopped}"
                                      Grid.Column="1" ButtonPanelVisibility="Collapsed" SearchBoxVisibility="Collapsed" 
-                                     SelectedObject="{Binding SelectedItem, Mode=OneWay}" Grid.RowSpan="2" />
+                                     SelectedObject="{Binding Building.SelectedItem, Mode=OneWay}" Grid.RowSpan="2" />
         </Grid>
 
 
