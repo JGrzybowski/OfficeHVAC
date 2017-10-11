@@ -42,5 +42,8 @@ namespace OfficeHVAC.Modules.TimeSimulation
             var timeMsg = new TimeChangedMessage(timeDelta, TimeSource.Now);
             this.TimeUpdateSubscription.SendToAllSubscribers(timeMsg, Self);
         }
+
+        public static Props Props(IControlledTimeSource timeSource) =>
+            Akka.Actor.Props.Create(() => new TimeSimulatorActor(timeSource));
     }
 }

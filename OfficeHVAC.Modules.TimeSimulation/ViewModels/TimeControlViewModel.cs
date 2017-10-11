@@ -12,6 +12,8 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
         private readonly Timer _timer;
         private string _timeText;
 
+        public const string TimeSimulatorActorName = "Clock";
+
         public Instant ResetTime { get; set; }
 
         public bool IsRunning => _timer.Enabled;
@@ -35,7 +37,10 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
 
         public TimeControlViewModel(IControlledTimeSource controlledTimeSource, ActorSystem actorSystem, long timerRefreshRate = 1000)
         {
-            var bridgeProps = Props.Create(() => new TimeSimulatorBridgeActor(this, controlledTimeSource));
+
+            var timeSimulatorActorRef = actorSystem.ActorOf(TimeSimulation.TimeSimulatorActor.Props(controlledTimeSource), TimeSimulatorActorName);
+
+            var bridgeProps = TimeSimulatorBridgeActor.Props(this, timeSimulatorActorRef);
             this.Bridge = actorSystem.ActorOf(bridgeProps, "timeBridge");
 
             _controlledTimeSource = controlledTimeSource;
