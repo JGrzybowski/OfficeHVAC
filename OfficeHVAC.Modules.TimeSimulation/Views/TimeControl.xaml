@@ -27,9 +27,8 @@
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Margin="10,0">
             <Button x:Name="StartButton" Content="⏯" Click="StartButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
             <Button x:Name="TickButton" Content="🔂" Click="TickButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
-            <Button x:Name="ResetButton" Content="🔄" Click="ResetButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
 
-            <Button x:Name="Plus5minButton" Content="🕐" Click="Plus5minButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
+            <Button x:Name="Plus5minButton" Content="🕐" Click="Plus5minButton_Click" Style="{DynamicResource TimeControlButtonStyle}" Margin="30,0,0,0"/>
             <Button x:Name="Plus15minButton" Content="🕒" Click="Plus15minButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
             <Button x:Name="Plus1hrButton" Content="🕛" Click="Plus1hrButton_Click" Style="{DynamicResource TimeControlButtonStyle}"/>
         </StackPanel>

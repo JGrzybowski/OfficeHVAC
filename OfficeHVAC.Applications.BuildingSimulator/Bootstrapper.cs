@@ -15,7 +15,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator
         {
             builder.RegisterInstance
                 (
-                    ActorSystem.Create("OfficeHVAC", 
+                    ActorSystem.Create(SystemInfo.SystemName, 
                                         ConfigurationFactory.ParseString(@"akka.scheduler.implementation = ""Akka.TestKit.TestScheduler, Akka.TestKit"""))
                 )
                 .As<ActorSystem>();

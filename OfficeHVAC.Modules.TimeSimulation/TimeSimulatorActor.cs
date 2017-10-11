@@ -33,7 +33,11 @@ namespace OfficeHVAC.Modules.TimeSimulation
                 NotifyAboutTimeChange(t);
             });
             
-            Receive<SetSpeedMessage>(msg => this.TimeSource.Speed = msg.Speed);
+            Receive<SetSpeedMessage>(msg =>
+            {
+                this.TimeSource.Speed = msg.Speed;
+                Sender.Tell(new SpeedUpdatedMessage(TimeSource.Speed));
+            });
         }
 
         public void NotifyAboutTimeChange(Instant oldInstant)

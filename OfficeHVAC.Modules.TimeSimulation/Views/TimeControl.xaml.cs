@@ -25,7 +25,5 @@ namespace OfficeHVAC.Modules.TimeSimulation.Views
         private void Plus1hrButton_Click(object sender, RoutedEventArgs e) => ViewModel.AddMinutes(60);
 
         private void TickButton_Click(object sender, RoutedEventArgs e) => ViewModel.TickManually();
-
-        private void ResetButton_Click(object sender, RoutedEventArgs e) => ViewModel.Reset();
     }
 }

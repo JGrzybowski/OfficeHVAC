@@ -4,16 +4,15 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
 {
     public interface ITimeControlViewModel
     {
-        Instant ResetTime { get; set; }
-
         double Speed { get; set; }
+        void SetupSpeed(double newValue);
 
         bool IsRunning { get; }
 
-        string TimeText { get; set; }
+        Instant Time { get; set; }
+        string TimeText { get; }
 
         void AddMinutes(long minutes);
-        void Reset();
         void TickManually();
         void ToggleTimer();
     }

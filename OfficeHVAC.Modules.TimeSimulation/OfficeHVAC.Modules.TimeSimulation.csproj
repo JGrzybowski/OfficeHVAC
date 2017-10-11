@@ -106,6 +106,7 @@
     <Compile Include="Messages\SetSpeedMessage.cs" />
     <Compile Include="Messages\TickClockMessage.cs" />
     <Compile Include="Messages\TimeChangedMessage.cs" />
+    <Compile Include="Messages\SpeedUpdatedMessage.cs" />
     <Compile Include="TimeSimulatorActor.cs" />
     <Compile Include="TimeSimulatorBridgeActor.cs" />
     <Compile Include="TimeSources\ControlledTimeSource.cs" />

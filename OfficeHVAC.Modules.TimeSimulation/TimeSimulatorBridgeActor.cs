@@ -14,10 +14,11 @@ namespace OfficeHVAC.Modules.TimeSimulation
         {
             Receive<TickClockMessage>(msg => Actor.Forward(msg));
             Receive<AddMinutesMessage>(msg => Actor.Forward(msg));
-            Receive<SetSpeedMessage>(msg => Actor.Forward(msg));
+            Receive<TimeChangedMessage>(msg => ViewModel.Time = msg.Now);
 
-            Receive<TimeChangedMessage>(msg => ViewModel.TimeText = msg.Now.ToString("hh:MM:ss", null));
-
+            Receive<SetSpeedMessage>(msg => Actor.Tell(msg));
+            Receive<SpeedUpdatedMessage>(msg => ViewModel.SetupSpeed(msg.Speed));
+            
             Actor.Tell(new SubscriptionMessage(), Self);
         }
 
