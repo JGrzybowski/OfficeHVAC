@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using OfficeHVAC.Models;
 using OfficeHVAC.Models.Subscription;
 using OfficeHVAC.Modules.TimeSimulation.Messages;
 using OfficeHVAC.Modules.TimeSimulation.TimeSources;
@@ -6,25 +7,28 @@ using OfficeHVAC.Modules.TimeSimulation.ViewModels;
 
 namespace OfficeHVAC.Modules.TimeSimulation
 {
-    public class TimeSimulatorBridgeActor : ReceiveActor
+    public class TimeSimulatorBridgeActor : BridgeActor<ITimeControlViewModel>
     {
-        private ITimeControlViewModel ViewModel { get; }
-        private IActorRef TimeSimulatorRef { get; }
+        public TimeSimulatorBridgeActor(ITimeControlViewModel viewModel, IActorRef timeSimulatorActorRef) : base(
+            viewModel, timeSimulatorActorRef)
+        {
+            Receive<TickClockMessage>(msg => Actor.Forward(msg));
+            Receive<AddMinutesMessage>(msg => Actor.Forward(msg));
+            Receive<TimeChangedMessage>(msg => ViewModel.Time = msg.Now);
+
+            Receive<SetSpeedMessage>(msg => Actor.Tell(msg));
+            Receive<SpeedUpdatedMessage>(msg => ViewModel.SetupSpeed(msg.Speed));
+            
+            Actor.Tell(new SubscriptionMessage(), Self);
+        }
 
         public TimeSimulatorBridgeActor(ITimeControlViewModel viewModel, IControlledTimeSource controlledTimeSource)
-        {
-            ViewModel = viewModel;
+            : this(viewModel, Context.ActorOf(TimeSimulatorActor.Props(controlledTimeSource))) { }
 
-            var simulatorProps = Props.Create(()=>new TimeSimulatorActor(controlledTimeSource));
-            TimeSimulatorRef = Context.ActorOf(simulatorProps);
+        public static Props Props(ITimeControlViewModel viewModel, IControlledTimeSource controlledTimeSource) =>
+            Akka.Actor.Props.Create(() => new TimeSimulatorBridgeActor(viewModel, controlledTimeSource));
 
-            Receive<TickClockMessage>(msg => TimeSimulatorRef.Forward(msg));
-            Receive<AddMinutesMessage>(msg => TimeSimulatorRef.Forward(msg));
-            Receive<SetSpeedMessage>(msg => TimeSimulatorRef.Forward(msg));
-
-            Receive<TimeChangedMessage>(msg => ViewModel.TimeText = msg.Now.ToString("hh:MM:ss", null));
-
-            TimeSimulatorRef.Tell(new SubscriptionMessage(), Self);
-        }
+        public static Props Props(ITimeControlViewModel viewModel, IActorRef timeSimulatorActorRef) =>
+            Akka.Actor.Props.Create(() => new TimeSimulatorBridgeActor(viewModel, timeSimulatorActorRef));
     }
 }

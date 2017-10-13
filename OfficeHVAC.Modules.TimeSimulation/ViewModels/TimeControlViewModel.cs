@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using NodaTime;
+using OfficeHVAC.Modules.TimeSimulation.Messages;
 using OfficeHVAC.Modules.TimeSimulation.TimeSources;
 using Prism.Mvvm;
 using System.Timers;
@@ -8,43 +9,44 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
 {
     public class TimeControlViewModel : BindableBase, ITimeControlViewModel
     {
-        private readonly IControlledTimeSource _controlledTimeSource;
-        private readonly Timer _timer;
-        private string _timeText;
+        public const string TimeSimulatorActorName = "Clock";
 
-        public Instant ResetTime { get; set; }
+        private readonly Timer _timer;
+        public IActorRef Bridge { get; }
+
+        private Instant time = new Instant();
+        public Instant Time
+        {
+            get => time;
+            set
+            {
+                SetProperty(ref time, value);
+                RaisePropertyChanged(nameof(TimeText));
+            }
+        }
+        public string TimeText => this.Time.ToString("hh:mm:ss", null);
 
         public bool IsRunning => _timer.Enabled;
         
-        //TODO Store TimeController State
+        private double speed = 10;
         public double Speed
         {
-            get =>_controlledTimeSource.Speed;
-            set
-            {
-                _controlledTimeSource.Speed = value;
-                this.RaisePropertyChanged();
-            }
+            get => speed;
+            set => Bridge.Tell(new SetSpeedMessage(value));
         }
-
-        public string TimeText
-        {
-            get => this._controlledTimeSource.Now.ToString("hh:MM:ss", null);
-            set => SetProperty(ref _timeText, value);
-        }
+        public void SetupSpeed(double newValue) => SetProperty(ref speed, newValue, nameof(Speed));
 
         public TimeControlViewModel(IControlledTimeSource controlledTimeSource, ActorSystem actorSystem, long timerRefreshRate = 1000)
         {
-            var bridgeProps = Props.Create(() => new TimeSimulatorBridgeActor(this, controlledTimeSource));
-            this.Bridge = actorSystem.ActorOf(bridgeProps, "timeBridge");
 
-            _controlledTimeSource = controlledTimeSource;
+            var timeSimulatorActorRef = actorSystem.ActorOf(TimeSimulatorActor.Props(controlledTimeSource), TimeSimulatorActorName);
+
+            var bridgeProps = TimeSimulatorBridgeActor.Props(this, timeSimulatorActorRef);
+            this.Bridge = actorSystem.ActorOf(bridgeProps, "timeBridge");
 
             _timer = new Timer(timerRefreshRate) { AutoReset = true };
             _timer.Elapsed += TimerTick;
         }
-
-        public IActorRef Bridge { get; }
 
         public void TimerTick(object sender, ElapsedEventArgs elapsedEventArgs) => TickManually();
 
@@ -58,22 +60,8 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
             RaisePropertyChanged(nameof(IsRunning));
         }
 
-        public void AddMinutes(long minutes)
-        {
-            _controlledTimeSource.AddMinutes(minutes);
-            RaisePropertyChanged(nameof(TimeText));
-        }
+        public void AddMinutes(long minutes) => Bridge.Tell(new AddMinutesMessage(minutes));
 
-        public void TickManually()
-        {
-            _controlledTimeSource.UpdateClock();
-            RaisePropertyChanged(nameof(TimeText));
-        }
-
-        public void Reset()
-        {
-            _controlledTimeSource.Reset(ResetTime);
-            RaisePropertyChanged(nameof(TimeText));
-        }
+        public void TickManually() => Bridge.Tell(new TickClockMessage());
     }
 }

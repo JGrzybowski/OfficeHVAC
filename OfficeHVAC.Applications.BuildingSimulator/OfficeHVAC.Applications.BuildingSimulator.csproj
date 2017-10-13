@@ -38,6 +38,9 @@
     <Reference Include="Akka, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Akka.1.3.1\lib\net45\Akka.dll</HintPath>
     </Reference>
+    <Reference Include="Akka.TestKit, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Akka.TestKit.1.3.1\lib\net45\Akka.TestKit.dll</HintPath>
+    </Reference>
     <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.6.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
@@ -118,6 +121,8 @@
     <Compile Include="Actors\RemoveRoomMessage.cs" />
     <Compile Include="Actors\UpdateCompanyMessage.cs" />
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="SystemInfo.cs" />
+    <Compile Include="ViewModels\BuildingViewModel.cs" />
     <Compile Include="ViewModels\CompanyViewModel.cs" />
     <Compile Include="ViewModels\DeviceViewModel.cs" />
     <Compile Include="ViewModels\ITreeElement.cs" />

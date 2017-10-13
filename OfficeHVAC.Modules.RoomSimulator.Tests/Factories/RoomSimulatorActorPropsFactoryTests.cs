@@ -1,15 +1,16 @@
 ﻿using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
+using NodaTime;
 using NSubstitute;
 using OfficeHVAC.Factories.ActorPaths;
+using OfficeHVAC.Models;
 using OfficeHVAC.Modules.RoomSimulator.Actors;
 using OfficeHVAC.Modules.RoomSimulator.Factories;
 using OfficeHVAC.Modules.TemperatureSimulation;
 using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using Shouldly;
 using System;
-using OfficeHVAC.Models;
 using Xunit;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
@@ -27,7 +28,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Factories
             _pathBuilderFake.ActorPath().Returns(blackHoleActor.Path);
 
             ITemperatureSimulator temperatureSimulatorFake = Substitute.For<ITemperatureSimulator>();
-            temperatureSimulatorFake.GetTemperature(Arg.Any<IRoomStatusMessage>()).Returns(28f);
+            temperatureSimulatorFake.ChangeTemperature(Arg.Any<IRoomStatusMessage>(), Arg.Any<Duration>())
+                                    .Returns(28f);
 
             _temperatureSimulatorFactoryFake = Substitute.For<ITemperatureSimulatorFactory>();
             _temperatureSimulatorFactoryFake.TemperatureSimulator().Returns(temperatureSimulatorFake);

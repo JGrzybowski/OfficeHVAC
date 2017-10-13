@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Security;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Interop;
-using Akka.Actor;
-using Akka.Dispatch.SysMsg;
+﻿using Akka.Actor;
 using OfficeHVAC.Models;
+using OfficeHVAC.Models.Subscription;
 using OfficeHVAC.Modules.RoomSimulator.Actors;
 using OfficeHVAC.Modules.TemperatureSimulation.Factories;
+using OfficeHVAC.Modules.TimeSimulation.Messages;
+using System.Collections.Generic;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.Actors
 {
@@ -20,15 +17,14 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Actors
         public CompanyActor()
         {
             Receive<CreateRoomMessage>(msg => Sender.Tell(CreateNewRoom(msg)));
-
             Receive<RemoveRoomMessage>(msg => RemoveRoom(msg.Id));
 
-            Receive<ChangeNameMessage>(msg =>
-            {
-                Name = msg.NewValue;
-                Thread.Sleep(5000);
-                Sender.Tell(new UpdateCompanyMessage($"{Name} from Actor"));
-            });
+            Receive<ChangeNameMessage>(msg => Name = msg.NewValue);
+
+            Receive<TimeChangedMessage>(msg => SendToAllRooms(msg));
+
+            var selection = Context.System.ActorSelection($"user/{SystemInfo.TimeSimulatorActorName}");
+            selection.Tell(new SubscriptionMessage());
         }
 
         private void RemoveRoom(string id)
@@ -52,6 +48,12 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Actors
             
             RoomsActors.Add(msg.Id, actor);
             return actor;
+        }
+
+        private void SendToAllRooms(object msg)
+        {
+            foreach (var room in RoomsActors)
+                room.Value.Tell(msg);
         }
     }
 }

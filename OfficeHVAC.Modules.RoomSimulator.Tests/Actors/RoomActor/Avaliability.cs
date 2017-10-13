@@ -20,7 +20,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
                     Name = TestRoomName,
                     Parameters = new ParameterValuesCollection()
                 },
-                companyActorPath,
                 Substitute.For<ISimulatorModels>())
             );
 

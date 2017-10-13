@@ -33,7 +33,11 @@ namespace OfficeHVAC.Modules.TimeSimulation
                 NotifyAboutTimeChange(t);
             });
             
-            Receive<SetSpeedMessage>(msg => this.TimeSource.Speed = msg.Speed);
+            Receive<SetSpeedMessage>(msg =>
+            {
+                this.TimeSource.Speed = msg.Speed;
+                Sender.Tell(new SpeedUpdatedMessage(TimeSource.Speed));
+            });
         }
 
         public void NotifyAboutTimeChange(Instant oldInstant)
@@ -42,5 +46,8 @@ namespace OfficeHVAC.Modules.TimeSimulation
             var timeMsg = new TimeChangedMessage(timeDelta, TimeSource.Now);
             this.TimeUpdateSubscription.SendToAllSubscribers(timeMsg, Self);
         }
+
+        public static Props Props(IControlledTimeSource timeSource) =>
+            Akka.Actor.Props.Create(() => new TimeSimulatorActor(timeSource));
     }
 }

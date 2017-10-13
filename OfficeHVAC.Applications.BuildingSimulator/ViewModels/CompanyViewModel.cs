@@ -1,11 +1,10 @@
 ﻿using Akka.Actor;
+using OfficeHVAC.Applications.BuildingSimulator.Actors;
 using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using OfficeHVAC.Applications.BuildingSimulator.Actors;
-using OfficeHVAC.Models;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 {

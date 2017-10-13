@@ -1,5 +1,4 @@
 ﻿using Akka.TestKit.Xunit2;
-using NodaTime;
 using NSubstitute;
 using OfficeHVAC.Modules.TimeSimulation.TimeSources;
 using OfficeHVAC.Modules.TimeSimulation.ViewModels;
@@ -176,46 +175,46 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
             }
         }
 
-        public class Reset : TestKit
-        {
-            [Fact]
-            public void resets_time_source_to_specified_date()
-            {
-                //Arrange
-                var resetInstant = Instant.FromUtc(2012, 12, 31, 23, 59, 59);
-                var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys) { ResetTime = resetInstant};
+        //public class Reset : TestKit
+        //{
+        //    [Fact]
+        //    public void resets_time_source_to_specified_date()
+        //    {
+        //        //Arrange
+        //        var resetInstant = Instant.FromUtc(2012, 12, 31, 23, 59, 59);
+        //        var timeSourceMock = Substitute.For<IControlledTimeSource>();
+        //        var vm = new TimeControlViewModel(timeSourceMock, this.Sys) { ResetTime = resetInstant};
                 
-                //Act
-                vm.Reset();
+        //        //Act
+        //        vm.Reset();
 
-                //Assert
-                timeSourceMock.Received(1).Reset(resetInstant);
-            }
+        //        //Assert
+        //        timeSourceMock.Received(1).Reset(resetInstant);
+        //    }
 
-            [Fact]
-            public void notifies_UI()
-            {
-                //Arrange
-                bool UI_notified = false;
-                PropertyChangedEventArgs notificationArgs = null;
+        //    [Fact]
+        //    public void notifies_UI()
+        //    {
+        //        //Arrange
+        //        bool UI_notified = false;
+        //        PropertyChangedEventArgs notificationArgs = null;
 
-                var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
-                vm.PropertyChanged += (sender, args) =>
-                {
-                    UI_notified = true;
-                    notificationArgs = args;
-                };
+        //        var timeSourceMock = Substitute.For<IControlledTimeSource>();
+        //        var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+        //        vm.PropertyChanged += (sender, args) =>
+        //        {
+        //            UI_notified = true;
+        //            notificationArgs = args;
+        //        };
 
-                //Act
-                vm.Reset();
+        //        //Act
+        //        vm.Reset();
 
-                //Assert
-                UI_notified.ShouldBe(true);
-                notificationArgs.ShouldNotBeNull();
-                notificationArgs?.PropertyName.ShouldBe(nameof(TimeControlViewModel.TimeText));
-            }
-        }
+        //        //Assert
+        //        UI_notified.ShouldBe(true);
+        //        notificationArgs.ShouldNotBeNull();
+        //        notificationArgs?.PropertyName.ShouldBe(nameof(TimeControlViewModel.TimeText));
+        //    }
+        //}
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Core;
 using NodaTime;
 using OfficeHVAC.Models;
 using OfficeHVAC.Modules.TimeSimulation.TimeSources;
@@ -34,7 +33,6 @@ namespace OfficeHVAC.Modules.TimeSimulation
                 .As<IControlledTimeSource>()
                 .SingleInstance();
             containerBuilder.RegisterType<TimeControlViewModel>()
-                .WithProperty(new NamedPropertyParameter(nameof(TimeControlViewModel.ResetTime), now))
                 .AsSelf()
                 .As<ITimeControlViewModel>();
         }
