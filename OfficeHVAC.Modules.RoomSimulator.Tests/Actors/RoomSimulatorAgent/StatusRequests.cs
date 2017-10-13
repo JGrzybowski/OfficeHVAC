@@ -1,7 +1,7 @@
-﻿using System;
-using Akka.Actor;
+﻿using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
+using NodaTime;
 using NSubstitute;
 using OfficeHVAC.Models;
 using OfficeHVAC.Modules.TemperatureSimulation;
@@ -19,7 +19,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
         private static ITemperatureSimulatorFactory GenerateTemperatureSimulatorFake()
         {
             var simulatorFake = Substitute.For<ITemperatureSimulator>();
-            simulatorFake.GetTemperature(Arg.Any<IRoomStatusMessage>()).Returns(TemperatureInRoom);
+            simulatorFake.ChangeTemperature(Arg.Any<IRoomStatusMessage>(), Arg.Any<Duration>())
+                         .Returns(TemperatureInRoom);
 
             var factoryFake = Substitute.For<ITemperatureSimulatorFactory>();
             factoryFake.TemperatureSimulator().Returns(simulatorFake);

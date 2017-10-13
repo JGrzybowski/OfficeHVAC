@@ -186,9 +186,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoomBridgeActor\Constructor.cs" />
     <Compile Include="RoomBridgeActor\Responses.cs" />
-    <Compile Include="RoomViewModel\Constructor.cs" />
-    <Compile Include="RoomViewModel\InitializeSimulator.cs" />
-    <Compile Include="RoomViewModel\ShutdownSimulator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OfficeHVAC.Models\OfficeHVAC.Models.csproj">
