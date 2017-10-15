@@ -1,4 +1,5 @@
-﻿using Akka.Actor;
+﻿using System;
+using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NodaTime;
@@ -58,7 +59,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
             roomActor.Tell(new ParameterValueMessage(paramType, value));
 
             //Assert
-            var status = await roomActor.Ask<IRoomStatusMessage>(new RoomStatus.Request());
+            var status = await roomActor.Ask<IRoomStatusMessage>(new RoomStatus.Request(), timeout: TimeSpan.FromSeconds(5));
             status.Parameters[SensorType.Temperature].Value.ShouldBe(value);
         }
     }

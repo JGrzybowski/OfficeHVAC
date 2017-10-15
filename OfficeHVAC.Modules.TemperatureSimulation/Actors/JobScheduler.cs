@@ -58,7 +58,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
         private async Task<RoomStatus> RequestStatus()
         {
-            return await Context.Sender.Ask<RoomStatus>(new RoomStatus.Request());
+            return await Context.Sender.Ask<RoomStatus>(new RoomStatus.Request(), TimeSpan.FromSeconds(5));
         }
 
         public static Props Props(ISimulatorModels models, Instant initialTime) => 
