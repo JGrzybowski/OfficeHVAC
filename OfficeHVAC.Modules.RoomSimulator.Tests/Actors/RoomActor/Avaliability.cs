@@ -20,8 +20,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
                     Name = TestRoomName,
                     Parameters = new ParameterValuesCollection()
                 },
-                Substitute.For<ISimulatorModels>())
-            );
+                TestActor
+            ));
 
         [Fact]
         public void sends_avaliability_message_to_server()

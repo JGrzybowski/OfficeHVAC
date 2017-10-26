@@ -65,9 +65,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Factories
 
             return Akka.Actor.Props.Create(() => new RoomSimulatorActor(
                 initialRoomStatus,
-                CompanyPathBuilder.ActorPath(),
-                TemperatureSimulatorFactory,
-                Models
+                CompanyPathBuilder.ActorPath().ToStringWithoutAddress(),
+                "",""
             ));
         }
     }

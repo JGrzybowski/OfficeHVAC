@@ -16,7 +16,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected HashSet<ISensorActorRef> Controllers { get; } = new HashSet<ISensorActorRef>();
 
-        protected HashSet<IActorRef> Subscribers { get; } = new HashSet<IActorRef>();
+        protected HashSet<IActorRef> StatusSubscribers { get; } = new HashSet<IActorRef>();
 
         protected List<TemperatureJob> Jobs { get; } = new List<TemperatureJob>();
 
@@ -24,12 +24,11 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected double StabilizationThreshold = 1.0;
 
-        protected ISimulatorModels Models;
-
-        public RoomActor(RoomStatus initialStatus, ISimulatorModels models) : this()
+        public RoomActor(RoomStatus initialStatus, ICanTell parentContact) : this()
         {
             Status = initialStatus;
-            Models = models;
+            
+            parentContact.Tell(new RoomAvaliabilityMessage(Self), Self);
         }
 
         public RoomActor()
@@ -49,7 +48,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             Receive<RoomStatus.Request>(message =>
             {
                 var status = GenerateRoomStatus();
-                Sender.Tell(status, Self);
+                Sender.Tell(status);
             });
 
             Receive<Requirements>(message =>
@@ -70,19 +69,19 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected virtual void OnUnsubscribeMesssage()
         {
-            Subscribers.Remove(Sender);
+            StatusSubscribers.Remove(Sender);
         }
 
         protected virtual void SendSubscribtionNewsletter()
         {
             var status = GenerateRoomStatus();
-            foreach (var subscriber in Subscribers)
+            foreach (var subscriber in StatusSubscribers)
                 subscriber.Tell(status, Self);
         }
 
         protected virtual void OnSubscribeMessage()
         {
-            Subscribers.Add(Sender);
+            StatusSubscribers.Add(Sender);
             Sender.Tell(GenerateRoomStatus());
         }
 
@@ -122,7 +121,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             return Status.ToMessage();
         }
 
-        public static Props Props(RoomStatus status, ISimulatorModels modelParams)
-            => Akka.Actor.Props.Create(() => new RoomActor(status.Clone(), modelParams));
+        public static Props Props(RoomStatus status, ICanTell parentContact)
+            => Akka.Actor.Props.Create(() => new RoomActor(status.Clone(), parentContact));
     }
 }

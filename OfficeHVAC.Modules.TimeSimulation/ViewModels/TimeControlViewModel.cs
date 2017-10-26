@@ -38,7 +38,6 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
 
         public TimeControlViewModel(IControlledTimeSource controlledTimeSource, ActorSystem actorSystem, long timerRefreshRate = 1000)
         {
-
             var timeSimulatorActorRef = actorSystem.ActorOf(TimeSimulatorActor.Props(controlledTimeSource), TimeSimulatorActorName);
 
             var bridgeProps = TimeSimulatorBridgeActor.Props(this, timeSimulatorActorRef);

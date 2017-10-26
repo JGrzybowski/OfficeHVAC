@@ -7,19 +7,21 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
 {
     public class TemperatureSimulator : ITemperatureSimulator
     {
-        public ITemperatureModel Model { get; }
+        public ITemperatureModel Model { get; protected set; }
 
         protected double LastTemperature;
         public double Temperature
         {
-            get { return LastTemperature; }
-            set { LastTemperature = value; }
+            get => LastTemperature;
+            set => LastTemperature = value;
         }
 
-        public TemperatureSimulator(double initialTemperature, ITemperatureModel model)
+        public void ReplaceTemperatureModel(ITemperatureModel model) => Model = model;
+
+        public TemperatureSimulator(double initialTemperature, ITemperatureModel model = null)
         {
-            this.Model = model;
-            this.LastTemperature = initialTemperature;
+            Model = model;
+            LastTemperature = initialTemperature;
         }
 
         public double ChangeTemperature(IRoomStatusMessage status, Duration timeDelta)
@@ -30,7 +32,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
                         .Cast<ITemperatureDevice>()
                         .ToList();
 
-            LastTemperature += Model.CalculateChange(LastTemperature, temperatureDevices, timeDelta, status.Volume);
+            LastTemperature += Model?.CalculateChange(LastTemperature, temperatureDevices, timeDelta, status.Volume) ?? 0; 
             return LastTemperature;
         }
     }

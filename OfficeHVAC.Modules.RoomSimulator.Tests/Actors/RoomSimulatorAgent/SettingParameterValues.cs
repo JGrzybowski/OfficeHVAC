@@ -33,7 +33,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
         }
 
         private Props SimulatorActorProps() =>
-            Props.Create(() => new RoomSimulatorActor(
+            RoomSimulatorActor.Props(
                 new RoomStatus()
                 {
                     Name = TestRoomName,
@@ -43,9 +43,9 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
                     }
                 },
                 ActorOf(BlackHoleActor.Props).Path,
-                GenerateTemperatureSimulatorFake(),
-                Substitute.For<ISimulatorModels>()
-            ));
+                ActorOf(BlackHoleActor.Props).Path,
+                ActorOf(BlackHoleActor.Props).Path
+            );
 
         [Theory]
         [InlineData(SensorType.Temperature, +1)]

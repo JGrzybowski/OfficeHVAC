@@ -42,8 +42,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Actors
                 Name = msg.Name
             };
             
-            var props = Props.Create(() =>
-                new RoomSimulatorActor(initialStatus, Self.Path, new TemperatureSimulatorFactory(null, null), null));
+            var props = RoomSimulatorActor.Props(initialStatus, Self.Path.ToStringWithoutAddress(), SystemInfo.TimeSimulatorActorPath, SystemInfo.TempSimulatorModelActorPath);
             var actor = Context.ActorOf(props);
             
             RoomsActors.Add(msg.Id, actor);

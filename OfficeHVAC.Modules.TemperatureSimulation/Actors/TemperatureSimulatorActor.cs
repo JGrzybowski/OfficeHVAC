@@ -2,6 +2,7 @@
 using OfficeHVAC.Models;
 using OfficeHVAC.Modules.TimeSimulation.Messages;
 using System;
+using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
@@ -12,12 +13,27 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         //private ICancelable Scheduler { get; set; }
         private ITemperatureSimulator temperatureSimulator { get; }
 
-        public TemperatureSimulatorActor(ITemperatureSimulator temperatureSimulator)
+        public TemperatureSimulatorActor(ITemperatureSimulator temperatureSimulator, string temperatureParamsActorPath)
         {
             this.temperatureSimulator = temperatureSimulator;
+            Become(AwaitingInitialModel);
+            Context.System.ActorSelection(temperatureParamsActorPath).Tell(new TemperatureModelRequest());
+        }
 
+        private void AwaitingInitialModel()
+        {
+            Receive<ITemperatureModel>(model =>
+                {
+                    this.temperatureSimulator.ReplaceTemperatureModel(model);
+                    Become(Processing);
+                }
+            );
+        }
+
+        private void Processing()
+        {
             Receive<ParameterValue.Request>(
-                msg => Sender.Tell(new ParameterValue(SensorType.Temperature, this.temperatureSimulator.Temperature)), 
+                msg => Sender.Tell(new ParameterValue(SensorType.Temperature, this.temperatureSimulator.Temperature)),
                 msg => msg.ParameterType == SensorType.Temperature
             );
 
@@ -26,8 +42,10 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             );
 
             Receive<IRoomStatusMessage>(msg => roomStatus = msg);
+            
+            Receive<ITemperatureModel>(model => this.temperatureSimulator.ReplaceTemperatureModel(model));
         }
-
+        
         protected override void PreStart()
         {
             //Scheduler = Context.System
@@ -42,14 +60,14 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             base.PreStart();
         }
 
-        public static Props Props(RoomStatus initialStatus, ISimulatorModels models)
+        public static Props Props(RoomStatus initialStatus, string timeActorPath, string tempParamsActorPath)
         {
             double initialTemperature = 0;
             if (initialStatus.Parameters.Contains(SensorType.Temperature))
                 initialTemperature = Convert.ToDouble(initialStatus.Parameters[SensorType.Temperature].Value);
 
             var props = Akka.Actor.Props.Create(
-                () => new TemperatureSimulatorActor(new TemperatureSimulator(initialTemperature, models.TemperatureModel))
+                () => new TemperatureSimulatorActor(new TemperatureSimulator(initialTemperature, null), tempParamsActorPath)
             );
 
             return props;

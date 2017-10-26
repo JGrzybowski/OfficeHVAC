@@ -32,8 +32,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
                         new ParameterValue(SensorType.Temperature, TemperatureInRoom)
                     }
                 },
-                Substitute.For<ISimulatorModels>()
-                )
+                ActorOf(BlackHoleActor.Props))
             );
 
         [Fact]

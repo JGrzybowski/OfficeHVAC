@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using OfficeHVAC.Modules.TimeSimulation;
 using Xunit;
 
 namespace OfficeHVAC.TestScenarios
@@ -26,21 +27,25 @@ namespace OfficeHVAC.TestScenarios
 
         private IControlledTimeSource TimeSource;
         private ITemperatureModel TemperatureModel;
-        private SimulatorModels Models;
 
         private TestActorRef<RoomSimulatorActor> RoomActorRef;
+
+        private IActorRef timeSimActorRef;         
+        private IActorRef tempSimParamsActorRef;         
 
         public Scenario1() : base(@"akka.scheduler.implementation = ""Akka.TestKit.TestScheduler, Akka.TestKit""")
         {
             Hole = ActorOf<BlackHoleActor>();
 
             Date = Instant.FromDateTimeUtc(DateTime.UtcNow.AddDays(1).Date);
-            var testScheduler = this.Sys.Scheduler as TestScheduler;
+            
+            var testScheduler = Sys.Scheduler as TestScheduler;
             TimeSource = new ControlledTimeSource(Date, testScheduler);
 
             TemperatureModel = new SimpleTemperatureModel();
 
-            Models = new SimulatorModels(TimeSource, TemperatureModel);
+            timeSimActorRef = Sys.ActorOf(TimeSimulatorActor.Props(TimeSource));
+            //tempSimParamsActorRef;
         }
 
         [Fact]
@@ -99,9 +104,7 @@ namespace OfficeHVAC.TestScenarios
             //Initially it's 25'C in the room
             InitialStatus.Parameters.Add(new ParameterValue(SensorType.Temperature, 25));
             RoomActorRef = ActorOfAsTestActorRef(() =>
-                new RoomSimulatorActor(InitialStatus, Hole.Path,
-                                       new TemperatureSimulatorFactory(TimeSource, TemperatureModel),
-                                       Models));
+                new RoomSimulatorActor(InitialStatus, Hole.Path, timeSimActorRef.Path, tempSimParamsActorRef.Path));
             //There is a meeting at 10:30 we want to have 21'C by then
             var firstMeeting = SetMeeting(At(10, 30), Temperature(21));
 
