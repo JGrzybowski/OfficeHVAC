@@ -4,6 +4,7 @@ using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
+using OfficeHVAC.Models.Subscription;
 
 namespace OfficeHVAC.Modules.ServerSimulator
 {

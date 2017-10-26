@@ -19,7 +19,7 @@ namespace OfficeHVAC.Modules.TimeSimulation
             Receive<SetSpeedMessage>(msg => Actor.Tell(msg));
             Receive<SpeedUpdatedMessage>(msg => ViewModel.SetupSpeed(msg.Speed));
             
-            Actor.Tell(new SubscriptionMessage(), Self);
+            Actor.Tell(new SubscribeMessage(Self));
         }
 
         public TimeSimulatorBridgeActor(ITimeControlViewModel viewModel, IControlledTimeSource controlledTimeSource)

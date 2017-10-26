@@ -1,12 +1,12 @@
 ﻿using Akka.Actor;
 
-namespace OfficeHVAC.Messages
+namespace OfficeHVAC.Models.Subscription
 {
-    public class UnsubscribeMessage
+    public class SubscribeMessage
     {
         public IActorRef Subscriber { get; private set; }
 
-        public UnsubscribeMessage(IActorRef subscriber)
+        public SubscribeMessage(IActorRef subscriber)
         {
             Subscriber = subscriber;
         }

@@ -6,6 +6,8 @@ using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using Shouldly;
 using System;
+using Akka.TestKit;
+using OfficeHVAC.Models.Subscription;
 using Xunit;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
@@ -32,7 +34,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
                         new ParameterValue(SensorType.Temperature, TemperatureInRoom)
                     }
                 },
-                ActorOf(BlackHoleActor.Props))
+                blackHole)
             );
 
         [Fact]

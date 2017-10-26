@@ -6,6 +6,7 @@ using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using Shouldly;
 using System.Threading;
+using OfficeHVAC.Models.Subscription;
 using Xunit;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor

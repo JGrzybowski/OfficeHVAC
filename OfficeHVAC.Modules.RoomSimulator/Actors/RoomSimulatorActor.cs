@@ -49,13 +49,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             //});
         }
 
-        protected override void PreStart()
-        {
-            StatusSubscribers.Add(Sensors.Single(s => s.Type == SensorType.Temperature).Actor);
-            SendSubscribtionNewsletter();
-            base.PreStart();
-        }
-
         protected Props PrepareTemperatureSimulatorActorProps(RoomStatus initialStatus, string timeActorPath, string tempActorPath)
         {
             if (initialStatus.Parameters.Contains(SensorType.Temperature))

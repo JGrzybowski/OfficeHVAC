@@ -16,8 +16,8 @@ namespace OfficeHVAC.Modules.TimeSimulation
         {
             TimeSource = timeSource;
 
-            Receive<SubscriptionMessage>(msg => this.TimeUpdateSubscription.AddSubscriber(Sender));
-            Receive<UnsubscriptionMessage>(msg => this.TimeUpdateSubscription.RemoveSubscriber(Sender));
+            Receive<SubscribeMessage>(msg => this.TimeUpdateSubscription.AddSubscriber(msg.Subscriber));
+            Receive<UnsubscribeMessage>(msg => this.TimeUpdateSubscription.RemoveSubscriber(msg.Subscriber));
 
             Receive<TickClockMessage>(msg =>
             {

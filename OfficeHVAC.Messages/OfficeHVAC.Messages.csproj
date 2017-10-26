@@ -121,9 +121,6 @@
     <Compile Include="RoomAvaliabilityMessage.cs" />
     <Compile Include="ChangeTemperature.cs" />
     <Compile Include="SetTemperature.cs" />
-    <Compile Include="SubscribeMessage.cs" />
-    <Compile Include="SubscriptionTriggerMessage.cs" />
-    <Compile Include="UnsubscribeMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

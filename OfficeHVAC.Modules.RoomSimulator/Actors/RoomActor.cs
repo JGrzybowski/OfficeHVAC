@@ -5,6 +5,7 @@ using OfficeHVAC.Models.Devices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OfficeHVAC.Models.Subscription;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -16,7 +17,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected HashSet<ISensorActorRef> Controllers { get; } = new HashSet<ISensorActorRef>();
 
-        protected HashSet<IActorRef> StatusSubscribers { get; } = new HashSet<IActorRef>();
+        protected IActorRef SubscribersManager { get; private set; }
 
         protected List<TemperatureJob> Jobs { get; } = new List<TemperatureJob>();
 
@@ -33,16 +34,22 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         public RoomActor()
         {
+            SubscribersManager = Context.ActorOf<SubscriptionActor>();
+            
             Receive<ParameterValueMessage>(
                 msg => Status.Parameters[msg.ParamType].Value = msg.Value,
                 msg => msg.ParamType != SensorType.Unknown
             );
 
             //Subscribtion handling
-            Receive<SubscribeMessage>(message => OnSubscribeMessage());
-            Receive<SubscriptionTriggerMessage>(message => SendSubscribtionNewsletter());
-            Receive<UnsubscribeMessage>(message => OnUnsubscribeMesssage());
-
+            Receive<SubscribeMessage>(message =>
+            {
+                SubscribersManager.Forward(message);
+                message.Subscriber.Tell(GenerateRoomStatus());
+            });
+            Receive<UnsubscribeMessage>(message => SubscribersManager.Forward(message));
+            Receive<SubscriptionTriggerMessage>(message => { SendSubscribtionNewsletter(); });
+            
             Receive<ParameterValue>(message => UpdateParameter(message));
 
             Receive<RoomStatus.Request>(message =>
@@ -51,38 +58,27 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 Sender.Tell(status);
             });
 
-            Receive<Requirements>(message =>
-            {
-                Events.Add(message);
-                Controllers.Single(s => s.Type == SensorType.Temperature).Actor.Tell(message);
-            });
-
-            Receive<TemperatureJob>(message =>
-            {
-                Jobs.Add(message);
-                //var job = Jobs.OrderBy(j => j.EndTime).First();
-                var job = message;
-                ActivateTemperatureMode(job.ModeType, job.DesiredTemperature);
-                SendSubscribtionNewsletter();
-            });
-        }
-
-        protected virtual void OnUnsubscribeMesssage()
-        {
-            StatusSubscribers.Remove(Sender);
+            // JOB SCHEDULING SECTION
+//            Receive<Requirements>(message =>
+//            {
+//                Events.Add(message);
+//                Controllers.Single(s => s.Type == SensorType.Temperature).Actor.Tell(message);
+//            });
+//
+//            Receive<TemperatureJob>(message =>
+//            {
+//                Jobs.Add(message);
+//                //var job = Jobs.OrderBy(j => j.EndTime).First();
+//                var job = message;
+//                ActivateTemperatureMode(job.ModeType, job.DesiredTemperature);
+//                SendSubscribtionNewsletter();
+//            });
         }
 
         protected virtual void SendSubscribtionNewsletter()
         {
             var status = GenerateRoomStatus();
-            foreach (var subscriber in StatusSubscribers)
-                subscriber.Tell(status, Self);
-        }
-
-        protected virtual void OnSubscribeMessage()
-        {
-            StatusSubscribers.Add(Sender);
-            Sender.Tell(GenerateRoomStatus());
+            SubscribersManager.Tell(new SendToSubscribersMessage(status));
         }
 
         protected virtual void UpdateParameter(ParameterValue paramValue)
@@ -105,16 +101,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 device.DesiredTemperature = desiredTemperature;
             }
         }
-
-        protected override void PreStart()
-        {
-            //var selection = Context.System.ActorSelection(CompanySupervisorActorPath.ToString());
-            //selection.Tell(new RoomAvaliabilityMessage(Self));
-
-            base.PreStart();
-        }
-
-        protected override void PostRestart(Exception reason) { }
 
         protected virtual IRoomStatusMessage GenerateRoomStatus()
         {

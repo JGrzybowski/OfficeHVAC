@@ -130,7 +130,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
                 //Assert
                 UI_notified.ShouldBe(true);
                 notificationArgs.ShouldNotBeNull();
-                notificationArgs?.PropertyName.ShouldBe(nameof(TimeControlViewModel.TimeText));
+                notificationArgs?.PropertyName.ShouldBe(nameof(TimeControlViewModel.Time));
             }
         }
 
