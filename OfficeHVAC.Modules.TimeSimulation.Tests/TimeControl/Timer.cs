@@ -3,6 +3,7 @@ using OfficeHVAC.Modules.TimeSimulation.TimeSources;
 using OfficeHVAC.Modules.TimeSimulation.ViewModels;
 using Shouldly;
 using System.ComponentModel;
+using System.Threading;
 using Akka.TestKit.Xunit2;
 using Xunit;
 
@@ -30,6 +31,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
 
                 //Act
                 vm.Speed = 3;
+                Thread.Sleep(500);
 
                 //Assert
                 UI_notified.ShouldBe(true);
@@ -46,24 +48,10 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
 
                 //Act
                 vm.Speed = 3;
+                Thread.Sleep(500);
 
                 //Assert
                 timeSourceMock.Speed.ShouldBe(3);
-            }
-
-            [Fact]
-            public void returns_time_source_Speed()
-            {
-                //Arrange
-                var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                timeSourceMock.Speed.Returns(5);
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
-
-                //Act
-                var s = vm.Speed;
-
-                //Assert
-                s.ShouldBe(5);
             }
         }
 
@@ -78,6 +66,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
 
                 //Act
                 vm.TimerTick(null, null);
+                Thread.Sleep(500);
 
                 //Assert
                 timeSourceMock.Received(1).UpdateClock();

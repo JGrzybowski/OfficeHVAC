@@ -7,15 +7,9 @@ namespace OfficeHVAC.Models.Subscription
     {
         private readonly HashSet<IActorRef> subscribers = new HashSet<IActorRef>();
 
-        public void AddSubscriber(IActorRef subscriber)
-        {
-            this.subscribers.Add(subscriber);
-        }
+        public void AddSubscriber(IActorRef subscriber) => this.subscribers.Add(subscriber);
 
-        public void RemoveSubscriber(IActorRef subscriber)
-        {
-            this.subscribers.Remove(subscriber);
-        }
+        public void RemoveSubscriber(IActorRef subscriber) => this.subscribers.Remove(subscriber);
 
         public void SendToAllSubscribers<T>(T message, IActorRef sender = null)
         {

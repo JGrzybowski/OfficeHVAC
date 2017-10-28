@@ -7,17 +7,15 @@ using OfficeHVAC.Messages;
 using OfficeHVAC.Modules.RoomSimulator.Factories;
 using Shouldly;
 using System.Threading;
+using OfficeHVAC.Models.Subscription;
 using Xunit;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
 {
     public class Constructor : TestKit
     {
-        private readonly ViewModels.RoomSimulatorViewModel _viewModel =
-            Substitute.For<ViewModels.RoomSimulatorViewModel>(
-                Substitute.For<IConfigBuilder>(),
-                Substitute.For<IBridgeRoomActorPropsFactory>()
-            );
+        private readonly ViewModels.IRoomViewModel _viewModel =
+            Substitute.For<ViewModels.IRoomViewModel>();
 
         private readonly Props _echoActorProps;
 

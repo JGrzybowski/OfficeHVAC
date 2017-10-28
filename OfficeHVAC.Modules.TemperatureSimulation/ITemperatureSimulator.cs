@@ -8,5 +8,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
         double ChangeTemperature(IRoomStatusMessage status, Duration timeDelta);
 
         double Temperature { get; set; }
+
+        void ReplaceTemperatureModel(ITemperatureModel model);
     }
 }

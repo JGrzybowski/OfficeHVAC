@@ -1,6 +1,6 @@
 ﻿namespace OfficeHVAC.Models.Subscription
 {
-    public class UnsubscriptionMessage
+    public class SubscriptionTriggerMessage
     {
     }
 }

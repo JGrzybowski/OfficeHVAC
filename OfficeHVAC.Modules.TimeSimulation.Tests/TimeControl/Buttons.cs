@@ -1,9 +1,13 @@
-﻿using Akka.TestKit.Xunit2;
+﻿using System;
+using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Modules.TimeSimulation.TimeSources;
 using OfficeHVAC.Modules.TimeSimulation.ViewModels;
 using Shouldly;
 using System.ComponentModel;
+using System.Threading;
+using Akka.TestKit;
+using NodaTime;
 using Xunit;
 
 namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
@@ -126,6 +130,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
 
                 //Act
                 vm.AddMinutes(5);
+                Thread.Sleep(300);
 
                 //Assert
                 UI_notified.ShouldBe(true);
@@ -145,6 +150,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
 
                 //Act
                 vm.TickManually();
+                Thread.Sleep(500);
 
                 //Assert
                 timeSourceMock.Received(1).UpdateClock();
@@ -167,6 +173,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
 
                 //Act
                 vm.TickManually();
+                Thread.Sleep(500);
 
                 //Assert
                 UI_notified.ShouldBe(true);

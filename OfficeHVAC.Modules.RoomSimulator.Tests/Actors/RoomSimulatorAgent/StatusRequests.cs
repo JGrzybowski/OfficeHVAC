@@ -20,7 +20,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
         {
             var simulatorFake = Substitute.For<ITemperatureSimulator>();
             simulatorFake.ChangeTemperature(Arg.Any<IRoomStatusMessage>(), Arg.Any<Duration>())
-                         .Returns(TemperatureInRoom);
+                .Returns(TemperatureInRoom);
 
             var factoryFake = Substitute.For<ITemperatureSimulatorFactory>();
             factoryFake.TemperatureSimulator().Returns(simulatorFake);
@@ -29,7 +29,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
         }
 
         private Props RoomActorProps() =>
-            Props.Create(() => new RoomSimulator.Actors.RoomSimulatorActor(
+            RoomSimulator.Actors.RoomSimulatorActor.Props(
                 new RoomStatus()
                 {
                     Name = TestRoomName,
@@ -39,9 +39,9 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
                     }
                 },
                 ActorOf(BlackHoleActor.Props).Path,
-                GenerateTemperatureSimulatorFake(),
-                Substitute.For<ISimulatorModels>()
-        ));
+                ActorOf(BlackHoleActor.Props).Path,
+                ActorOf(BlackHoleActor.Props).Path              
+            );
 
         [Fact]
         public void responds_with_room_status_when_requested()

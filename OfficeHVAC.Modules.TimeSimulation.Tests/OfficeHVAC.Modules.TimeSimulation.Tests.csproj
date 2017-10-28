@@ -102,7 +102,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeControl\Buttons.cs" />
     <Compile Include="TimeControl\Timer.cs" />
-    <Compile Include="TimeControl\TimeTextProperty.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

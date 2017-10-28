@@ -24,7 +24,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Actors
             Receive<TimeChangedMessage>(msg => SendToAllRooms(msg));
 
             var selection = Context.System.ActorSelection($"user/{SystemInfo.TimeSimulatorActorName}");
-            selection.Tell(new SubscriptionMessage());
+            selection.Tell(new SubscribeMessage(Self));
         }
 
         private void RemoveRoom(string id)
@@ -35,15 +35,13 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Actors
 
         private IActorRef CreateNewRoom(CreateRoomMessage msg)
         {
-            //TODO how to distribute TemperatureModels??
             RoomStatus initialStatus = new RoomStatus()
             {
                 Id = msg.Id,
                 Name = msg.Name
             };
             
-            var props = Props.Create(() =>
-                new RoomSimulatorActor(initialStatus, Self.Path, new TemperatureSimulatorFactory(null, null), null));
+            var props = RoomSimulatorActor.Props(initialStatus, Self.Path.ToStringWithoutAddress(), SystemInfo.TimeSimulatorActorPath, SystemInfo.TempSimulatorModelActorPath);
             var actor = Context.ActorOf(props);
             
             RoomsActors.Add(msg.Id, actor);
