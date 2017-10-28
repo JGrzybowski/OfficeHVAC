@@ -49,6 +49,12 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             //});
         }
 
+        protected override void AddSensor(SensorAvaliableMessage msg)
+        {
+            base.AddSensor(msg);
+            Sender.Tell(GenerateRoomStatus());
+        }
+
         protected Props PrepareTemperatureSimulatorActorProps(RoomStatus initialStatus, string timeActorPath, string tempActorPath)
         {
             if (initialStatus.Parameters.Contains(SensorType.Temperature))

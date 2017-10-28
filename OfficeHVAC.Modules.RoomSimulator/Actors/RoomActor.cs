@@ -41,6 +41,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 msg => msg.ParamType != SensorType.Unknown
             );
 
+            Receive<SensorAvaliableMessage>(msg => AddSensor(msg));
+            
             //Subscribtion handling
             Receive<SubscribeMessage>(message =>
             {
@@ -73,6 +75,13 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 //                ActivateTemperatureMode(job.ModeType, job.DesiredTemperature);
 //                SendSubscribtionNewsletter();
 //            });
+        }
+
+        protected virtual void AddSensor(SensorAvaliableMessage msg)
+        {
+            var sensorRef = new SensorActorRef(msg.SendorId, msg.SensorType, Sender);
+            Sensors.Add(sensorRef);
+            Sender.Tell(new SubscribeMessage(Self)); 
         }
 
         protected virtual void SendSubscribtionNewsletter()

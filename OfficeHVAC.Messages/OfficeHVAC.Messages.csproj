@@ -120,6 +120,7 @@
     <Compile Include="RemoveDevice.cs" />
     <Compile Include="RoomAvaliabilityMessage.cs" />
     <Compile Include="ChangeTemperature.cs" />
+    <Compile Include="SensorAvaliableMessage.cs" />
     <Compile Include="SetTemperature.cs" />
   </ItemGroup>
   <ItemGroup>
