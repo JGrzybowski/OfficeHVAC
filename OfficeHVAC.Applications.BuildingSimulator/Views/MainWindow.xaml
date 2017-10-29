@@ -10,21 +10,25 @@
                          Title="HVAC Simulator" Height="600" Width="800"
 >
     <DockPanel>
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="145"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="35"/>
-        </Grid.RowDefinitions> -->
-
         <syncfusion:Ribbon DockPanel.Dock="Top" Grid.ColumnSpan="2" VerticalAlignment="Top" >
             <syncfusion:RibbonTab Caption="Building" DataContext="{Binding Building}">
-                <syncfusion:RibbonBar Header="Add &amp; Remove">
-                    <syncfusion:RibbonButton Label="+Company" SizeForm="Large" Command="{Binding AddCompanyCommand}"/>
-                    <syncfusion:RibbonButton Label="-Company" SizeForm="Large" Command="{Binding DeleteCompanyCommand}"/>
-                    <syncfusion:RibbonButton Label="+Room"    SizeForm="Large" Command="{Binding AddRoomCommand}"/>
-                    <syncfusion:RibbonButton Label="-Room"    SizeForm="Large" Command="{Binding RemoveRoomCommand}" />
-                    <syncfusion:RibbonButton Label="+Device"  SizeForm="Large" Command="{Binding AddDeviceCommand}"/>
-                    <syncfusion:RibbonButton Label="-Device"  SizeForm="Large" Command="{Binding RemoveDeviceCommand}" />
+                <syncfusion:RibbonBar Header="Company">
+                    <syncfusion:RibbonButton Label="+Company" SizeForm="Small" Command="{Binding AddCompanyCommand}"/>
+                    <syncfusion:RibbonButton Label="-Company" SizeForm="Small" Command="{Binding DeleteCompanyCommand}"/>
+                </syncfusion:RibbonBar>
+                <syncfusion:RibbonBar Header="Rooms">
+                    <syncfusion:RibbonButton Label="+Room"    SizeForm="Small" Command="{Binding AddRoomCommand}"/>
+                    <syncfusion:RibbonButton Label="-Room"    SizeForm="Small" Command="{Binding RemoveRoomCommand}" />
+                </syncfusion:RibbonBar>
+                <syncfusion:RibbonBar Header="Devices">
+                    <syncfusion:RibbonButton Label="+Device"  SizeForm="Small" Command="{Binding AddDeviceCommand}"/>
+                    <syncfusion:RibbonButton Label="-Device"  SizeForm="Small" Command="{Binding RemoveDeviceCommand}" />
+                </syncfusion:RibbonBar>
+                <syncfusion:RibbonBar Header="Sensors">
+                    <syncfusion:SplitButton Label="+Sensor" SizeForm="Small" >
+                        <syncfusion:DropDownMenuItem Header="Temperature" Command="{Binding AddTemperatureSensorCommand}"/>
+                        <syncfusion:DropDownMenuItem Header="Location" IsEnabled="false"/>
+                    </syncfusion:SplitButton>
                 </syncfusion:RibbonBar>
             </syncfusion:RibbonTab>
         </syncfusion:Ribbon>
@@ -54,7 +58,5 @@
                                      Grid.Column="1" ButtonPanelVisibility="Collapsed" SearchBoxVisibility="Collapsed" 
                                      SelectedObject="{Binding Building.SelectedItem, Mode=OneWay}" Grid.RowSpan="2" />
         </Grid>
-
-
     </DockPanel>
 </syncfusion:RibbonWindow>

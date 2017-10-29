@@ -6,6 +6,7 @@ using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using System;
 using System.Linq;
 using System.Windows.Navigation;
+using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -32,6 +33,14 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 msg => Status.Parameters[SensorType.Temperature].Value = Convert.ToDouble(Status.Parameters[SensorType.Temperature].Value) + msg.DeltaT,
                 msg => Status.Parameters.Contains(SensorType.Temperature));
 
+            Receive<AddTemperatureSensorMessage>(
+                msg =>
+                {
+                    var props = TemperatureSimulatorActor.Props(Status, msg.TimeActorPath, msg.TemperatureParamerersActorPath);
+                    var tSim = Context.ActorOf(props, "temperatureSimulator");
+                    Sender.Tell(tSim);
+                });
+            
             //this.Receive<TimeChangedMessage>(
             //    msg => , 
             //    msg =>

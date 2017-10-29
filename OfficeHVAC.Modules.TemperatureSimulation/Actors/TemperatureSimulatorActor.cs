@@ -24,7 +24,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         {
             Receive<ITemperatureModel>(model =>
                 {
-                    this.temperatureSimulator.ReplaceTemperatureModel(model);
+                    temperatureSimulator.ReplaceTemperatureModel(model);
                     Become(Processing);
                 }
             );

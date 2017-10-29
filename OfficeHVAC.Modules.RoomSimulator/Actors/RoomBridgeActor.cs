@@ -4,6 +4,7 @@ using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Subscription;
 using OfficeHVAC.Modules.RoomSimulator.ViewModels;
+using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -22,6 +23,9 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             Receive<SetTemperature>(msg => _roomActorRef.Tell(msg));
             Receive<ChangeTemperature>(msg => _roomActorRef.Tell(msg));
             Receive<IRoomStatusMessage>(msg => UpdateViewModel(msg));
+
+            Receive<AddTemperatureSensorMessage>(msg => _roomActorRef.Forward(msg));
+            Receive<RemoveSensorMessage>(msg => _roomActorRef.Forward(msg));
 
             _roomActorRef.Tell(new SubscribeMessage(Self));
         }

@@ -118,6 +118,7 @@
     <Compile Include="ParameterValueRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoveDevice.cs" />
+    <Compile Include="RemoveSensorMessage.cs" />
     <Compile Include="RoomAvaliabilityMessage.cs" />
     <Compile Include="ChangeTemperature.cs" />
     <Compile Include="SensorAvaliableMessage.cs" />
