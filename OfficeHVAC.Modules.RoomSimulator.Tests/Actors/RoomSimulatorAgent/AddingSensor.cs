@@ -22,8 +22,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
                     Name = TestRoomName,
                     Parameters = new ParameterValuesCollection()
                 },
-                ActorOf(BlackHoleActor.Props).Path,
-                ActorOf(BlackHoleActor.Props).Path,
                 ActorOf(BlackHoleActor.Props).Path                
             ));
         

@@ -4,12 +4,12 @@ namespace OfficeHVAC.Messages {
     public class SensorAvaliableMessage
     {
         public SensorType SensorType { get; }
-        public string SendorId { get; }
+        public string SensorId { get; }
 
-        public SensorAvaliableMessage(SensorType sensorType, string sendorId)
+        public SensorAvaliableMessage(SensorType sensorType, string sensorId)
         {
             SensorType = sensorType;
-            SendorId = sendorId;
+            SensorId = sensorId;
         }
     }
 }

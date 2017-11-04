@@ -30,6 +30,9 @@
                         <syncfusion:DropDownMenuItem Header="Location" IsEnabled="false"/>
                     </syncfusion:SplitButton>
                 </syncfusion:RibbonBar>
+                <syncfusion:RibbonBar Header="Seed Data">
+                    <syncfusion:RibbonButton Label="Set1"  SizeForm="Small" Click="SeedDataButton_Click"/>
+                </syncfusion:RibbonBar>
             </syncfusion:RibbonTab>
         </syncfusion:Ribbon>
 

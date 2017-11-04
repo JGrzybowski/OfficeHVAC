@@ -12,5 +12,11 @@ namespace OfficeHVAC.Modules.TimeSimulation.Messages
             TimeDelta = timeDelta;
             Now = now;
         }
+        
+        public TimeChangedMessage(Instant now)
+        {
+            TimeDelta = Duration.Zero;
+            Now = now;
+        }
     }
 }

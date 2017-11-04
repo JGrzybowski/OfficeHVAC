@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Windows.Navigation;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
+using OfficeHVAC.Modules.TimeSimulation.Messages;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -16,13 +17,12 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         private readonly ITemperatureSimulatorFactory temperatureSimulatorFactory;
 
-        public RoomSimulatorActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath,ActorPath timeSimulatorActorPath, ActorPath tempSimulatorModelActorPath)
-            : this(initialStatus, companySupervisorActorPath.ToStringWithoutAddress(),timeSimulatorActorPath.ToStringWithoutAddress(), tempSimulatorModelActorPath.ToStringWithoutAddress()) { }
+        public RoomSimulatorActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath)
+            : this(initialStatus, companySupervisorActorPath.ToStringWithoutAddress()) { }
 
-        public RoomSimulatorActor(RoomStatus initialStatus, string companySupervisorActorPath, string timeSimulatorActorPath, string tempSimulatorModelActorPath)
+        public RoomSimulatorActor(RoomStatus initialStatus, string companySupervisorActorPath)
             : base(initialStatus, Context.System.ActorSelection(companySupervisorActorPath))
         {     
-            
 //            var tempController = Context.ActorOf(JobScheduler.Props(models, initialStatus.TimeStamp));
 //            Controllers.Add(new SensorActorRef(
 //                Guid.NewGuid().ToString(),
@@ -36,15 +36,21 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             Receive<AddTemperatureSensorMessage>(
                 msg =>
                 {
-                    var props = TemperatureSimulatorActor.Props(Status, msg.TimeActorPath, msg.TemperatureParamerersActorPath);
+                    var props = PrepareTemperatureSimulatorActorProps(Status, msg.TimeActorPath, msg.TemperatureParamerersActorPath);
                     var tSim = Context.ActorOf(props, "temperatureSimulator");
+                    AddSensor(tSim, SensorType.Temperature, msg.SensorId);
                     Sender.Tell(tSim);
                 });
             
-            //this.Receive<TimeChangedMessage>(
-            //    msg => , 
-            //    msg =>
-            //);
+            Receive<TimeChangedMessage>(
+                msg =>
+                {
+                    Status.TimeStamp = msg.Now;
+                    foreach (var sensor in Sensors)
+                        sensor.Actor.Tell(msg);
+                },
+                msg => msg.Now > Status.TimeStamp
+            );
 
             //this.Receive<SetDesiredTemperature>(message => {
             //    foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
@@ -58,10 +64,11 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             //});
         }
 
-        protected override void AddSensor(SensorAvaliableMessage msg)
+        protected override void AddSensor(IActorRef sensorRef, SensorType sensorType, string sensorId)
         {
-            base.AddSensor(msg);
-            Sender.Tell(GenerateRoomStatus());
+            base.AddSensor(sensorRef, sensorType, sensorId);
+            sensorRef.Tell(new TimeChangedMessage(Status.TimeStamp));
+            sensorRef.Tell(GenerateRoomStatus());
         }
 
         protected Props PrepareTemperatureSimulatorActorProps(RoomStatus initialStatus, string timeActorPath, string tempActorPath)
@@ -70,18 +77,17 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 this.temperatureSimulatorFactory.InitialTemperature = Convert.ToDouble(initialStatus.Parameters[SensorType.Temperature].Value);
 
             var props = TemperatureSimulatorActor.Props(this.Status, timeActorPath, tempActorPath);
-
             return props;
         }
 
-        public static Props Props(RoomStatus initialStatus, string companySupervisorActorPath, string timeSimulatorActorPath, string tempSimulatorModelActorPath)
+        public static Props Props(RoomStatus initialStatus, string companySupervisorActorPath)
         {
-            return Akka.Actor.Props.Create(() => new RoomSimulatorActor(initialStatus.Clone(), companySupervisorActorPath, timeSimulatorActorPath, tempSimulatorModelActorPath));
+            return Akka.Actor.Props.Create(() => new RoomSimulatorActor(initialStatus.Clone(), companySupervisorActorPath));
         }
         
-        public static Props Props(RoomStatus initialStatus, ActorPath companySupervisorActorPath, ActorPath timeSimulatorActorPath, ActorPath tempSimulatorModelActorPath)
+        public static Props Props(RoomStatus initialStatus, ActorPath companySupervisorActorPath)
         {
-            return Akka.Actor.Props.Create(() => new RoomSimulatorActor(initialStatus.Clone(), companySupervisorActorPath, timeSimulatorActorPath, tempSimulatorModelActorPath));
+            return Akka.Actor.Props.Create(() => new RoomSimulatorActor(initialStatus.Clone(), companySupervisorActorPath));
         }
     }
 }

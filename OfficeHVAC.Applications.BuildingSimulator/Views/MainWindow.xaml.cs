@@ -33,5 +33,11 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Views
             if (dc != null)
                 dc.IsSimulatorRunning = false;
         }
+        
+        private void SeedDataButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dc = DataContext as MainWindowViewModel;
+            dc?.SeedData();
+        }
     }
 }
