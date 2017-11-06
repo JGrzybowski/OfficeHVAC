@@ -25,7 +25,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
         private bool receivedInitialTimestamp = false;
         private bool receivedInitialTemperatureModel = false;
-        private bool receivedInitialData => receivedInitialTimestamp && receivedInitialTemperatureModel;
+        private bool ReceivedInitialData => receivedInitialTimestamp && receivedInitialTemperatureModel;
         
         public TemperatureSimulatorActor(ITemperatureSimulator temperatureSimulator, string temperatureParamsActorPath)
         {
@@ -36,7 +36,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             SubsciptionManager = Context.ActorOf<SubscriptionActor>();
             
             Become(AwaitingInitialModel);
-            temperatureaParamsActorContact.Tell(new TemperatureModelRequest(),Self);
+            temperatureaParamsActorContact.Tell(new SubscribeMessage(Self), Self);
         }
 
         private void AwaitingInitialModel()
@@ -45,7 +45,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                 {
                     temperatureSimulator.ReplaceTemperatureModel(model);
                     receivedInitialTemperatureModel = true;
-                    if(receivedInitialData)
+                    if(ReceivedInitialData)
                         Become(Processing);
                 });
 
@@ -54,7 +54,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                 {
                     LastTimestamp = msg.Now;
                     receivedInitialTimestamp = true;
-                    if (receivedInitialData) 
+                    if (ReceivedInitialData) 
                         Become(Processing);
                 });
             

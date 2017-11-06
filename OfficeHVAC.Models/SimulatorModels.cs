@@ -12,13 +12,12 @@ namespace OfficeHVAC.Models
         public IActorRef TimeSource => timeSource;
         private IActorRef timeSource;
 
-        public ITemperatureModel TemperatureModel => temperatureModel;
-        private ITemperatureModel temperatureModel;
+        public ITemperatureModel TemperatureModel { get; }
 
         public SimulatorModels(IActorRef timeSource, ITemperatureModel temperatureModel)
         {
             this.timeSource = timeSource;
-            this.temperatureModel = temperatureModel;
+            this.TemperatureModel = temperatureModel;
         }
     }
 }

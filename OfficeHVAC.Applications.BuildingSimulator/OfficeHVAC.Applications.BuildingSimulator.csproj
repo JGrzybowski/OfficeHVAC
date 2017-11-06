@@ -119,6 +119,7 @@
     <Compile Include="Actors\CompanyBridgeActor.cs" />
     <Compile Include="Actors\CreateRoomMessage.cs" />
     <Compile Include="Actors\RemoveRoomMessage.cs" />
+    <Compile Include="Actors\TemperatureModelActor.cs" />
     <Compile Include="Actors\UpdateCompanyMessage.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="SystemInfo.cs" />

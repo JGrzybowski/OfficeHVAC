@@ -32,8 +32,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator
             //builder.RegisterType<BuildingViewModel>().AsSelf();
 
             TimeSimulationModule.InitializeDependencies(builder);
-            
-            builder.Register(context => new SimulatorModels(context.Resolve<TimeControlViewModel>().Bridge, new SimpleTemperatureModel())).As<ISimulatorModels>();
+                       
             
             base.ConfigureContainerBuilder(builder);
         }

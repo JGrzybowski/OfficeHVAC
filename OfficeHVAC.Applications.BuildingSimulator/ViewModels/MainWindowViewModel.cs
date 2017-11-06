@@ -24,12 +24,15 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 
         public BuildingViewModel Building { get; set; }
         public ITimeControlViewModel Time { get; set; }
+        public TemperatureSimulatorParamsViewModel TemperatureParams { get; set; }
         
-        public MainWindowViewModel(ActorSystem actorSystem, BuildingViewModel building, ITimeControlViewModel time)
+        public MainWindowViewModel(ActorSystem actorSystem, BuildingViewModel building, 
+            ITimeControlViewModel time, TemperatureSimulatorParamsViewModel temperatureParams)
         {
             ActorSystem = actorSystem;
             Building = building;
             Time = time;
+            TemperatureParams = temperatureParams;
         }
 
         public async Task SeedData()
