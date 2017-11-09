@@ -29,7 +29,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 
         public async Task<RoomViewModel> AddRoom()
         {
-            var room = new RoomViewModel {Name = "New Room"};
+            var room = new RoomViewModel { Name = "New Room" };
             
             var roomActorRef = Actor.Ask<IActorRef>(new CreateRoomMessage()
             {

@@ -177,7 +177,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Actors\RoomActor\AddingSensor.cs" />
     <Compile Include="Actors\RoomActor\Subscriptions.cs" />
+    <Compile Include="Actors\RoomSimulatorAgent\AddingSensor.cs" />
     <Compile Include="Actors\RoomSimulatorAgent\StatusRequests.cs" />
     <Compile Include="Actors\RoomActor\Avaliability.cs" />
     <Compile Include="Actors\RoomSimulatorAgent\SettingParameterValues.cs" />

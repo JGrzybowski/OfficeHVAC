@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Akka.Actor;
 using OfficeHVAC.Applications.BuildingSimulator.Actors;
@@ -28,10 +29,12 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         public CompanyViewModel SelectedCompany => SelectedItem as CompanyViewModel;
         public RoomViewModel SelectedRoom       => SelectedItem as RoomViewModel;
         public DeviceViewModel SelectedDevice   => SelectedItem as DeviceViewModel;
+        public SensorViewModel SelectedSensor   => SelectedItem as SensorViewModel;
 
         public bool CompanyIsSelected   => SelectedCompany  != null;
         public bool RoomIsSelected      => SelectedRoom     != null;
         public bool DeviceIsSelected    => SelectedDevice   != null;
+        public bool SensorIsSelected    => SelectedSensor   != null;
 
         public ActorSystem ActorSystem { get; set; }
         
@@ -47,6 +50,9 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 
             InitializeAddDeviceCommand();
             InitializeRemoveDeviceCommand();
+            
+            InitializeAddTemperatureSensorCommand();
+            InitializeRemoveSensorCommand();
         }
         
         public ICommand AddCompanyCommand { get; set; }
@@ -139,6 +145,41 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
                 (
                     () => RemoveDevice(SelectedDevice),
                     () => DeviceIsSelected
+                )
+                .ObservesProperty(() => SelectedItem);
+        }
+        
+        public ICommand AddTemperatureSensorCommand { get; set; }
+        public async Task<SensorViewModel> AddTemperatureSensor(RoomViewModel room)
+        {
+            var sensor = new TemperatureSensorViewModel() {Name = "Temparature Sensor"};
+            await room.AddTemperatureSensor(sensor, SystemInfo.TimeSimulatorActorPath, SystemInfo.TempSimulatorModelActorPath);
+            return sensor;
+        }
+        private void InitializeAddTemperatureSensorCommand()
+        {
+            AddTemperatureSensorCommand = new DelegateCommand(
+                    async () => await AddTemperatureSensor(SelectedRoom),
+                          () => RoomIsSelected
+                )
+                .ObservesProperty(() => SelectedItem);
+        }
+
+        public ICommand RemoveSensorCommand { get; set; }
+        public void RemoveSensor(SensorViewModel sensorViewModel)
+        {
+            var sensorId = SelectedSensor.Id;
+            var room = Companies.SelectMany(c => c.SubItems)
+                    .Single(r => r.SubItems.Any(snr => snr.Id == sensorId))
+                as RoomViewModel;
+            room?.RemoveDevice(sensorId);
+        }
+        private void InitializeRemoveSensorCommand()
+        {
+            RemoveDeviceCommand = new DelegateCommand
+                (
+                    () => RemoveSensor(SelectedSensor),
+                    () => SensorIsSelected
                 )
                 .ObservesProperty(() => SelectedItem);
         }

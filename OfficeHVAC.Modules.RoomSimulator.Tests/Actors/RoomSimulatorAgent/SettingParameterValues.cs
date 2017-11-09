@@ -42,8 +42,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
                         new ParameterValue(SensorType.Temperature, TemperatureInRoom)
                     }
                 },
-                ActorOf(BlackHoleActor.Props).Path,
-                ActorOf(BlackHoleActor.Props).Path,
                 ActorOf(BlackHoleActor.Props).Path
             );
 

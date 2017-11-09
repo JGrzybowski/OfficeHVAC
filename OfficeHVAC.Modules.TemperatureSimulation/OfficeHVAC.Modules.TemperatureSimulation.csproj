@@ -65,9 +65,11 @@
     <Compile Include="Factories\ITemperatureSimulatorFactory.cs" />
     <Compile Include="Factories\TemperatureSimulatorFactory.cs" />
     <Compile Include="ITemperatureSimulator.cs" />
+    <Compile Include="Messages\AddTemperatureSensorMessage.cs" />
     <Compile Include="Messages\TemperatureModelRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleTemperatureModel.cs" />
+    <Compile Include="TemperatureModelParams.cs" />
     <Compile Include="TemperatureSimulator.cs" />
   </ItemGroup>
   <ItemGroup>

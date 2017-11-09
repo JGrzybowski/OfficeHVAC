@@ -1,4 +1,6 @@
 ﻿using Akka.Actor;
+using Akka.IO.Buffers;
+using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Models;
@@ -9,6 +11,13 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
 {
     public class OnTemperatureRequest : TestKit
     {
+        private string blackHoleAddress;
+
+        public OnTemperatureRequest()
+        {
+            blackHoleAddress = ActorOf<BlackHoleActor>().Path.ToStringWithoutAddress();
+        }
+        
         [Fact]
         public void sends_data_based_on_TemperatureSimulator()
         {
@@ -17,7 +26,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
             var temperatureSimulatorFake = Substitute.For<ITemperatureSimulator>();
             temperatureSimulatorFake.Temperature = expectedTemperature;
             var actor = ActorOfAsTestActorRef<Actors.TemperatureSimulatorActor>(
-                Props.Create<Actors.TemperatureSimulatorActor>(temperatureSimulatorFake));
+                Props.Create(() => new Actors.TemperatureSimulatorActor(temperatureSimulatorFake, blackHoleAddress)));
 
             var parameters = new ParameterValuesCollection()
             {

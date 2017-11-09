@@ -45,7 +45,6 @@ namespace OfficeHVAC.TestScenarios
             TemperatureModel = new SimpleTemperatureModel();
 
             timeSimActorRef = Sys.ActorOf(TimeSimulatorActor.Props(TimeSource));
-            //tempSimParamsActorRef;
         }
 
         [Fact]
@@ -104,7 +103,7 @@ namespace OfficeHVAC.TestScenarios
             //Initially it's 25'C in the room
             InitialStatus.Parameters.Add(new ParameterValue(SensorType.Temperature, 25));
             RoomActorRef = ActorOfAsTestActorRef(() =>
-                new RoomSimulatorActor(InitialStatus, Hole.Path, timeSimActorRef.Path, tempSimParamsActorRef.Path));
+                new RoomSimulatorActor(InitialStatus, Hole.Path));
             //There is a meeting at 10:30 we want to have 21'C by then
             var firstMeeting = SetMeeting(At(10, 30), Temperature(21));
 

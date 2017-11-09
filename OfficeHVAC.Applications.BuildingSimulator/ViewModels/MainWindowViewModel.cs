@@ -24,42 +24,46 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 
         public BuildingViewModel Building { get; set; }
         public ITimeControlViewModel Time { get; set; }
+        public TemperatureSimulatorParamsViewModel TemperatureParams { get; set; }
         
-        public MainWindowViewModel(ActorSystem actorSystem, BuildingViewModel building, ITimeControlViewModel time)
+        public MainWindowViewModel(ActorSystem actorSystem, BuildingViewModel building, 
+            ITimeControlViewModel time, TemperatureSimulatorParamsViewModel temperatureParams)
         {
             ActorSystem = actorSystem;
             Building = building;
             Time = time;
-
-
-            //SeedData().Wait();
+            TemperatureParams = temperatureParams;
         }
 
-        private async Task SeedData()
+        public async Task SeedData()
         {
             var company = Building.AddCompany();
             company.Name = "CompanyA";
             
             var room = await company.AddRoom();
             room.Name = "Room 101";
-            room = await company.AddRoom();
-            room.Name = "Room 102";
-                
-            company = Building.AddCompany();
-            company.Name = "CompanyB";
+            var sensor = await Building.AddTemperatureSensor(room);
+
+            //room = await company.AddRoom();
+            //room.Name = "Room 102";
+         
+            //sensor = await Building.AddTemperatureSensor(room);
             
-            room = await company.AddRoom();
-            room.Name = "Room 1053";
-            room = await company.AddRoom();
-            room.Name = "Room 1026";
-            
-            company = Building.AddCompany();
-            company.Name = "CompanyC";
-            
-            room = await company.AddRoom();
-            room.Name = "Room 57";
-            room = await company.AddRoom();
-            room.Name = "Room 1021";
+//            company = Building.AddCompany();
+//            company.Name = "CompanyB";
+//            
+//            room = await company.AddRoom();
+//            room.Name = "Room 1053";
+//            room = await company.AddRoom();
+//            room.Name = "Room 1026";
+//            
+//            company = Building.AddCompany();
+//            company.Name = "CompanyC";
+//            
+//            room = await company.AddRoom();
+//            room.Name = "Room 57";
+//            room = await company.AddRoom();
+//            room.Name = "Room 1021";
         }
     }
 }
