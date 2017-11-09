@@ -15,11 +15,6 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Views
             PropertiesEditor.HidePropertiesCollection.Add(nameof(ITreeElement.SubItems));
         }
 
-        //private void treeviewitem_AfterItemEdit(object sender, EditModeChangeEventArgs e)
-        //{
-        //    (e.Source as ITreeElement).Name = e.NewValue.ToString();
-        //}
-
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is MainWindowViewModel dc)

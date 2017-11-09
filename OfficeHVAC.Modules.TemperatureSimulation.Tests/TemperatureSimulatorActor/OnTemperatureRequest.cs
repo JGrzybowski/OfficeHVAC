@@ -10,7 +10,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
 {
     public class OnTemperatureRequest : TestKit
     {
-        private string blackHoleAddress;
+        private readonly string blackHoleAddress;
 
         public OnTemperatureRequest()
         {
