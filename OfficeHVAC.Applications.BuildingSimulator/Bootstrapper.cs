@@ -2,13 +2,9 @@
 using Akka.Configuration;
 using Akka.TestKit;
 using Autofac;
-using OfficeHVAC.Applications.BuildingSimulator.ViewModels;
 using OfficeHVAC.Modules.TimeSimulation;
 using Prism.Autofac;
 using System.Windows;
-using OfficeHVAC.Models;
-using OfficeHVAC.Modules.TemperatureSimulation;
-using OfficeHVAC.Modules.TimeSimulation.ViewModels;
 
 namespace OfficeHVAC.Applications.BuildingSimulator
 {

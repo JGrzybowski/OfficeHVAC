@@ -7,7 +7,6 @@ using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
 using OfficeHVAC.Modules.RoomSimulator.Actors;
 using OfficeHVAC.Modules.TemperatureSimulation;
-using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using OfficeHVAC.Modules.TimeSimulation.TimeSources;
 using Shouldly;
 using System;

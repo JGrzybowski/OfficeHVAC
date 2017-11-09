@@ -1,13 +1,10 @@
-﻿using System;
-using Akka.TestKit.Xunit2;
+﻿using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Modules.TimeSimulation.TimeSources;
 using OfficeHVAC.Modules.TimeSimulation.ViewModels;
 using Shouldly;
 using System.ComponentModel;
 using System.Threading;
-using Akka.TestKit;
-using NodaTime;
 using Xunit;
 
 namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl

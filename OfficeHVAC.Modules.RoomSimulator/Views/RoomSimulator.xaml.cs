@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using OfficeHVAC.Modules.RoomSimulator.ViewModels;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Views
 {

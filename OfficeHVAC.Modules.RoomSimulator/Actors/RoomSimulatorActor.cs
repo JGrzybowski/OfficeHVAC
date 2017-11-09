@@ -4,8 +4,6 @@ using OfficeHVAC.Models;
 using OfficeHVAC.Modules.TemperatureSimulation.Actors;
 using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using System;
-using System.Linq;
-using System.Windows.Navigation;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 using OfficeHVAC.Modules.TimeSimulation.Messages;
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Data.Common;
 using Prism.Mvvm;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels {

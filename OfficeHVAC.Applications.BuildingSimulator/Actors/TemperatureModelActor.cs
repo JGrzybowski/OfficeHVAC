@@ -1,7 +1,6 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Subscription;
-using OfficeHVAC.Modules.TemperatureSimulation;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.Actors
 {

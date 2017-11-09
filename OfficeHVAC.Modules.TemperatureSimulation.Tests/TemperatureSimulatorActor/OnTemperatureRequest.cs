@@ -1,5 +1,4 @@
 ﻿using Akka.Actor;
-using Akka.IO.Buffers;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;

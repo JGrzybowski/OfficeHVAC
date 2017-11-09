@@ -2,7 +2,6 @@
 using NodaTime;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Subscription;
-using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 using OfficeHVAC.Modules.TimeSimulation.Messages;
 using System;
 

@@ -1,11 +1,9 @@
-﻿using System;
-using Akka.Actor;
+﻿using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Subscription;
-using Shouldly;
 using Xunit;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent

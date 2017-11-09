@@ -1,12 +1,9 @@
 ﻿using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
-using NSubstitute;
-using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using Shouldly;
 using System;
-using Akka.TestKit;
 using OfficeHVAC.Models.Subscription;
 using Xunit;
 

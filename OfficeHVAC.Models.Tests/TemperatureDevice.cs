@@ -2,8 +2,6 @@
 using OfficeHVAC.Models.Devices;
 using Shouldly;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Xunit;
 
 namespace OfficeHVAC.Models.Tests
