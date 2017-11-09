@@ -7,7 +7,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels {
         public string Name { get; set; }
         public ObservableCollection<ITreeElement> SubItems { get; }
 
-        public TreeElement(ObservableCollection<ITreeElement> subItems, string Id = null)
+        public TreeElement(ObservableCollection<ITreeElement> subItems, string id = null)
         {
             SubItems = subItems;
         }

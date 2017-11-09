@@ -27,7 +27,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 //                SensorType.Temperature,
 //                tempController));
 
-            this.Receive<ChangeTemperature>(
+            Receive<ChangeTemperature>(
                 msg => Status.Parameters[SensorType.Temperature].Value = Convert.ToDouble(Status.Parameters[SensorType.Temperature].Value) + msg.DeltaT,
                 msg => Status.Parameters.Contains(SensorType.Temperature));
 
@@ -72,9 +72,9 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         protected Props PrepareTemperatureSimulatorActorProps(RoomStatus initialStatus, string timeActorPath, string tempActorPath)
         {
             if (initialStatus.Parameters.Contains(SensorType.Temperature))
-                this.temperatureSimulatorFactory.InitialTemperature = Convert.ToDouble(initialStatus.Parameters[SensorType.Temperature].Value);
+                temperatureSimulatorFactory.InitialTemperature = Convert.ToDouble(initialStatus.Parameters[SensorType.Temperature].Value);
 
-            var props = TemperatureSimulatorActor.Props(this.Status, timeActorPath, tempActorPath);
+            var props = TemperatureSimulatorActor.Props(Status, timeActorPath, tempActorPath);
             return props;
         }
 

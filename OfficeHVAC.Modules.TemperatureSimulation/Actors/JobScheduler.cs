@@ -16,7 +16,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
         public JobScheduler(ISimulatorModels models, Instant initialTime)
         {
-            this.temperatureModel = models.TemperatureModel;
+            temperatureModel = models.TemperatureModel;
 
             ReceiveAsync<Requirements>(
                 async msg => Sender.Tell(CalculateNextJob(msg, await RequestStatus())),
@@ -49,7 +49,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
             var bestModeName = temperatureModel.FindMostEfficientCombination(task, status, temperatureDevices);
             var job = new TemperatureJob(bestModeName, desiredTemperature,
-                                        requirements.Deadline - this.temperatureModel.CalculateNeededTime(task.InitialTemperature, task.DesiredTemperature, temperatureDevices, bestModeName, status.Volume),
+                                        requirements.Deadline - temperatureModel.CalculateNeededTime(task.InitialTemperature, task.DesiredTemperature, temperatureDevices, bestModeName, status.Volume),
                                         requirements.Deadline);
 
             return job;

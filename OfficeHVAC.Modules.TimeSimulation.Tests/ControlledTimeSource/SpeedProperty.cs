@@ -15,7 +15,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.ControlledTimeSource
         public void throws_ArgumentOutOfRangeException_when_trying_to_set_to_negative_value()
         {
             //Arrange
-            var clock = new TimeSources.ControlledTimeSource(InitialTime, this.Sys.Scheduler as TestScheduler);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime, Sys.Scheduler as TestScheduler);
 
             //Act & Assert
             var ex = Should.Throw<ArgumentOutOfRangeException>(() => clock.Speed = -3);
@@ -28,7 +28,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.ControlledTimeSource
         public void sets_speed_when_value_is_non_negative(int newSpeed)
         {
             //Arrange
-            var clock = new TimeSources.ControlledTimeSource(InitialTime, this.Sys.Scheduler as TestScheduler);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime, Sys.Scheduler as TestScheduler);
 
             //Act
             clock.Speed = newSpeed;

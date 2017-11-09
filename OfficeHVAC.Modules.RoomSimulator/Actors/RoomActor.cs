@@ -92,7 +92,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected virtual void UpdateParameter(ParameterValue paramValue)
         {
-            this.Status.Parameters[paramValue.ParameterType].Value = paramValue.Value;
+            Status.Parameters[paramValue.ParameterType].Value = paramValue.Value;
             if (paramValue.ParameterType == SensorType.Temperature)
             {
                 var temperature = Convert.ToDouble(paramValue.Value);

@@ -46,7 +46,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         public void RemoveRoom(string id)
         {
             var roomVm = SubItems.Single(room => room.Id == id);
-            this.Actor.Tell(new RemoveRoomMessage() {Id = roomVm.Id});
+            Actor.Tell(new RemoveRoomMessage() {Id = roomVm.Id});
             SubItems.Remove(roomVm);
         }
 

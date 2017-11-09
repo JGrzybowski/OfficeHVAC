@@ -36,8 +36,8 @@ namespace OfficeHVAC.Modules.ServerSimulator.ViewModels
 
         public ServerLogViewModel(ActorSystem actorSystem, TestScheduler scheduler, ITimeSource timeSource)
         {
-            this.LocalActorSystem = actorSystem;
-            this.TimeSource = timeSource;
+            LocalActorSystem = actorSystem;
+            TimeSource = timeSource;
             BindingOperations.EnableCollectionSynchronization(Logs, _lock);
             InitializeSimulator();
         }
@@ -54,21 +54,21 @@ namespace OfficeHVAC.Modules.ServerSimulator.ViewModels
             IsConnected = true;
             try
             {
-                var logactorProps = Props.Create(() => new LoggerActor(this.TimeSource));
+                var logactorProps = Props.Create(() => new LoggerActor(TimeSource));
                 var bridgeProps = Props.Create(() => new ServerBridgeActor(this, logactorProps));
-                this.BridgeActor = this.LocalActorSystem.ActorOf(bridgeProps, BridgeActorName);
+                BridgeActor = LocalActorSystem.ActorOf(bridgeProps, BridgeActorName);
             }
             catch (Exception)
             {
                 // TODO Log exception
-                this.IsConnected = false;
+                IsConnected = false;
             }
         }
 
         public async Task ShutdownSimulator()
         {
-            this.BridgeActor = null;
-            this.IsConnected = false;
+            BridgeActor = null;
+            IsConnected = false;
         }
     }
 }

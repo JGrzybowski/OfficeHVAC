@@ -21,15 +21,15 @@ namespace OfficeHVAC.Models
         public ParameterValuesCollection Parameters { get; set; } = new ParameterValuesCollection();
 
         public HashSet<IDevice> Devices { get; set; } = new HashSet<IDevice>();
-        IEnumerable<IDevice> IRoomStatusMessage.Devices => this.Devices;
+        IEnumerable<IDevice> IRoomStatusMessage.Devices => Devices;
 
         public List<TemperatureJob> Jobs { get; set; } = new List<TemperatureJob>();
-        IEnumerable<TemperatureJob> IRoomStatusMessage.Jobs => this.Jobs;
+        IEnumerable<TemperatureJob> IRoomStatusMessage.Jobs => Jobs;
 
         public List<Requirements> Events { get; set; } = new List<Requirements>();
-        IEnumerable<Requirements> IRoomStatusMessage.Events => this.Events;
+        IEnumerable<Requirements> IRoomStatusMessage.Events => Events;
 
-        public IRoomStatusMessage ToMessage() => this.Clone() as IRoomStatusMessage;
+        public IRoomStatusMessage ToMessage() => Clone() as IRoomStatusMessage;
 
         public RoomStatus Clone()
         {
@@ -39,15 +39,15 @@ namespace OfficeHVAC.Models
                 Volume = Volume,
                 Name = Name,
                 Parameters = Parameters.Clone(),
-                Devices = new HashSet<IDevice>(this.Devices.Select(device => device.Clone())),
-                Sensors = this.Sensors.Select(param => param.Clone() as ISensorActorRef).ToList(),
+                Devices = new HashSet<IDevice>(Devices.Select(device => device.Clone())),
+                Sensors = Sensors.Select(param => param.Clone() as ISensorActorRef).ToList(),
 
-                Events = this.Events,
-                Jobs = this.Jobs
+                Events = Events,
+                Jobs = Jobs
             };
         }
 
-        object ICloneable.Clone() => this.Clone();
+        object ICloneable.Clone() => Clone();
 
         public class Request { }
     }

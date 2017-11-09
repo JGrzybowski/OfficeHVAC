@@ -24,7 +24,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
                 RaisePropertyChanged(nameof(TimeText));
             }
         }
-        public string TimeText => this.Time.ToString("hh:mm:ss", null);
+        public string TimeText => Time.ToString("hh:mm:ss", null);
 
         public bool IsRunning => _timer.Enabled;
         
@@ -41,7 +41,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
             var timeSimulatorActorRef = actorSystem.ActorOf(TimeSimulatorActor.Props(controlledTimeSource), TimeSimulatorActorName);
 
             var bridgeProps = TimeSimulatorBridgeActor.Props(this, timeSimulatorActorRef);
-            this.Bridge = actorSystem.ActorOf(bridgeProps, "timeBridge");
+            Bridge = actorSystem.ActorOf(bridgeProps, "timeBridge");
 
             _timer = new Timer(timerRefreshRate) { AutoReset = true };
             _timer.Elapsed += TimerTick;

@@ -14,7 +14,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.ControlledTimeSource
         public void sets_new_value_of_Now()
         {
             //Arrange
-            var clock = new TimeSources.ControlledTimeSource(InitialTime, this.Sys.Scheduler as TestScheduler);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime, Sys.Scheduler as TestScheduler);
             var newInstant = InitialTime - Duration.FromHours(-15);
 
             //Act

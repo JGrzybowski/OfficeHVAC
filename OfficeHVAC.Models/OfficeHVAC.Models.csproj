@@ -73,7 +73,6 @@
     <Compile Include="IRange.cs" />
     <Compile Include="ISensor.cs" />
     <Compile Include="ISensorActorRef.cs" />
-    <Compile Include="SimulatorModels.cs" />
     <Compile Include="Subscription\ISubscription.cs" />
     <Compile Include="ObservableKeyedCollection.cs" />
     <Compile Include="ITemperatureModel.cs" />

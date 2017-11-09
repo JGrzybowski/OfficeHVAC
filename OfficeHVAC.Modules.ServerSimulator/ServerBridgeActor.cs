@@ -12,7 +12,7 @@ namespace OfficeHVAC.Modules.ServerSimulator
 
         public ServerBridgeActor(ServerLogViewModel viewModel, Props serverActorProps) : base(viewModel)
         {
-            this.ServerActor = Context.ActorOf(serverActorProps, "Logger");
+            ServerActor = Context.ActorOf(serverActorProps, "Logger");
 
             Receive<RoomAvaliabilityMessage>(msg => ViewModel.Log($"Room {Sender.Path} is avaliable."));
 

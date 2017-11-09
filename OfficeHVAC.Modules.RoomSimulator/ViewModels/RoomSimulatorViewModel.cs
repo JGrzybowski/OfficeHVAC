@@ -36,14 +36,15 @@ namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
         }
 
         public ICommand InitializeCommand { get; }
+        
         // Constructor
         public RoomSimulatorViewModel(IBridgeRoomActorPropsFactory bridgeRoomActorPropsFactory, ActorSystem actorSystem)
         {
-            this.LocalActorSystem = actorSystem;
+            LocalActorSystem = actorSystem;
 
-            this.BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
-            this.BridgeRoomActorPropsFactory.ViewModel = this;
-            this.BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.RoomName = "Room101";
+            BridgeRoomActorPropsFactory = bridgeRoomActorPropsFactory;
+            BridgeRoomActorPropsFactory.ViewModel = this;
+            BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.RoomName = "Room101";
 
             //IncreaseCommand = new DelegateCommand(
             //        () => BridgeActor.Tell(new ChangeTemperature(1)),
@@ -64,22 +65,22 @@ namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
             IsConnected = true;
             try
             {
-                var bridgeProps = this.BridgeRoomActorPropsFactory.Props();
+                var bridgeProps = BridgeRoomActorPropsFactory.Props();
                 var bridgeActorName = $"{BridgeRoomActorPropsFactory.RoomSimulatorActorPropsFactory.RoomName}-{BridgeActorNamePostxix}";
-                this.BridgeActor = this.LocalActorSystem.ActorOf(bridgeProps, bridgeActorName);
+                BridgeActor = LocalActorSystem.ActorOf(bridgeProps, bridgeActorName);
             }
             catch (Exception)
             {
-                this.IsConnected = false;
-                this.LocalActorSystem = null;
+                IsConnected = false;
+                LocalActorSystem = null;
             }
         }
 
         public async Task ShutdownSimulator()
         {
             BridgeActor.Tell(PoisonPill.Instance);
-            this.BridgeActor = null;
-            this.IsConnected = false;
+            BridgeActor = null;
+            IsConnected = false;
         }
     }
 }

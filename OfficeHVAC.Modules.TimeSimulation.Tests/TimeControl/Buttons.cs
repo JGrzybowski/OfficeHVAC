@@ -18,7 +18,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+                var vm = new TimeControlViewModel(timeSourceMock, Sys);
 
                 //Act
                 vm.ToggleTimer();
@@ -32,7 +32,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+                var vm = new TimeControlViewModel(timeSourceMock, Sys);
 
                 //Act
                 vm.ToggleTimer();
@@ -50,7 +50,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
                 PropertyChangedEventArgs notificationArgs = null;
 
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+                var vm = new TimeControlViewModel(timeSourceMock, Sys);
 
                 vm.PropertyChanged += (sender, args) =>
                 {
@@ -75,7 +75,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
                 PropertyChangedEventArgs notificationArgs = null;
 
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+                var vm = new TimeControlViewModel(timeSourceMock, Sys);
                 vm.ToggleTimer();
 
                 vm.PropertyChanged += (sender, args) =>
@@ -101,7 +101,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+                var vm = new TimeControlViewModel(timeSourceMock, Sys);
 
                 //Act
                 vm.AddMinutes(5);
@@ -118,7 +118,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
                 PropertyChangedEventArgs notificationArgs = null;
 
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+                var vm = new TimeControlViewModel(timeSourceMock, Sys);
                 vm.PropertyChanged += (sender, args) =>
                 {
                     UI_notified = true;
@@ -143,7 +143,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+                var vm = new TimeControlViewModel(timeSourceMock, Sys);
 
                 //Act
                 vm.TickManually();
@@ -161,7 +161,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
                 PropertyChangedEventArgs notificationArgs = null;
 
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+                var vm = new TimeControlViewModel(timeSourceMock, Sys);
                 vm.PropertyChanged += (sender, args) =>
                 {
                     UI_notified = true;

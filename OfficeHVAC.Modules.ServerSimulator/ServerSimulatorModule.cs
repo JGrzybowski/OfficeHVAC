@@ -22,7 +22,7 @@ namespace OfficeHVAC.Modules.ServerSimulator
         //         which was defined on the MainWindow in the HelloWorld project.
         public void Initialize()
         {
-            _regionManager.RegisterViewWithRegion("ServerLogRegion", typeof(OfficeHVAC.Modules.ServerSimulator.Views.ServerLog));
+            _regionManager.RegisterViewWithRegion("ServerLogRegion", typeof(Views.ServerLog));
         }
 
         public static void InitializeDependencies(ContainerBuilder containerBuilder)

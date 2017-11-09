@@ -22,15 +22,13 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Views
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            var dc = DataContext as MainWindowViewModel;
-            if (dc != null)
+            if (DataContext is MainWindowViewModel dc)
                 dc.IsSimulatorRunning = true;
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            var dc = DataContext as MainWindowViewModel;
-            if (dc != null)
+            if (DataContext is MainWindowViewModel dc)
                 dc.IsSimulatorRunning = false;
         }
         

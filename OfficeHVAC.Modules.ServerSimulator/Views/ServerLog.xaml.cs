@@ -8,7 +8,7 @@ namespace OfficeHVAC.Modules.ServerSimulator.Views
     /// </summary>
     public partial class ServerLog : UserControl
     {
-        protected IServerLogViewModel ViewModel => this.DataContext as IServerLogViewModel;
+        protected IServerLogViewModel ViewModel => DataContext as IServerLogViewModel;
         public ServerLog()
         {
             InitializeComponent();

@@ -26,20 +26,20 @@ namespace OfficeHVAC.Modules.TimeSimulation
             Receive<TickClockMessage>(msg =>
             {
                 var t = TimeSource.Now;
-                this.TimeSource.UpdateClock();
+                TimeSource.UpdateClock();
                 NotifyAboutTimeChange(t);
             });
 
             Receive<AddMinutesMessage>(msg =>
             {
                 var t = TimeSource.Now;
-                this.TimeSource.AddMinutes(msg.Minutes);
+                TimeSource.AddMinutes(msg.Minutes);
                 NotifyAboutTimeChange(t);
             });
             
             Receive<SetSpeedMessage>(msg =>
             {
-                this.TimeSource.Speed = msg.Speed;
+                TimeSource.Speed = msg.Speed;
                 Sender.Tell(new SpeedUpdatedMessage(TimeSource.Speed));
             });
         }
@@ -48,7 +48,7 @@ namespace OfficeHVAC.Modules.TimeSimulation
         {
             var timeDelta = TimeSource.Now - oldInstant;
             var timeMsg = new TimeChangedMessage(timeDelta, TimeSource.Now);
-            this.TimeUpdateSubscription.SendToAllSubscribers(timeMsg, Self);
+            TimeUpdateSubscription.SendToAllSubscribers(timeMsg, Self);
         }
 
         public static Props Props(IControlledTimeSource timeSource) =>
