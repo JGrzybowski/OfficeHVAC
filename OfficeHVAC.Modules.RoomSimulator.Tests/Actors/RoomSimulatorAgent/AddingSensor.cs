@@ -11,7 +11,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
     public class AddingSensor : TestKit
     {
         private const string TestRoomName = "Room 101";
-        private const float TemperatureInRoom = 20f;
 
         private Props RoomActorProps() =>
             Props.Create(() => new RoomSimulator.Actors.RoomSimulatorActor(

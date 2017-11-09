@@ -14,7 +14,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
         private readonly Timer timer;
         public IActorRef Bridge { get; }
 
-        private Instant time = new Instant();
+        private Instant time;
         public Instant Time
         {
             get => time;

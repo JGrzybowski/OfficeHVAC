@@ -56,11 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActorPaths\IActorPathBuilder.cs" />
-    <Compile Include="ActorPaths\IRemoteActorPathBuilder.cs" />
-    <Compile Include="ActorPaths\RemoteActorPathBuilder.cs" />
-    <Compile Include="Configs\RemoteConfigBuilder.cs" />
-    <Compile Include="Configs\IConfigBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Propses\IPropsFactory.cs" />
     <Compile Include="TimeSources\ITimeSourceFactory.cs" />
