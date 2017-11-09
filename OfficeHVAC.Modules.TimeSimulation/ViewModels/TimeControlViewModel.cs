@@ -11,10 +11,10 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
     {
         public const string TimeSimulatorActorName = "Clock";
 
-        private readonly Timer _timer;
+        private readonly Timer timer;
         public IActorRef Bridge { get; }
 
-        private Instant time = new Instant();
+        private Instant time;
         public Instant Time
         {
             get => time;
@@ -24,9 +24,9 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
                 RaisePropertyChanged(nameof(TimeText));
             }
         }
-        public string TimeText => this.Time.ToString("hh:mm:ss", null);
+        public string TimeText => Time.ToString("hh:mm:ss", null);
 
-        public bool IsRunning => _timer.Enabled;
+        public bool IsRunning => timer.Enabled;
         
         private double speed = 10;
         public double Speed
@@ -41,20 +41,20 @@ namespace OfficeHVAC.Modules.TimeSimulation.ViewModels
             var timeSimulatorActorRef = actorSystem.ActorOf(TimeSimulatorActor.Props(controlledTimeSource), TimeSimulatorActorName);
 
             var bridgeProps = TimeSimulatorBridgeActor.Props(this, timeSimulatorActorRef);
-            this.Bridge = actorSystem.ActorOf(bridgeProps, "timeBridge");
+            Bridge = actorSystem.ActorOf(bridgeProps, "timeBridge");
 
-            _timer = new Timer(timerRefreshRate) { AutoReset = true };
-            _timer.Elapsed += TimerTick;
+            timer = new Timer(timerRefreshRate) { AutoReset = true };
+            timer.Elapsed += TimerTick;
         }
 
         public void TimerTick(object sender, ElapsedEventArgs elapsedEventArgs) => TickManually();
 
         public void ToggleTimer()
         {
-            if (_timer.Enabled)
-                _timer.Stop();
+            if (timer.Enabled)
+                timer.Stop();
             else
-                _timer.Start();
+                timer.Start();
 
             RaisePropertyChanged(nameof(IsRunning));
         }

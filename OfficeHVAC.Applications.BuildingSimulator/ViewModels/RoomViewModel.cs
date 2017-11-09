@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Akka.Actor;
-using Akka.Actor.Dsl;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels

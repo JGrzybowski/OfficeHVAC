@@ -1,5 +1,3 @@
-using System;
-
 namespace OfficeHVAC.Applications.BuildingSimulator.Actors {
     public class UpdateCompanyMessage
     {

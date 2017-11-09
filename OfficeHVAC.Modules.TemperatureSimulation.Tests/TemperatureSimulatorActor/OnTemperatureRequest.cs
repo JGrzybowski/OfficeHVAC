@@ -1,5 +1,4 @@
 ﻿using Akka.Actor;
-using Akka.IO.Buffers;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using NSubstitute;
@@ -11,7 +10,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
 {
     public class OnTemperatureRequest : TestKit
     {
-        private string blackHoleAddress;
+        private readonly string blackHoleAddress;
 
         public OnTemperatureRequest()
         {

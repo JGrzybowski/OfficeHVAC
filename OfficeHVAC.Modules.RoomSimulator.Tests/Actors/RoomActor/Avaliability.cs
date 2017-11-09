@@ -1,6 +1,5 @@
 ﻿using Akka.Actor;
 using Akka.TestKit.Xunit2;
-using NSubstitute;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using Shouldly;
@@ -11,7 +10,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
     public class Avaliability : TestKit
     {
         private const string TestRoomName = "Room 101";
-        private const float TemperatureInRoom = 20f;
 
         private Props RoomActorProps(ActorPath companyActorPath) =>
             Props.Create(() => new RoomSimulator.Actors.RoomActor(

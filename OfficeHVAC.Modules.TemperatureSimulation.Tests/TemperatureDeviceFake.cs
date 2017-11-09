@@ -35,7 +35,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
 
         public double CalculatePowerConsumption(TemperatureModeType modeType, Duration time) => CalculatePowerConsumptionFunction(modeType, time);
 
-        IEnumerable<ITemperatureMode> ITemperatureDeviceDefinition.Modes => this.Modes;
+        IEnumerable<ITemperatureMode> ITemperatureDeviceDefinition.Modes => Modes;
 
         public IDevice Clone() => new TemperatureDeviceFake()
         {

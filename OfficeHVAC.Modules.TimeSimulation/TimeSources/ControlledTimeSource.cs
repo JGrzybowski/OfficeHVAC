@@ -9,28 +9,28 @@ namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
     {
         private static readonly long TicksInSecond = Duration.FromSeconds(1).BclCompatibleTicks;
         
-        private readonly FakeClock _internalClock;
+        private readonly FakeClock internalClock;
         private readonly TestScheduler scheduler;
 
-        private double _speed = 1;
+        private double speed = 1;
         public double Speed
         {
-            get { return _speed; }
+            get => speed;
             set
             {
                 if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(value), value, "Speed cannot have negative value");
-                _speed = value;
+                speed = value;
             }
         }
 
-        public Instant Now => _internalClock.GetCurrentInstant();
+        public Instant Now => internalClock.GetCurrentInstant();
 
         public ControlledTimeSource(Instant initial, TestScheduler scheduler)
         {
-            _internalClock = new FakeClock(initial);
+            internalClock = new FakeClock(initial);
             this.scheduler = scheduler;
-            this.Reset(initial);
+            Reset(initial);
         }
 
         public void AddHours(int hours)      => AdvanceClock(Duration.FromHours(hours));
@@ -45,13 +45,13 @@ namespace OfficeHVAC.Modules.TimeSimulation.TimeSources
 
         private void AdvanceClock(Duration duration)
         {
-            _internalClock.Advance(duration);
+            internalClock.Advance(duration);
             scheduler?.AdvanceTo(Now.ToDateTimeOffset());
         } 
 
         public void Reset(Instant instant)
         {
-            _internalClock.Reset(instant);
+            internalClock.Reset(instant);
             scheduler?.AdvanceTo(Now.ToDateTimeOffset());
         }
     }

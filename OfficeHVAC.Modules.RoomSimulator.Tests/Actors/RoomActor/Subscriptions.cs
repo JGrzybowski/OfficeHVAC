@@ -1,12 +1,9 @@
 ﻿using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
-using NSubstitute;
-using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using Shouldly;
 using System;
-using Akka.TestKit;
 using OfficeHVAC.Models.Subscription;
 using Xunit;
 
@@ -78,7 +75,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomActor
         public void does_not_send_status_update_info_to_unsubscribed_actors_when_recieving_update_request()
         {
             //Arrange
-            var actor = this.ActorOfAsTestActorRef<RoomSimulator.Actors.RoomActor>(RoomActorProps());
+            var actor = ActorOfAsTestActorRef<RoomSimulator.Actors.RoomActor>(RoomActorProps());
             actor.Tell(new SubscribeMessage(TestActor));
             ExpectMsg<IRoomStatusMessage>();
             actor.Tell(new UnsubscribeMessage(TestActor));

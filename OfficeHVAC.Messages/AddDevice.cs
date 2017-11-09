@@ -1,10 +1,4 @@
-﻿using OfficeHVAC.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OfficeHVAC.Models.Devices;
+﻿using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Messages
 {

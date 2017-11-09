@@ -15,22 +15,15 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Views
             PropertiesEditor.HidePropertiesCollection.Add(nameof(ITreeElement.SubItems));
         }
 
-        //private void treeviewitem_AfterItemEdit(object sender, EditModeChangeEventArgs e)
-        //{
-        //    (e.Source as ITreeElement).Name = e.NewValue.ToString();
-        //}
-
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            var dc = DataContext as MainWindowViewModel;
-            if (dc != null)
+            if (DataContext is MainWindowViewModel dc)
                 dc.IsSimulatorRunning = true;
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            var dc = DataContext as MainWindowViewModel;
-            if (dc != null)
+            if (DataContext is MainWindowViewModel dc)
                 dc.IsSimulatorRunning = false;
         }
         

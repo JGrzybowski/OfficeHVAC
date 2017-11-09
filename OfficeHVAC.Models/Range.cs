@@ -17,7 +17,7 @@ namespace OfficeHVAC.Models
 
         public T Min
         {
-            get { return min; }
+            get => min;
             set
             {
                 if (value.IsLessThan(max))
@@ -29,7 +29,7 @@ namespace OfficeHVAC.Models
 
         public T Max
         {
-            get { return max; }
+            get => max;
             set
             {
                 if (value.IsGreaterThan(min))

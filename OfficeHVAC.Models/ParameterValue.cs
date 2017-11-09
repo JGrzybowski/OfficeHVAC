@@ -16,7 +16,7 @@ namespace OfficeHVAC.Models
 
         public object Value { get; set; }
 
-        public IParameterValueMessage ToMessage() => this.Clone() as IParameterValueMessage;
+        public IParameterValueMessage ToMessage() => Clone() as IParameterValueMessage;
 
         public object Clone()
         {
@@ -24,7 +24,7 @@ namespace OfficeHVAC.Models
             {
                 ParameterType = ParameterType,
             };
-            clone.Value = Value.GetType().IsValueType ? this.Value : (Value as ICloneable).Clone();
+            clone.Value = Value.GetType().IsValueType ? Value : (Value as ICloneable)?.Clone();
 
             return clone;
         }

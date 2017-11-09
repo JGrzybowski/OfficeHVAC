@@ -14,7 +14,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.ControlledTimeSource
         public void does_not_change_Now_value_when_speed_is_set_to_0()
         {
             //Arrange
-            var clock = new TimeSources.ControlledTimeSource(InitialTime, this.Sys.Scheduler as TestScheduler){ Speed = 0 };
+            var clock = new TimeSources.ControlledTimeSource(InitialTime, Sys.Scheduler as TestScheduler){ Speed = 0 };
 
             //Act
             clock.UpdateClock();
@@ -30,7 +30,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.ControlledTimeSource
         public void changes_Now_value_accoding_to_speed_value(double speed)
         {
             //Arrange
-            var clock = new TimeSources.ControlledTimeSource(InitialTime, this.Sys.Scheduler as TestScheduler){ Speed = speed };
+            var clock = new TimeSources.ControlledTimeSource(InitialTime, Sys.Scheduler as TestScheduler){ Speed = speed };
 
             //Act
             clock.UpdateClock();

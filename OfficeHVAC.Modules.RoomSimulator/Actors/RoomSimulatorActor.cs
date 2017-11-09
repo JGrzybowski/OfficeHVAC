@@ -2,10 +2,7 @@
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Modules.TemperatureSimulation.Actors;
-using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using System;
-using System.Linq;
-using System.Windows.Navigation;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 using OfficeHVAC.Modules.TimeSimulation.Messages;
 
@@ -13,10 +10,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
     public class RoomSimulatorActor : RoomActor
     {
-        private ICancelable Scheduler { get; set; }
-
-        private readonly ITemperatureSimulatorFactory temperatureSimulatorFactory;
-
         public RoomSimulatorActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath)
             : this(initialStatus, companySupervisorActorPath.ToStringWithoutAddress()) { }
 
@@ -29,14 +22,14 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 //                SensorType.Temperature,
 //                tempController));
 
-            this.Receive<ChangeTemperature>(
+            Receive<ChangeTemperature>(
                 msg => Status.Parameters[SensorType.Temperature].Value = Convert.ToDouble(Status.Parameters[SensorType.Temperature].Value) + msg.DeltaT,
                 msg => Status.Parameters.Contains(SensorType.Temperature));
 
             Receive<AddTemperatureSensorMessage>(
                 msg =>
                 {
-                    var props = PrepareTemperatureSimulatorActorProps(Status, msg.TimeActorPath, msg.TemperatureParamerersActorPath);
+                    var props = PrepareTemperatureSimulatorActorProps(msg.TimeActorPath, msg.TemperatureParamerersActorPath);
                     var tSim = Context.ActorOf(props, "temperatureSimulator");
                     AddSensor(tSim, SensorType.Temperature, msg.SensorId);
                     Sender.Tell(tSim);
@@ -71,12 +64,9 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             sensorRef.Tell(GenerateRoomStatus());
         }
 
-        protected Props PrepareTemperatureSimulatorActorProps(RoomStatus initialStatus, string timeActorPath, string tempActorPath)
+        protected Props PrepareTemperatureSimulatorActorProps(string timeActorPath, string tempActorPath)
         {
-            if (initialStatus.Parameters.Contains(SensorType.Temperature))
-                this.temperatureSimulatorFactory.InitialTemperature = Convert.ToDouble(initialStatus.Parameters[SensorType.Temperature].Value);
-
-            var props = TemperatureSimulatorActor.Props(this.Status, timeActorPath, tempActorPath);
+            var props = TemperatureSimulatorActor.Props(Status, timeActorPath, tempActorPath);
             return props;
         }
 

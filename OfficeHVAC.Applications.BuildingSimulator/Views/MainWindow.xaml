@@ -6,11 +6,15 @@
                          xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
                          xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
                          xmlns:views="clr-namespace:OfficeHVAC.Modules.TimeSimulation.Views;assembly=OfficeHVAC.Modules.TimeSimulation"
+                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                         xmlns:viewModels="clr-namespace:OfficeHVAC.Applications.BuildingSimulator.ViewModels"
+                         mc:Ignorable="d"
                          syncfusionskin:SfSkinManager.VisualStyle="Office2016White"
-                         Title="HVAC Simulator" Height="600" Width="800"
->
+                         Title="HVAC Simulator" Height="600" Width="800" 
+                         d:DataContext="{viewModels:MainWindowViewModel}">
     <DockPanel>
-        <syncfusion:Ribbon DockPanel.Dock="Top" Grid.ColumnSpan="2" VerticalAlignment="Top" >
+        <syncfusion:Ribbon DockPanel.Dock="Top" VerticalAlignment="Top" >
             <syncfusion:RibbonTab Caption="Building" DataContext="{Binding Building}">
                 <syncfusion:RibbonBar Header="Company">
                     <syncfusion:RibbonButton Label="+Company" SizeForm="Small" Command="{Binding AddCompanyCommand}"/>
@@ -51,7 +55,7 @@
 
             <syncfusion:TreeViewAdv x:Name="Tree" ItemsSource="{Binding Building.Companies}" SelectedTreeItem="{Binding Building.SelectedItem}">
                 <syncfusion:TreeViewAdv.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding SubItems}" >
+                    <HierarchicalDataTemplate ItemsSource="{Binding SubItems}" DataType="viewModels:ITreeElement">
                         <TextBlock Text="{Binding Name, Mode=TwoWay}" />
                     </HierarchicalDataTemplate>
                 </syncfusion:TreeViewAdv.ItemTemplate>

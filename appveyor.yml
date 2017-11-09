@@ -1,0 +1,19 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+install:
+- cmd: >-
+    nuget sources Add -Name "SyncfusionNuGet" -Source http://nuget.syncfusion.com/wpf
+
+    nuget restore
+build:
+  project: OfficeHVAC.sln
+  verbosity: minimal
+test_script:
+- cmd: >-
+    if exist .\OfficeHVAC_coverage.xml del .\OfficeHVAC_coverage.xml
+
+    .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:".\OfficeHVAC.Models.Tests\bin\Debug\OfficeHVAC.Models.Tests.dll .\OfficeHVAC.Modules.TemperatureSimulation.Tests\bin\Debug\OfficeHVAC.Modules.TemperatureSimulation.Tests.dll .\OfficeHVAC.Modules.TimeSimulation.Tests\bin\Debug\OfficeHVAC.Modules.TimeSimulation.Tests.dll .\OfficeHVAC.Modules.RoomSimulator.Tests\bin\Debug\OfficeHVAC.Modules.RoomSimulator.Tests.dll -noshadow -appveyor" -filter:"+[OfficeHVAC*]* -[OfficeHVAC.*.Tests]* -[OfficeHVAC*]*.Properties -[OfficeHVAC*]*.*Module -[OfficeHVAC*]*.*Window -[OfficeHVAC*]*.App"  -excludebyfile:"*\*Designer.cs;*\*.xaml;*\*.xaml.cs" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -skipautoprops -output:.\OfficeHVAC_coverage.xml -mergeoutput
+
+    C:\Python35-x64\python.exe -m pip install codecov
+
+    C:\Python35-x64\Scripts\codecov -f "OfficeHVAC_coverage.xml" -X gcov

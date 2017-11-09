@@ -1,11 +1,7 @@
 ﻿using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
-using NodaTime;
-using NSubstitute;
 using OfficeHVAC.Models;
-using OfficeHVAC.Modules.TemperatureSimulation;
-using OfficeHVAC.Modules.TemperatureSimulation.Factories;
 using Shouldly;
 using Xunit;
 
@@ -15,18 +11,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
     {
         private const string TestRoomName = "Room 101";
         private const float TemperatureInRoom = 20f;
-
-        private static ITemperatureSimulatorFactory GenerateTemperatureSimulatorFake()
-        {
-            var simulatorFake = Substitute.For<ITemperatureSimulator>();
-            simulatorFake.ChangeTemperature(Arg.Any<IRoomStatusMessage>(), Arg.Any<Duration>())
-                .Returns(TemperatureInRoom);
-
-            var factoryFake = Substitute.For<ITemperatureSimulatorFactory>();
-            factoryFake.TemperatureSimulator().Returns(simulatorFake);
-
-            return factoryFake;
-        }
 
         private Props RoomActorProps() =>
             RoomSimulator.Actors.RoomSimulatorActor.Props(

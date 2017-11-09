@@ -2,7 +2,6 @@
 using NodaTime;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Subscription;
-using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 using OfficeHVAC.Modules.TimeSimulation.Messages;
 using System;
 
@@ -11,32 +10,30 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
     public class TemperatureSimulatorActor : ReceiveActor
     {
         private IRoomStatusMessage roomStatus;
+        private readonly ITemperatureSimulator temperatureSimulator;
 
-        private ICanTell temperatureaParamsActorContact { get; set; }
-        
-        private IActorRef SubsciptionManager { get; set; }
-        
-        private ITemperatureSimulator temperatureSimulator { get; }
+        private readonly ICanTell temperatureParamsActorContact;
+        private readonly IActorRef subsciptionManager;
         
         private Duration Threshold { get; set; } = Duration.FromSeconds(5);
         private Duration ThresholdBuffer { get; set; } = Duration.Zero;
         private Instant LastSubscriptionTimestamp { get; set; } = Instant.MinValue;
         private Instant LastTimestamp { get; set; } = Instant.MinValue;
 
-        private bool receivedInitialTimestamp = false;
-        private bool receivedInitialTemperatureModel = false;
+        private bool receivedInitialTimestamp;
+        private bool receivedInitialTemperatureModel;
         private bool ReceivedInitialData => receivedInitialTimestamp && receivedInitialTemperatureModel;
         
         public TemperatureSimulatorActor(ITemperatureSimulator temperatureSimulator, string temperatureParamsActorPath)
         {
             this.temperatureSimulator = temperatureSimulator;
 
-            temperatureaParamsActorContact = Context.System.ActorSelection(temperatureParamsActorPath);
+            temperatureParamsActorContact = Context.System.ActorSelection(temperatureParamsActorPath);
 
-            SubsciptionManager = Context.ActorOf<SubscriptionActor>();
+            subsciptionManager = Context.ActorOf<SubscriptionActor>();
             
             Become(AwaitingInitialModel);
-            temperatureaParamsActorContact.Tell(new SubscribeMessage(Self), Self);
+            temperatureParamsActorContact.Tell(new SubscribeMessage(Self), Self);
         }
 
         private void AwaitingInitialModel()
@@ -58,8 +55,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                         Become(Processing);
                 });
             
-            Receive<SubscribeMessage>(message => SubsciptionManager.Forward(message));
-            Receive<UnsubscribeMessage>(message => SubsciptionManager.Forward(message));
+            Receive<SubscribeMessage>(message => subsciptionManager.Forward(message));
+            Receive<UnsubscribeMessage>(message => subsciptionManager.Forward(message));
         }
 
         private void Processing()
@@ -75,8 +72,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             
             Receive<ITemperatureModel>(model => temperatureSimulator.ReplaceTemperatureModel(model));
             
-            Receive<SubscribeMessage>(message => SubsciptionManager.Forward(message));
-            Receive<UnsubscribeMessage>(message => SubsciptionManager.Forward(message));
+            Receive<SubscribeMessage>(message => subsciptionManager.Forward(message));
+            Receive<UnsubscribeMessage>(message => subsciptionManager.Forward(message));
         }
 
         protected void AddTimeToBuffer(TimeChangedMessage msg)
@@ -90,7 +87,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             if (ThresholdBuffer > Threshold)
             {
                 var statusUpdateMessage = new ParameterValue(SensorType.Temperature, temperatureSimulator.Temperature);
-                SubsciptionManager.Tell(new SendToSubscribersMessage(statusUpdateMessage));
+                subsciptionManager.Tell(new SendToSubscribersMessage(statusUpdateMessage));
                 ThresholdBuffer = Duration.Zero;
             }
         }

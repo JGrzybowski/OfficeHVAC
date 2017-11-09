@@ -8,8 +8,8 @@
         {
             return new Sensor()
             {
-                Id = this.Id,
-                Type = this.Type
+                Id = Id,
+                Type = Type
             };
         }
     }

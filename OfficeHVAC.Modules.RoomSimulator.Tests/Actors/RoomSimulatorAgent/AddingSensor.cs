@@ -1,11 +1,9 @@
-﻿using System;
-using Akka.Actor;
+﻿using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Subscription;
-using Shouldly;
 using Xunit;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
@@ -13,7 +11,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.Actors.RoomSimulatorAgent
     public class AddingSensor : TestKit
     {
         private const string TestRoomName = "Room 101";
-        private const float TemperatureInRoom = 20f;
 
         private Props RoomActorProps() =>
             Props.Create(() => new RoomSimulator.Actors.RoomSimulatorActor(

@@ -9,7 +9,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Views
     /// </summary>
     public partial class TimeControl : UserControl
     {
-        private ITimeControlViewModel ViewModel => this.DataContext as ITimeControlViewModel;
+        private ITimeControlViewModel ViewModel => DataContext as ITimeControlViewModel;
 
         public TimeControl()
         {

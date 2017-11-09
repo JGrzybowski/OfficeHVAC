@@ -18,7 +18,7 @@ namespace OfficeHVAC.Models.Devices
                 TemperatureRange = new Range<double>(double.NegativeInfinity, double.PositiveInfinity)
             };
             Modes = new ModesCollection() { offMode };
-            this.SetActiveMode(TemperatureModeType.Off);
+            SetActiveMode(TemperatureModeType.Off);
         }
 
         public string Id { get; set; }
@@ -34,16 +34,16 @@ namespace OfficeHVAC.Models.Devices
         {
             TemperatureDevice clone = new TemperatureDevice
             {
-                Id = this.Id,
-                DesiredTemperature = this.DesiredTemperature,
-                Modes = new ModesCollection(this.Modes.Select(m => m.Clone())),
-                MaxPower = this.MaxPower
+                Id = Id,
+                DesiredTemperature = DesiredTemperature,
+                Modes = new ModesCollection(Modes.Select(m => m.Clone())),
+                MaxPower = MaxPower
             };
-            clone.SetActiveMode(this.ActiveMode.Type);
+            clone.SetActiveMode(ActiveMode.Type);
             return clone;
         }
 
-        public double EffectivePower => this.ActiveMode.CalculateEffectivePower(MaxPower);
+        public double EffectivePower => ActiveMode.CalculateEffectivePower(MaxPower);
 
         public double PowerConsumption => MaxPower * Math.Abs(EffectivePower);
 
@@ -63,8 +63,8 @@ namespace OfficeHVAC.Models.Devices
         public double DesiredTemperature { get; set; }
 
         public double CalculatePowerConsumption(TemperatureModeType modeType, Duration time) =>
-            this.Modes[modeType].CalculateEffectivePower(MaxPower) * time.ToTimeSpan().TotalSeconds;
+            Modes[modeType].CalculateEffectivePower(MaxPower) * time.ToTimeSpan().TotalSeconds;
 
-        IEnumerable<ITemperatureMode> ITemperatureDeviceDefinition.Modes => this.Modes;
+        IEnumerable<ITemperatureMode> ITemperatureDeviceDefinition.Modes => Modes;
     }
 }

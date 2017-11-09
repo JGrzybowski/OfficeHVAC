@@ -1,5 +1,4 @@
-﻿using System.CodeDom.Compiler;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Akka.Actor;
 using OfficeHVAC.Applications.BuildingSimulator.Actors;
 using OfficeHVAC.Models;
@@ -14,26 +13,25 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         
         private double airsSpecificHeat = 1005;   //  W / kg*C*s
         private double airsDensity = 1.2;         // kg / m^3 
+        
         private IActorRef actor;
+        private ITemperatureModel model = new SimpleTemperatureModel();
 
         public TemperatureSimulatorParamsViewModel(ActorSystem actorSystem)
         {
             actor = actorSystem.ActorOf<TemperatureModelActor>(SystemInfo.TempSimulatorModelActorName);
-            actor.Tell(Model);
+            actor.Tell(model);
             
             PropertyChanged += OnParamsChange; 
         }
-
-        private TemperatureModelParams ModelParams => new TemperatureModelParams(AirsSpecificHeat, AirsDensity);
-        private ITemperatureModel Model = new SimpleTemperatureModel();
 
         private void OnParamsChange(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(AirsDensity) && e.PropertyName != nameof(AirsSpecificHeat)) 
                 return;
             
-            Model = new SimpleTemperatureModel();
-            actor.Tell(Model);
+            model = new SimpleTemperatureModel();
+            actor.Tell(model);
         }
         
         public double AirsSpecificHeat

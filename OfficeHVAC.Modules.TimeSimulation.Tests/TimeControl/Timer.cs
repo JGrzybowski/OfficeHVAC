@@ -17,15 +17,15 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
             public void notifies_UI()
             {
                 //Arrange
-                bool UI_notified = false;
+                bool uiNotified = false;
                 PropertyChangedEventArgs notificationArgs = null;
 
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+                var vm = new TimeControlViewModel(timeSourceMock, Sys);
 
                 vm.PropertyChanged += (sender, args) =>
                 {
-                    UI_notified = true;
+                    uiNotified = true;
                     notificationArgs = args;
                 };
 
@@ -34,7 +34,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
                 Thread.Sleep(500);
 
                 //Assert
-                UI_notified.ShouldBe(true);
+                uiNotified.ShouldBe(true);
                 notificationArgs.ShouldNotBeNull();
                 notificationArgs?.PropertyName.ShouldBe(nameof(TimeControlViewModel.Speed));
             }
@@ -44,7 +44,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+                var vm = new TimeControlViewModel(timeSourceMock, Sys);
 
                 //Act
                 vm.Speed = 3;
@@ -62,7 +62,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
             {
                 //Arrange
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
-                var vm = new TimeControlViewModel(timeSourceMock, this.Sys);
+                var vm = new TimeControlViewModel(timeSourceMock, Sys);
 
                 //Act
                 vm.TimerTick(null, null);

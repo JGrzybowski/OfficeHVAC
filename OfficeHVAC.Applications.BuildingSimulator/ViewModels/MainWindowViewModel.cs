@@ -43,7 +43,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             var room = await company.AddRoom();
             room.Name = "Room 101";
             var sensor = await Building.AddTemperatureSensor(room);
-
+            
             //room = await company.AddRoom();
             //room.Name = "Room 102";
          

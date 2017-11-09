@@ -14,7 +14,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.ControlledTimeSource
         public void returns_initial_time_after_being_constructed()
         {
             //Arrange
-            var clock = new TimeSources.ControlledTimeSource(InitialTime, this.Sys.Scheduler as TestScheduler);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime, Sys.Scheduler as TestScheduler);
 
             //Assert
             clock.Now.ShouldBe(InitialTime);
@@ -24,7 +24,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.ControlledTimeSource
         public void sets_initial_speed_to_1()
         {
             //Arrange
-            var clock = new TimeSources.ControlledTimeSource(InitialTime, this.Sys.Scheduler as TestScheduler);
+            var clock = new TimeSources.ControlledTimeSource(InitialTime, Sys.Scheduler as TestScheduler);
 
             //Assert
             clock.Speed.ShouldBe(1);
