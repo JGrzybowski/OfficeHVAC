@@ -10,8 +10,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
     public class RoomSimulatorActor : RoomActor
     {
-        private ICancelable Scheduler { get; set; }
-
         public RoomSimulatorActor(RoomStatus initialStatus, ActorPath companySupervisorActorPath)
             : this(initialStatus, companySupervisorActorPath.ToStringWithoutAddress()) { }
 
