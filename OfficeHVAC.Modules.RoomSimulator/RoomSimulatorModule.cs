@@ -12,14 +12,14 @@ namespace OfficeHVAC.Modules.RoomSimulator
 {
     public class RoomSimulatorModule : Module, Prism.Modularity.IModule
     {
-        readonly IRegionManager _regionManager;
+        readonly IRegionManager regionManager;
 
         //TODO: 07.  Implement the module constructor to bring in required objects.
         //          When Prism loads the module it will instantiate this class using
         //          Autofac DI, Autofac will then inject a Region Manager instance.
         public RoomSimulatorModule(IRegionManager regionManager)
         {
-            _regionManager = regionManager;
+            this.regionManager = regionManager;
         }
 
         //TODO: 08. Implement the required Initialize method to provide an entry point
@@ -28,7 +28,7 @@ namespace OfficeHVAC.Modules.RoomSimulator
         //         which was defined on the MainWindow in the HelloWorld project.
         public void Initialize()
         {
-            _regionManager.RegisterViewWithRegion("RoomSim", typeof(Views.RoomSimulator));
+            regionManager.RegisterViewWithRegion("RoomSim", typeof(Views.RoomSimulator));
         }
 
         public static void InitializeDependencies(ContainerBuilder containerBuilder)

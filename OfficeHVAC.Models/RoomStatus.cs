@@ -29,7 +29,7 @@ namespace OfficeHVAC.Models
         public List<Requirements> Events { get; set; } = new List<Requirements>();
         IEnumerable<Requirements> IRoomStatusMessage.Events => Events;
 
-        public IRoomStatusMessage ToMessage() => Clone() as IRoomStatusMessage;
+        public IRoomStatusMessage ToMessage() => Clone();
 
         public RoomStatus Clone()
         {

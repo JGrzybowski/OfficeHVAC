@@ -11,21 +11,21 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
 {
     public class Constructor : TestKit
     {
-        private readonly ViewModels.IRoomViewModel _viewModel =
+        private readonly ViewModels.IRoomViewModel viewModel =
             Substitute.For<ViewModels.IRoomViewModel>();
 
-        private readonly Props _echoActorProps;
+        private readonly Props echoActorProps;
 
         public Constructor()
         {
-            _echoActorProps = EchoActor.Props(this, false);
+            echoActorProps = EchoActor.Props(this, false);
         }
         
         [Fact]
         public void creates_room_actor()
         {
             //Arrange & Act
-            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
+            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(viewModel, echoActorProps), "bridge");
             ExpectMsg<SubscribeMessage>();
             Thread.Sleep(500);
 

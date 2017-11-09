@@ -20,37 +20,37 @@ namespace OfficeHVAC.TestScenarios
 {
     public class Scenario1 : TestKit
     {
-        private IActorRef Hole;
+        private IActorRef hole;
 
-        private Instant Date;
+        private Instant date;
 
-        private IControlledTimeSource TimeSource;
-        private ITemperatureModel TemperatureModel;
+        private IControlledTimeSource timeSource;
+        private ITemperatureModel temperatureModel;
 
-        private TestActorRef<RoomSimulatorActor> RoomActorRef;
+        private TestActorRef<RoomSimulatorActor> roomActorRef;
 
         private IActorRef timeSimActorRef;         
         private IActorRef tempSimParamsActorRef;         
 
         public Scenario1() : base(@"akka.scheduler.implementation = ""Akka.TestKit.TestScheduler, Akka.TestKit""")
         {
-            Hole = ActorOf<BlackHoleActor>();
+            hole = ActorOf<BlackHoleActor>();
 
-            Date = Instant.FromDateTimeUtc(DateTime.UtcNow.AddDays(1).Date);
+            date = Instant.FromDateTimeUtc(DateTime.UtcNow.AddDays(1).Date);
             
             var testScheduler = Sys.Scheduler as TestScheduler;
-            TimeSource = new ControlledTimeSource(Date, testScheduler);
+            timeSource = new ControlledTimeSource(date, testScheduler);
 
-            TemperatureModel = new SimpleTemperatureModel();
+            temperatureModel = new SimpleTemperatureModel();
 
-            timeSimActorRef = Sys.ActorOf(TimeSimulatorActor.Props(TimeSource));
+            timeSimActorRef = Sys.ActorOf(TimeSimulatorActor.Props(timeSource));
         }
 
         [Fact]
         public void Passes()
         {
             //In the test room
-            var InitialStatus = new RoomStatus()
+            var initialStatus = new RoomStatus()
             {
                 Name = "Test Room",
                 Devices = new HashSet<IDevice>()
@@ -98,11 +98,11 @@ namespace OfficeHVAC.TestScenarios
             };
 
             //It's 7:30
-            TimeSource.Reset(At(7, 30));
+            timeSource.Reset(At(7, 30));
             //Initially it's 25'C in the room
-            InitialStatus.Parameters.Add(new ParameterValue(SensorType.Temperature, 25));
-            RoomActorRef = ActorOfAsTestActorRef(() =>
-                new RoomSimulatorActor(InitialStatus, Hole.Path));
+            initialStatus.Parameters.Add(new ParameterValue(SensorType.Temperature, 25));
+            roomActorRef = ActorOfAsTestActorRef(() =>
+                new RoomSimulatorActor(initialStatus, hole.Path));
             //There is a meeting at 10:30 we want to have 21'C by then
             var firstMeeting = SetMeeting(At(10, 30), Temperature(21));
 
@@ -148,7 +148,7 @@ namespace OfficeHVAC.TestScenarios
 
         private IRoomStatusMessage GetStatus()
         {
-            return RoomActorRef.UnderlyingActor.Status;
+            return roomActorRef.UnderlyingActor.Status;
             //RoomActorRef.Tell(new RoomStatus.Request());
             //var status = ExpectMsg<RoomStatus>();
             //return status;
@@ -162,28 +162,28 @@ namespace OfficeHVAC.TestScenarios
 
             var requirements = new Requirements(time, pars);
 
-            RoomActorRef.Tell(requirements);
+            roomActorRef.Tell(requirements);
             Thread.Sleep(2500);
             return requirements;
         }
 
         private void SetTime(int hours, int minutes)
         {
-            int repetitions = (int)(At(hours, minutes) - TimeSource.Now).TotalMinutes;
+            int repetitions = (int)(At(hours, minutes) - timeSource.Now).TotalMinutes;
 
             for (int i = 0; i < repetitions; i++)
             {
-                TimeSource.AddMinutes(1);
+                timeSource.AddMinutes(1);
                 Thread.Sleep(25);
 
-                var T = Convert.ToDouble(RoomActorRef.UnderlyingActor.Status.Parameters[SensorType.Temperature].Value);
-                Debug.WriteLine($"at {TimeSource.Now} T is {T}");
+                var T = Convert.ToDouble(roomActorRef.UnderlyingActor.Status.Parameters[SensorType.Temperature].Value);
+                Debug.WriteLine($"at {timeSource.Now} T is {T}");
             }
 
-            TimeSource.Reset(At(hours, minutes));
+            timeSource.Reset(At(hours, minutes));
         }
 
-        private Instant At(int hours, int minutes = 0, int seconds = 0) => Date
+        private Instant At(int hours, int minutes = 0, int seconds = 0) => date
                                                                            + Duration.FromHours(hours)
                                                                            + Duration.FromMinutes(minutes)
                                                                            + Duration.FromSeconds(seconds);

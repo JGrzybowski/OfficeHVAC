@@ -5,11 +5,11 @@ namespace OfficeHVAC.Factories.Configs
 {
     public class RemoteConfigBuilder : BindableBase, IConfigBuilder
     {
-        private int? _port;
+        private int? port;
         public int? Port
         {
-            get { return _port; }
-            set { SetProperty(ref _port, value); }
+            get => port;
+            set => SetProperty(ref port, value);
         }
         
         public Config Config()

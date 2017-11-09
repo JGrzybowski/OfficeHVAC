@@ -17,13 +17,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         public object SelectedItem
         {
             get => selectedItem;
-            set
-            {
-                SetProperty(ref selectedItem, value);
-                //RaisePropertyChanged(nameof(SelectedCompany));
-                //RaisePropertyChanged(nameof(SelectedRoom));
-                //RaisePropertyChanged(nameof(SelectedDevice));
-            }
+            set => SetProperty(ref selectedItem, value);
         }
 
         public CompanyViewModel SelectedCompany => SelectedItem as CompanyViewModel;

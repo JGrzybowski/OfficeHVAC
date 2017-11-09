@@ -10,7 +10,7 @@ namespace OfficeHVAC.Modules.TimeSimulation
     {
         private IControlledTimeSource TimeSource { get; }
 
-        private readonly Subscription TimeUpdateSubscription = new Subscription();
+        private readonly Subscription timeUpdateSubscription = new Subscription();
 
         public TimeSimulatorActor(IControlledTimeSource timeSource)
         {
@@ -18,10 +18,10 @@ namespace OfficeHVAC.Modules.TimeSimulation
 
             Receive<SubscribeMessage>(msg =>
             {
-                TimeUpdateSubscription.AddSubscriber(msg.Subscriber);
+                timeUpdateSubscription.AddSubscriber(msg.Subscriber);
                 msg.Subscriber.Tell(new TimeChangedMessage(Duration.Zero,TimeSource.Now));
             });
-            Receive<UnsubscribeMessage>(msg => TimeUpdateSubscription.RemoveSubscriber(msg.Subscriber));
+            Receive<UnsubscribeMessage>(msg => timeUpdateSubscription.RemoveSubscriber(msg.Subscriber));
 
             Receive<TickClockMessage>(msg =>
             {
@@ -48,7 +48,7 @@ namespace OfficeHVAC.Modules.TimeSimulation
         {
             var timeDelta = TimeSource.Now - oldInstant;
             var timeMsg = new TimeChangedMessage(timeDelta, TimeSource.Now);
-            TimeUpdateSubscription.SendToAllSubscribers(timeMsg, Self);
+            timeUpdateSubscription.SendToAllSubscribers(timeMsg, Self);
         }
 
         public static Props Props(IControlledTimeSource timeSource) =>

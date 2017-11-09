@@ -8,23 +8,23 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Actors
     {
         private ITemperatureModel model;
         
-        private IActorRef SubscriptionManager;
+        private IActorRef subscriptionManager;
         
         public TemperatureModelActor()
         {
-            SubscriptionManager = Context.ActorOf<SubscriptionActor>();
+            subscriptionManager = Context.ActorOf<SubscriptionActor>();
             
             Receive<SubscribeMessage>(msg =>
             {
-                SubscriptionManager.Tell(msg);
+                subscriptionManager.Tell(msg);
                 msg.Subscriber.Tell(model);
             });
             
-            Receive<UnsubscribeMessage>(msg => SubscriptionManager.Tell(msg));
+            Receive<UnsubscribeMessage>(msg => subscriptionManager.Tell(msg));
             Receive<ITemperatureModel>(msg =>
             {
                 model = msg;
-                SubscriptionManager.Tell(new SendToSubscribersMessage(model));
+                subscriptionManager.Tell(new SendToSubscribersMessage(model));
             });
         }
     }

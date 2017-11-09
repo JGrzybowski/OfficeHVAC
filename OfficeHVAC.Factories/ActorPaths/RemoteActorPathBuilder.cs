@@ -5,32 +5,32 @@ namespace OfficeHVAC.Factories.ActorPaths
 {
     public class RemoteActorPathBuilder : BindableBase, IRemoteActorPathBuilder
     {
-        private string _systemName = "OfficeHVAC";
+        private string systemName = "OfficeHVAC";
         public string SystemName
         {
-            get { return _systemName; }
-            set { SetProperty(ref _systemName, value); }
+            get => systemName;
+            set => SetProperty(ref systemName, value);
         }
 
-        private string _serverAddress;
+        private string serverAddress;
         public string ServerAddress
         {
-            get { return _serverAddress; }
-            set { SetProperty(ref _serverAddress, value); }
+            get => serverAddress;
+            set => SetProperty(ref serverAddress, value);
         }
 
-        private int? _serverPort;
+        private int? serverPort;
         public int? ServerPort
         {
-            get { return _serverPort; }
-            set { SetProperty(ref _serverPort, value); }
+            get => serverPort;
+            set => SetProperty(ref serverPort, value);
         }
 
-        private string _companyActorName;
+        private string companyActorName;
         public string CompanyActorName
         {
-            get { return _companyActorName; }
-            set { SetProperty(ref _companyActorName, value); }
+            get => companyActorName;
+            set => SetProperty(ref companyActorName, value);
         }
 
         public virtual ActorPath ActorPath()

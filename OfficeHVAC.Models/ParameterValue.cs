@@ -24,7 +24,7 @@ namespace OfficeHVAC.Models
             {
                 ParameterType = ParameterType,
             };
-            clone.Value = Value.GetType().IsValueType ? Value : (Value as ICloneable).Clone();
+            clone.Value = Value.GetType().IsValueType ? Value : (Value as ICloneable)?.Clone();
 
             return clone;
         }

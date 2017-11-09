@@ -11,16 +11,16 @@ namespace OfficeHVAC.Modules.TimeSimulation
 {
     public class TimeSimulationModule : Module, Prism.Modularity.IModule
     {
-        readonly IRegionManager _regionManager;
+        readonly IRegionManager regionManager;
 
         public TimeSimulationModule(IRegionManager regionManager)
         {
-            _regionManager = regionManager;
+            this.regionManager = regionManager;
         }
 
         public void Initialize()
         {
-            _regionManager.RegisterViewWithRegion("TimeSimulationRegion", typeof(TimeControl));
+            regionManager.RegisterViewWithRegion("TimeSimulationRegion", typeof(TimeControl));
         }
 
         public static void InitializeDependencies (ContainerBuilder containerBuilder)

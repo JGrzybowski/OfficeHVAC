@@ -21,7 +21,6 @@ namespace OfficeHVAC.Models
 
         protected override void RemoveItem(int index)
         {
-            TItem item = Items[index];
             base.RemoveItem(index);
             //FIX (NotifyCollectionChangedAction.Remove, item) throws strange exception
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));

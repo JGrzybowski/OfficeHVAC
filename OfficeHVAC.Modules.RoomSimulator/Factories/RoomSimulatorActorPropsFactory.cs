@@ -29,11 +29,11 @@ namespace OfficeHVAC.Modules.RoomSimulator.Factories
 
         public float Temperature { get; set; }
 
-        private string _roomName = "Room";
+        private string roomName = "Room";
         public string RoomName
         {
-            get { return _roomName; }
-            set { SetProperty(ref _roomName, value); }
+            get => roomName;
+            set => SetProperty(ref roomName, value);
         }
 
         public Props Props()

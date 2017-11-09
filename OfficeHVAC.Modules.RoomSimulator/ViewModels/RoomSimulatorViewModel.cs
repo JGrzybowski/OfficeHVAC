@@ -21,18 +21,18 @@ namespace OfficeHVAC.Modules.RoomSimulator.ViewModels
         public ActorSystem LocalActorSystem { get; set; }
 
         // Notifiable Properties 
-        private double _temperature;
+        private double temperature;
         public double Temperature
         {
-            get { return _temperature; }
-            set { SetProperty(ref _temperature, value); }
+            get => temperature;
+            set => SetProperty(ref temperature, value);
         }
 
-        private bool _isConnected;
+        private bool isConnected;
         public bool IsConnected
         {
-            get { return _isConnected; }
-            private set { SetProperty(ref _isConnected, value); }
+            get => isConnected;
+            private set => SetProperty(ref isConnected, value);
         }
 
         public ICommand InitializeCommand { get; }

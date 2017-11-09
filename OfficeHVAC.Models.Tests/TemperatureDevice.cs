@@ -86,10 +86,10 @@ namespace OfficeHVAC.Models.Tests
             device.SetActiveMode(workingModeFake.Type);
 
             //Act
-            var Peff = device.EffectivePower;
+            var p_eff = device.EffectivePower;
 
             //Assert
-            Peff.ShouldBe(750);
+            p_eff.ShouldBe(750);
             workingModeFake.Received(1).CalculateEffectivePower(1000);
         }
     }

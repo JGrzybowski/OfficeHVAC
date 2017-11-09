@@ -23,13 +23,13 @@ namespace OfficeHVAC.Modules.ServerSimulator.ViewModels
         // Actor System fields
         public IActorRef BridgeActor { get; private set; }
 
-        private bool _isConnected;
+        private bool isConnected;
         private readonly object _lock = new object();
 
         public bool IsConnected
         {
-            get { return _isConnected; }
-            private set { SetProperty(ref _isConnected, value); }
+            get => isConnected;
+            private set => SetProperty(ref isConnected, value);
         }
 
         public ICommand InitializeCommand { get; }

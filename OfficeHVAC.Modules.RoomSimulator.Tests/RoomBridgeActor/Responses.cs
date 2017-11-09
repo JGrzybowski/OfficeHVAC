@@ -13,20 +13,20 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
 {
     public class Responses : TestKit
     {
-        private readonly ViewModels.IRoomViewModel _viewModel = Substitute.For<ViewModels.IRoomViewModel>();
+        private readonly ViewModels.IRoomViewModel viewModel = Substitute.For<ViewModels.IRoomViewModel>();
 
-        private readonly Props _echoActorProps;
+        private readonly Props echoActorProps;
 
         public Responses()
         {
-            _echoActorProps = EchoActor.Props(this, false);
+            echoActorProps = EchoActor.Props(this, false);
         }
 
         [Fact]
         public void forwards_SetTemperature_message_to_RoomActor()
         {
             //Arrange
-            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
+            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(viewModel, echoActorProps), "bridge");
             ExpectMsg<SubscribeMessage>();
             var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
 
@@ -47,7 +47,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
         public void forwards_ChangeTemperature_message_to_RoomActor(float deltaT)
         {
             //Arrange
-            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel, _echoActorProps), "bridge");
+            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(viewModel, echoActorProps), "bridge");
             ExpectMsg<SubscribeMessage>();
             var roomActor = Sys.ActorSelection(bridge, "room").Anchor;
 
@@ -66,14 +66,14 @@ namespace OfficeHVAC.Modules.RoomSimulator.Tests.RoomBridgeActor
         public void updates_ViewModel_Temperature_when_recieved_RoomStatusMessage_with_temperature()
         {
             //Arrange
-            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(_viewModel, BlackHoleActor.Props), "bridge");
+            var bridge = ActorOf(() => new RoomSimulator.Actors.RoomBridgeActor(viewModel, BlackHoleActor.Props), "bridge");
 
             //Act
             bridge.Tell(GenerateRoomStatusMessage("Room 101", 26));
 
             //Assert
             Thread.Sleep(1000);
-            _viewModel.Temperature.ShouldBe(26);
+            viewModel.Temperature.ShouldBe(26);
         }
 
         private IRoomStatusMessage GenerateRoomStatusMessage(string roomName, double temperature) =>
