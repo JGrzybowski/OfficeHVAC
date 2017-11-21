@@ -1,10 +1,11 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
+using OfficeHVAC.Modules.RoomSimulator.Messages;
 using OfficeHVAC.Modules.TemperatureSimulation.Actors;
-using System;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 using OfficeHVAC.Modules.TimeSimulation.Messages;
+using System;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -45,6 +46,16 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 msg => msg.Now > Status.TimeStamp
             );
 
+            Receive<SetTemperature>(msg =>
+            {
+                UpdateParameter(new ParameterValue(SensorType.Temperature, msg.Temperature));
+            });
+
+            Receive<SetRoomVolume>(msg =>
+            {
+                Status.Volume = msg.Volume;
+                SendSubscribtionNewsletter();
+            });
             //this.Receive<SetDesiredTemperature>(message => {
             //    foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
             //        device.DesiredTemperature = message.DesiredTemperature;

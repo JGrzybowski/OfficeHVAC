@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Akka.Actor;
+using NodaTime;
 using OfficeHVAC.Models;
 using Prism.Mvvm;
 
@@ -24,6 +25,13 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels {
             get => sensorType;
             protected set => SetProperty(ref sensorType, value);
         }
+        
+        protected Instant timestamp;
+        public Instant Timestamp
+        {
+            get => timestamp;
+            set => SetProperty(ref timestamp, value);
+        }
 
         public IActorRef Actor { get; set; }
     }
@@ -37,5 +45,6 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels {
             get => paramValue;
             set => SetProperty(ref paramValue, value);
         }
+        public void PushParam(TParamValue value) => SetProperty(ref paramValue, value);
     }
 }

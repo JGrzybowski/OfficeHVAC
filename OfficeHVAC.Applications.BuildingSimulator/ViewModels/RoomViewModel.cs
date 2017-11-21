@@ -1,16 +1,21 @@
-﻿using OfficeHVAC.Models;
+﻿using Akka.Actor;
+using OfficeHVAC.Messages;
+using OfficeHVAC.Models;
+using OfficeHVAC.Modules.RoomSimulator.Messages;
+using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Akka.Actor;
-using OfficeHVAC.Modules.TemperatureSimulation.Messages;
+using OfficeHVAC.Applications.BuildingSimulator.Actors;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 {
     public class RoomViewModel : BindableBase, ITreeElement
     {
+        private readonly ActorSystem actorSystem;
+        
         public string Id { get; } = Guid.NewGuid().ToString();
 
         private string name;
@@ -20,7 +25,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             set => SetProperty(ref name, value);
         }
 
-        private RoomStatus status;
+        private RoomStatus status = new RoomStatus();
         public RoomStatus Status
         {
             get => status;
@@ -31,12 +36,31 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         public ObservableCollection<ITreeElement> Sensors { get; } = new ObservableCollection<ITreeElement>();
         public ObservableCollection<ITreeElement> SubItems { get; }
 
-        public double Temperature { get; set; } = 20.0;
-        public double Volume { get; set; } = 300;
+        public double Temperature
+        {
+            get => (double)(Status.Parameters.TryGet(SensorType.Temperature).Value);
+            set
+            {
+                Status.Parameters.TryGet(SensorType.Temperature).Value = value;
+                Actor.Tell(new SetTemperature(value));
+            }
+        }
+
+        public double Volume
+        {
+            get => Status.Volume;
+            set
+            {
+                Status.Volume = value;
+                Actor.Tell(new SetRoomVolume(value));
+            }
+        }
+        
         public IActorRef Actor { get; set; }
 
-        public RoomViewModel()
+        public RoomViewModel(ActorSystem actorSystem)
         {
+            this.actorSystem = actorSystem;
             SubItems = new ObservableCollection<ITreeElement>()
             {
                 new TreeElement(Sensors){Name = "Sensors"},
@@ -53,7 +77,9 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         public async Task AddTemperatureSensor(TemperatureSensorViewModel sensor, string timeSimulatorActorPath, string tempSimulatorModelActorPath)
         {
             var tempSensorActor = await Actor.Ask<IActorRef>(new AddTemperatureSensorMessage(timeSimulatorActorPath, tempSimulatorModelActorPath, sensor.Id));
-            sensor.Actor = tempSensorActor;
+            var bridgeActor = actorSystem.ActorOf(TemperatureSimulatorBridgeActor.Props(sensor, tempSensorActor));
+            
+            sensor.Actor = bridgeActor;
             AddSensor(sensor);
         }
     }

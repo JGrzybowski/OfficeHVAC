@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actors\DebuggableActor.cs" />
     <Compile Include="BridgeActor.cs" />
     <Compile Include="Devices\DeviceDefinition.cs" />
     <Compile Include="Devices\IMode.cs" />
@@ -73,6 +74,8 @@
     <Compile Include="IRange.cs" />
     <Compile Include="ISensor.cs" />
     <Compile Include="ISensorActorRef.cs" />
+    <Compile Include="Subscription\DebugSubscribeMessage.cs" />
+    <Compile Include="Subscription\DebugUnsubscribeMessage.cs" />
     <Compile Include="Subscription\ISubscription.cs" />
     <Compile Include="ObservableKeyedCollection.cs" />
     <Compile Include="ITemperatureModel.cs" />

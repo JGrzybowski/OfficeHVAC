@@ -2,10 +2,9 @@
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
-using System;
+using OfficeHVAC.Models.Subscription;
 using System.Collections.Generic;
 using System.Linq;
-using OfficeHVAC.Models.Subscription;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -92,13 +91,17 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected virtual void UpdateParameter(ParameterValue paramValue)
         {
-            Status.Parameters[paramValue.ParameterType].Value = paramValue.Value;
-            if (paramValue.ParameterType == SensorType.Temperature)
-            {
-                var temperature = Convert.ToDouble(paramValue.Value);
-                if (Jobs.Any() && Math.Abs(Jobs.First().DesiredTemperature - temperature) < StabilizationThreshold)
-                    ActivateTemperatureMode(TemperatureModeType.Stabilization, Jobs.First().DesiredTemperature);
-            }
+            if(Status.Parameters.Contains(paramValue.ParameterType))
+                Status.Parameters[paramValue.ParameterType].Value = paramValue.Value;
+            else 
+                Status.Parameters.Add(paramValue.Clone() as ParameterValue);
+
+            //if (paramValue.ParameterType == SensorType.Temperature)
+            //{
+            //    var temperature = Convert.ToDouble(paramValue.Value);
+            //    if (Jobs.Any() && Math.Abs(Jobs.First().DesiredTemperature - temperature) < StabilizationThreshold)
+            //        ActivateTemperatureMode(TemperatureModeType.Stabilization, Jobs.First().DesiredTemperature);
+            //}
             SendSubscribtionNewsletter();
         }
 

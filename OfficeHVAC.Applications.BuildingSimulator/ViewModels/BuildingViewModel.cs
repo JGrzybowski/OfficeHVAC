@@ -54,7 +54,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         {
             var companyActor = ActorSystem.ActorOf<CompanyActor>();
             
-            var companyVm = new CompanyViewModel
+            var companyVm = new CompanyViewModel(ActorSystem)
             {
                 Name = "NewCompany",
             };
