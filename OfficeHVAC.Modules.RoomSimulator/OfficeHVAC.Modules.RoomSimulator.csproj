@@ -140,6 +140,7 @@
   <ItemGroup>
     <Compile Include="Actors\RoomActor.cs" />
     <Compile Include="Actors\RoomSimulatorActor.cs" />
+    <Compile Include="Actors\TemperatureActuatorActor.cs" />
     <Compile Include="Messages\SetRoomVolume.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

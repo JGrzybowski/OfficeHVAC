@@ -6,9 +6,9 @@ using OfficeHVAC.Modules.TemperatureSimulation.Actors;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.Actors
 {
-    public class TemperatureSimulatorBridgeActor : BridgeActor<SensorViewModel<double>>
+    public class TemperatureSimulatorBridgeActor : BridgeActor<SensorViewModel<TemperatureSimulatorActor.Status,double>>
     {
-        public TemperatureSimulatorBridgeActor(SensorViewModel<double> viewModel, IActorRef actorRef) 
+        public TemperatureSimulatorBridgeActor(SensorViewModel<TemperatureSimulatorActor.Status,double> viewModel, IActorRef actorRef) 
             : base(viewModel, actorRef)
         {
             Receive<TemperatureSimulatorActor.Status>(msg => UpdateViewModel(msg));
@@ -17,8 +17,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Actors
 
         private void UpdateViewModel(TemperatureSimulatorActor.Status status)
         {
-            ViewModel.PushParam(status.Temperature);
-            ViewModel.Timestamp = status.LastTimestamp;
+            ViewModel.PushStatus(status);
         }
 
         public static Props Props(TemperatureSensorViewModel sensor, IActorRef tempSensorActor) => 

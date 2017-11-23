@@ -8,6 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using NodaTime;
 using OfficeHVAC.Applications.BuildingSimulator.Actors;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
@@ -35,6 +36,8 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         public ObservableCollection<ITreeElement> Devices { get; } = new ObservableCollection<ITreeElement>();
         public ObservableCollection<ITreeElement> Sensors { get; } = new ObservableCollection<ITreeElement>();
         public ObservableCollection<ITreeElement> SubItems { get; }
+
+        public Instant Timestamp => Status.TimeStamp;
 
         public double Temperature
         {
@@ -68,7 +71,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             };
         }
         
-        public void AddDevice(DeviceViewModel device) => Devices.Add(device);
+        public void AddActuator(SensorViewModel device) => Devices.Add(device);
         public void RemoveDevice(string id) => Devices.Remove(Devices.Single(dev => dev.Id == id));
 
         public void AddSensor(SensorViewModel sensor) => Sensors.Add(sensor);
@@ -81,6 +84,15 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             
             sensor.Actor = bridgeActor;
             AddSensor(sensor);
+        }
+
+        public async Task AddTemperatureActuator(TemperatureActuatorViewModel viewModel, string timeSimulatorActorPath, string tempSimulatorModelActorPath)
+        {
+            var temperatureActuatorActor = await Actor.Ask<IActorRef>(new AddTemperatureActuatorMessage(viewModel.Id));
+            var bridgeActor = actorSystem.ActorOf(TemperatureActuatorBridgeActor.Props(viewModel, temperatureActuatorActor));
+
+            viewModel.Actor = bridgeActor;
+            AddActuator(viewModel);
         }
     }
 }

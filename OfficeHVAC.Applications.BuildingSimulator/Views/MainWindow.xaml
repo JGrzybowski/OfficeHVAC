@@ -24,9 +24,10 @@
                     <syncfusion:RibbonButton Label="+Room"    SizeForm="Small" Command="{Binding AddRoomCommand}"/>
                     <syncfusion:RibbonButton Label="-Room"    SizeForm="Small" Command="{Binding RemoveRoomCommand}" />
                 </syncfusion:RibbonBar>
-                <syncfusion:RibbonBar Header="Devices">
-                    <syncfusion:RibbonButton Label="+Device"  SizeForm="Small" Command="{Binding AddDeviceCommand}"/>
-                    <syncfusion:RibbonButton Label="-Device"  SizeForm="Small" Command="{Binding RemoveDeviceCommand}" />
+                <syncfusion:RibbonBar Header="Actuators">
+                    <syncfusion:SplitButton Label="+Actuator" SizeForm="Small" >
+                        <syncfusion:DropDownMenuItem Header="Temperature" Command="{Binding AddTemperatureActuatorCommand}"/>
+                    </syncfusion:SplitButton>
                 </syncfusion:RibbonBar>
                 <syncfusion:RibbonBar Header="Sensors">
                     <syncfusion:SplitButton Label="+Sensor" SizeForm="Small" >

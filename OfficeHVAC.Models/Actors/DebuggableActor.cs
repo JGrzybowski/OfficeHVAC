@@ -15,7 +15,11 @@ namespace OfficeHVAC.Models.Actors
 
         protected void RegisterDebugSubscribers()
         {
-            Receive<DebugSubscribeMessage>(msg => DebugSubscriptionManager.Tell(new SubscribeMessage(msg.Subscriber)));
+            Receive<DebugSubscribeMessage>(msg =>
+            {
+                DebugSubscriptionManager.Tell(new SubscribeMessage(msg.Subscriber));
+                msg.Subscriber.Tell(GenerateInternalState());
+            });
             Receive<DebugUnsubscribeMessage>(msg => DebugSubscriptionManager.Tell(new UnsubscribeMessage(msg.Subscriber)));
         }
 

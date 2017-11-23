@@ -17,12 +17,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         public RoomSimulatorActor(RoomStatus initialStatus, string companySupervisorActorPath)
             : base(initialStatus, Context.System.ActorSelection(companySupervisorActorPath))
         {     
-//            var tempController = Context.ActorOf(JobScheduler.Props(models, initialStatus.TimeStamp));
-//            Controllers.Add(new SensorActorRef(
-//                Guid.NewGuid().ToString(),
-//                SensorType.Temperature,
-//                tempController));
-
             Receive<ChangeTemperature>(
                 msg => Status.Parameters[SensorType.Temperature].Value = Convert.ToDouble(Status.Parameters[SensorType.Temperature].Value) + msg.DeltaT,
                 msg => Status.Parameters.Contains(SensorType.Temperature));
@@ -35,6 +29,14 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                     AddSensor(tSim, SensorType.Temperature, msg.SensorId);
                     Sender.Tell(tSim);
                 });
+
+            Receive<AddTemperatureActuatorMessage>(msg =>
+            {
+                var actuatorProps = PrepareTemperatureActuatorProps();
+                var acuatorRef = Context.ActorOf(actuatorProps, "temperatureActuator");
+                AddActuator(acuatorRef, SensorType.Temperature, msg.Id);
+                Sender.Tell(acuatorRef);
+            });
             
             Receive<TimeChangedMessage>(
                 msg =>
@@ -46,26 +48,13 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 msg => msg.Now > Status.TimeStamp
             );
 
-            Receive<SetTemperature>(msg =>
-            {
-                UpdateParameter(new ParameterValue(SensorType.Temperature, msg.Temperature));
-            });
+            Receive<SetTemperature>(msg => UpdateParameter(new ParameterValue(SensorType.Temperature, msg.Temperature)));
 
             Receive<SetRoomVolume>(msg =>
             {
                 Status.Volume = msg.Volume;
                 SendSubscribtionNewsletter();
             });
-            //this.Receive<SetDesiredTemperature>(message => {
-            //    foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
-            //        device.DesiredTemperature = message.DesiredTemperature;
-            //});
-
-            //this.Receive<SetDesiredMode>(message =>
-            //{
-            //    foreach (ITemperatureDevice device in TemperatureSimulator.Devices)
-            //        device.SetActiveModeByName = message.DesiredMode;
-            //});
         }
 
         protected override void AddSensor(IActorRef sensorRef, SensorType sensorType, string sensorId)
@@ -75,20 +64,23 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             sensorRef.Tell(GenerateRoomStatus());
         }
 
-        protected Props PrepareTemperatureSimulatorActorProps(string timeActorPath, string tempActorPath)
+        protected override void AddActuator(IActorRef actuatorRef, SensorType actuatorType, string actuatorId)
         {
-            var props = TemperatureSimulatorActor.Props(Status, timeActorPath, tempActorPath);
-            return props;
+            base.AddActuator(actuatorRef, actuatorType, actuatorId);
+            actuatorRef.Tell(new TimeChangedMessage(Status.TimeStamp));
+            actuatorRef.Tell(GenerateRoomStatus());
         }
 
-        public static Props Props(RoomStatus initialStatus, string companySupervisorActorPath)
-        {
-            return Akka.Actor.Props.Create(() => new RoomSimulatorActor(initialStatus.Clone(), companySupervisorActorPath));
-        }
-        
-        public static Props Props(RoomStatus initialStatus, ActorPath companySupervisorActorPath)
-        {
-            return Akka.Actor.Props.Create(() => new RoomSimulatorActor(initialStatus.Clone(), companySupervisorActorPath));
-        }
+        protected Props PrepareTemperatureSimulatorActorProps(string timeActorPath, string tempActorPath) => 
+            TemperatureSimulatorActor.Props(Status, timeActorPath, tempActorPath);
+
+        protected Props PrepareTemperatureActuatorProps() => 
+            TemperatureActuatorActor.Props();
+
+        public static Props Props(RoomStatus initialStatus, string companySupervisorActorPath) => 
+            Akka.Actor.Props.Create(() => new RoomSimulatorActor(initialStatus.Clone(), companySupervisorActorPath));
+
+        public static Props Props(RoomStatus initialStatus, ActorPath companySupervisorActorPath) => 
+            Akka.Actor.Props.Create(() => new RoomSimulatorActor(initialStatus.Clone(), companySupervisorActorPath));
     }
 }

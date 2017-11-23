@@ -63,6 +63,7 @@
     <Compile Include="Actors\JobScheduler.cs" />
     <Compile Include="Actors\TemperatureSimulatorActor.cs" />
     <Compile Include="ITemperatureSimulator.cs" />
+    <Compile Include="Messages\AddTemperatureActuatorMessage.cs" />
     <Compile Include="Messages\AddTemperatureSensorMessage.cs" />
     <Compile Include="Messages\TemperatureModelRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

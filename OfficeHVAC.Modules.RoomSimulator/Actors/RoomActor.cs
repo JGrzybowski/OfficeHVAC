@@ -14,7 +14,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected HashSet<ISensorActorRef> Sensors { get; } = new HashSet<ISensorActorRef>();
 
-        protected HashSet<ISensorActorRef> Controllers { get; } = new HashSet<ISensorActorRef>();
+        protected HashSet<ISensorActorRef> Actuators { get; } = new HashSet<ISensorActorRef>();
 
         protected IActorRef SubscribersManager { get; private set; }
 
@@ -63,7 +63,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 //            Receive<Requirements>(message =>
 //            {
 //                Events.Add(message);
-//                Controllers.Single(s => s.Type == SensorType.Temperature).Actor.Tell(message);
+//                Actuators.Single(s => s.Type == SensorType.Temperature).Actor.Tell(message);
 //            });
 //
 //            Receive<TemperatureJob>(message =>
@@ -81,6 +81,13 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             var sensorRef = new SensorActorRef(sensorId, sensorType, sensorActorRef);
             Sensors.Add(sensorRef);
             sensorActorRef.Tell(new SubscribeMessage(Self)); 
+        }
+
+        protected virtual void AddActuator(IActorRef actuatorRef, SensorType actuatorType, string actuatorId)
+        {
+            var actuatorDeviceRef = new SensorActorRef(actuatorId, actuatorType, actuatorRef);
+            Actuators.Add(actuatorDeviceRef);
+            actuatorRef.Tell(new SubscribeMessage(Self)); 
         }
 
         protected virtual void SendSubscribtionNewsletter()

@@ -36,7 +36,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels {
         public IActorRef Actor { get; set; }
     }
     
-    public class SensorViewModel<TParamValue> : SensorViewModel 
+    public abstract class SensorViewModel<TSensorStatus, TParamValue> : SensorViewModel 
         where TParamValue : struct
     {
         protected TParamValue paramValue;
@@ -45,6 +45,8 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels {
             get => paramValue;
             set => SetProperty(ref paramValue, value);
         }
-        public void PushParam(TParamValue value) => SetProperty(ref paramValue, value);
+        public void PushParam(TParamValue value) => SetProperty(ref paramValue, value, nameof(ParamValue));
+
+        public abstract void PushStatus(TSensorStatus status);
     }
 }

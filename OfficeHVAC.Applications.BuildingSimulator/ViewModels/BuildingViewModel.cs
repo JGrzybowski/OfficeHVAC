@@ -108,17 +108,17 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
                 .ObservesProperty(() => SelectedItem);
         }
 
-        public ICommand AddDeviceCommand { get; set; }
-        public DeviceViewModel AddDevice(RoomViewModel room)
+        public ICommand AddTemperatureActuatorCommand { get; set; }
+        public async Task<TemperatureActuatorViewModel> AddTemperatureActuator(RoomViewModel room)
         {
-            var device = new DeviceViewModel {Name = "New Device"};
-            room.AddDevice(device);
-            return device;
+            var actuator = new TemperatureActuatorViewModel {Name = "New Device"};
+            await room.AddTemperatureActuator(actuator, SystemInfo.TimeSimulatorActorPath, SystemInfo.TempSimulatorModelActorPath);
+            return actuator;
         }
         private void InitializeAddDeviceCommand()
         {
-            AddDeviceCommand = new DelegateCommand(
-                    () => AddDevice(SelectedRoom),
+            AddTemperatureActuatorCommand = new DelegateCommand(
+                    () => AddTemperatureActuator(SelectedRoom),
                     () => RoomIsSelected
                 )
                 .ObservesProperty(() => SelectedItem);
