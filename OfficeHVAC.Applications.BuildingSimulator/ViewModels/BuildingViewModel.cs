@@ -118,8 +118,8 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         private void InitializeAddDeviceCommand()
         {
             AddTemperatureActuatorCommand = new DelegateCommand(
-                    () => AddTemperatureActuator(SelectedRoom),
-                    () => RoomIsSelected
+                    async () => await AddTemperatureActuator(SelectedRoom),
+                          () => RoomIsSelected
                 )
                 .ObservesProperty(() => SelectedItem);
         }

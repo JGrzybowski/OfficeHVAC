@@ -123,6 +123,7 @@
     <Compile Include="ChangeTemperature.cs" />
     <Compile Include="SensorAvaliableMessage.cs" />
     <Compile Include="SetTemperature.cs" />
+    <Compile Include="TimeChangedMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -76,7 +76,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             
             Receive<SubscribeMessage>(message => subsciptionManager.Forward(message));
             Receive<UnsubscribeMessage>(message => subsciptionManager.Forward(message));
-            RegisterDebugSubscribers();
+            RegisterDebugReceives();
         }
 
         private void Processing()
@@ -94,7 +94,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             
             Receive<SubscribeMessage>(message => subsciptionManager.Forward(message));
             Receive<UnsubscribeMessage>(message => subsciptionManager.Forward(message));
-            RegisterDebugSubscribers();
+            RegisterDebugReceives();
         }
 
         protected void AddTimeToBuffer(TimeChangedMessage msg)

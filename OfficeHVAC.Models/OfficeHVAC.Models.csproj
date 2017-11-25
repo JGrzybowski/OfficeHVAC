@@ -74,6 +74,7 @@
     <Compile Include="IRange.cs" />
     <Compile Include="ISensor.cs" />
     <Compile Include="ISensorActorRef.cs" />
+    <Compile Include="SetInternalStatusMessage.cs" />
     <Compile Include="Subscription\DebugSubscribeMessage.cs" />
     <Compile Include="Subscription\DebugUnsubscribeMessage.cs" />
     <Compile Include="Subscription\ISubscription.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="Requirements.cs" />
     <Compile Include="RoomStatus.cs" />
     <Compile Include="Sensor.cs" />
-    <Compile Include="SensorActor.cs" />
+    <Compile Include="SensorActorRef.cs" />
     <Compile Include="SensorType.cs" />
     <Compile Include="ISimulatorModels.cs" />
     <Compile Include="Subscription\SendToSubscribersMessage.cs" />

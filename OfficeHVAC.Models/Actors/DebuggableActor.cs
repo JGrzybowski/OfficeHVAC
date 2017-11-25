@@ -3,18 +3,19 @@ using OfficeHVAC.Models.Subscription;
 
 namespace OfficeHVAC.Models.Actors
 {
-    public abstract class DebuggableActor<T> : ReceiveActor
+    public abstract class DebuggableActor<TInternalStatus> : ReceiveActor
     {
         protected IActorRef DebugSubscriptionManager;
 
         public DebuggableActor()
         {
             DebugSubscriptionManager = Context.ActorOf<SubscriptionActor>();
-            RegisterDebugSubscribers();
+            RegisterDebugReceives();
         }
 
-        protected void RegisterDebugSubscribers()
+        protected void RegisterDebugReceives()
         {
+            Receive<SetInternalStatusMessage<TInternalStatus>>(msg => SetInternalStatus(msg.Status));
             Receive<DebugSubscribeMessage>(msg =>
             {
                 DebugSubscriptionManager.Tell(new SubscribeMessage(msg.Subscriber));
@@ -23,8 +24,12 @@ namespace OfficeHVAC.Models.Actors
             Receive<DebugUnsubscribeMessage>(msg => DebugSubscriptionManager.Tell(new UnsubscribeMessage(msg.Subscriber)));
         }
 
-        protected abstract T GenerateInternalState();
-        protected void InformDebugSubscribers(T internalStatus)
+        protected virtual void SetInternalStatus(TInternalStatus msg) => 
+            InformAboutInternalState();
+        
+        protected abstract TInternalStatus GenerateInternalState();
+        
+        protected void InformDebugSubscribers(TInternalStatus internalStatus)
         {
             DebugSubscriptionManager.Tell(new SendToSubscribersMessage(internalStatus));
         }
