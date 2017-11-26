@@ -14,9 +14,7 @@ namespace OfficeHVAC.Components
             SubsciptionManager = Context.ActorOf<SubscriptionActor>();
             Receive<SubscribeMessage>(msg => SubsciptionManager.Tell(msg));
             Receive<UnsubscribeMessage>(msg => SubsciptionManager.Tell(msg));
-        }
-
-        
+        }    
 
         public class Status : ComponentStatus<TParameter>
         {

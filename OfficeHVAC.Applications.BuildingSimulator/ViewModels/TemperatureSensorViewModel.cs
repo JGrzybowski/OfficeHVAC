@@ -12,7 +12,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 
         public override void PushStatus(TemperatureSimulatorActor.Status status)
         {
-            SetProperty(ref timestamp, status.LastTimestamp, nameof(Timestamp));
+            SetProperty(ref timestamp, status.Timestamp, nameof(Timestamp));
             SetProperty(ref paramValue, status.Temperature, nameof(ParamValue));
         }
     }

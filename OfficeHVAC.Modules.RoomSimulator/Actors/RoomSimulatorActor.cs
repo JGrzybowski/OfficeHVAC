@@ -24,7 +24,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             Receive<AddTemperatureSensorMessage>(
                 msg =>
                 {
-                    var props = PrepareTemperatureSimulatorActorProps(msg.TimeActorPath, msg.TemperatureParamerersActorPath);
+                    var props = PrepareTemperatureSimulatorActorProps(msg.SensorId, msg.TimeActorPath, msg.TemperatureParamerersActorPath);
                     var tSim = Context.ActorOf(props, "temperatureSimulator");
                     AddSensor(tSim, SensorType.Temperature, msg.SensorId);
                     Sender.Tell(tSim);
@@ -71,7 +71,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             actuatorRef.Tell(GenerateRoomStatus());
         }
 
-        protected Props PrepareTemperatureSimulatorActorProps(string timeActorPath, string tempActorPath) => 
+        protected Props PrepareTemperatureSimulatorActorProps(string id, string timeActorPath, string tempActorPath) => 
             TemperatureSimulatorActor.Props(Status, timeActorPath, tempActorPath);
 
         protected Props PrepareTemperatureActuatorProps() => 

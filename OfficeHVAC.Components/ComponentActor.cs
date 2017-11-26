@@ -12,12 +12,12 @@ namespace OfficeHVAC.Components
     public abstract class ComponentActor<TInternalStatus, TParameter> : DebuggableActor<TInternalStatus>
         where TInternalStatus : ComponentStatus<TParameter>
     {
-        private string Id { get; set; }
+        protected string Id { get; set; }
         
-        private TParameter ParameterValue { get; set; }
+        protected TParameter ParameterValue { get; set; }
         
-        private Instant TimeStamp { get; set; } = Instant.MinValue;
-        private bool TimeStampInitialized => TimeStamp != Instant.MinValue;
+        protected Instant Timestamp { get; set; } = Instant.MinValue;
+        private bool TimeStampInitialized => Timestamp != Instant.MinValue;
 
         protected virtual bool ReceivedInitialData() => TimeStampInitialized;
 
@@ -44,7 +44,7 @@ namespace OfficeHVAC.Components
         {
             Receive<TimeChangedMessage>(
                 msg => OnTimeChangedMessage(msg), 
-                msg => msg.Now > TimeStamp);
+                msg => msg.Now > Timestamp);
             
             RegisterDebugReceives();
         }
@@ -54,10 +54,10 @@ namespace OfficeHVAC.Components
             Receive<TimeChangedMessage>(
                 msg =>
                 {
-                    OnTimeChangedMessage(msg);
+                    Timestamp = msg.Now;
                     if(ReceivedInitialData()) Become(Initialized);
                 }, 
-                msg => msg.Now > TimeStamp);
+                msg => msg.Now > Timestamp);
             
             RegisterDebugReceives();
         }
@@ -65,14 +65,14 @@ namespace OfficeHVAC.Components
         protected override void SetInternalStatus(TInternalStatus msg)
         {
             Id = msg.Id;
-            TimeStamp = msg.TimeStamp;
+            Timestamp = msg.TimeStamp;
             ParameterValue = msg.ParameterValue;
             base.SetInternalStatus(msg);
         }
 
         protected virtual void OnTimeChangedMessage(TimeChangedMessage msg)
         {
-            TimeStamp = msg.Now;
+            Timestamp = msg.Now;
             InformAboutInternalState();
         }
 
