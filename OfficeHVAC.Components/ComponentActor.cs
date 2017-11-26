@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Akka.Actor;
+﻿using Akka.Actor;
 using NodaTime;
 using OfficeHVAC.Models.Actors;
 using OfficeHVAC.Models.Subscription;
 using OfficeHVAC.Modules.TimeSimulation.Messages;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace OfficeHVAC.Components
@@ -17,7 +17,7 @@ namespace OfficeHVAC.Components
         protected TParameter ParameterValue { get; set; }
         
         protected Instant Timestamp { get; set; } = Instant.MinValue;
-        private bool TimeStampInitialized => Timestamp != Instant.MinValue;
+        protected bool TimeStampInitialized => Timestamp != Instant.MinValue;
 
         protected virtual bool ReceivedInitialData() => TimeStampInitialized;
 
@@ -28,7 +28,7 @@ namespace OfficeHVAC.Components
             SetInternalStatus(initialStatus);
             
             SubscriptionSources = new List<ICanTell>(
-                subscribtionsSources.Select(path => Context.ActorSelection(path)));
+                subscribtionsSources.Select(path => Context.System.ActorSelection(path)));
             
             Become(Initialized);
         }
@@ -36,7 +36,7 @@ namespace OfficeHVAC.Components
         public ComponentActor(IEnumerable<string> subscribtionsSources)
         {
             SubscriptionSources = new List<ICanTell>(
-                subscribtionsSources.Select(path => Context.ActorSelection(path)));
+                subscribtionsSources.Select(path => Context.System.ActorSelection(path)));
             Become(Uninitialized);
         }
 
@@ -65,17 +65,22 @@ namespace OfficeHVAC.Components
         protected override void SetInternalStatus(TInternalStatus msg)
         {
             Id = msg.Id;
-            Timestamp = msg.TimeStamp;
+            Timestamp = msg.Timestamp;
             ParameterValue = msg.ParameterValue;
             base.SetInternalStatus(msg);
         }
 
         protected virtual void OnTimeChangedMessage(TimeChangedMessage msg)
         {
-            Timestamp = msg.Now;
+            UpdateTime(msg.Now);
             InformAboutInternalState();
         }
 
+        protected virtual void UpdateTime(Instant now)
+        {
+            Timestamp = now;
+        }
+        
         protected override void PreStart()
         {
             foreach (var subscriptionSource in SubscriptionSources)
@@ -87,13 +92,13 @@ namespace OfficeHVAC.Components
     {
         public string Id { get; }
         public T ParameterValue { get; }
-        public Instant TimeStamp { get; }
+        public Instant Timestamp { get; }
 
-        public ComponentStatus(string id, T parameterValue, Instant timeStamp)
+        public ComponentStatus(string id, T parameterValue, Instant timestamp)
         {
             Id = id;
             ParameterValue = parameterValue;
-            TimeStamp = timeStamp;
+            Timestamp = timestamp;
         }
     }
 }

@@ -6,16 +6,16 @@ using OfficeHVAC.Modules.TemperatureSimulation.Actors;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.Actors
 {
-    public class TemperatureSimulatorBridgeActor : BridgeActor<SensorViewModel<TemperatureSimulatorActor.Status,double>>
+    public class TemperatureSimulatorBridgeActor : BridgeActor<SensorViewModel<TemperatureSimulatorActorStatus,double>>
     {
-        public TemperatureSimulatorBridgeActor(SensorViewModel<TemperatureSimulatorActor.Status,double> viewModel, IActorRef actorRef) 
+        public TemperatureSimulatorBridgeActor(SensorViewModel<TemperatureSimulatorActorStatus,double> viewModel, IActorRef actorRef) 
             : base(viewModel, actorRef)
         {
-            Receive<TemperatureSimulatorActor.Status>(msg => UpdateViewModel(msg));
+            Receive<TemperatureSimulatorActorStatus>(msg => UpdateViewModel(msg));
             actorRef.Tell(new DebugSubscribeMessage(Self));
         }
 
-        private void UpdateViewModel(TemperatureSimulatorActor.Status status)
+        private void UpdateViewModel(TemperatureSimulatorActorStatus status)
         {
             ViewModel.PushStatus(status);
         }

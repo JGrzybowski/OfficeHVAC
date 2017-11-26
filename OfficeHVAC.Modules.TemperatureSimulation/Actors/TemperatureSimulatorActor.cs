@@ -11,26 +11,21 @@ using OfficeHVAC.Models.Actors;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
-    public class TemperatureSimulatorActor : ComponentActor<TemperatureSimulatorActor.Status, double>
+    public class TemperatureSimulatorActor : SensorActor<TemperatureSimulatorActorStatus, double>
     {
         private IRoomStatusMessage roomStatus;
         private readonly ITemperatureSimulator temperatureSimulator;
 
-        private readonly IActorRef subsciptionManager;
-        
-        private Duration Threshold { get; set; } = Duration.FromSeconds(5);
-        private Duration ThresholdBuffer { get; set; } = Duration.Zero;
-
-        private bool receivedInitialTimestamp;
         private bool receivedInitialTemperatureModel;
         private bool receivedInitialStatus;
-        protected override bool ReceivedInitialData() => receivedInitialTimestamp && receivedInitialTemperatureModel && receivedInitialStatus;
-        
-        public TemperatureSimulatorActor(ITemperatureSimulator temperatureSimulator, IEnumerable<string> subscribionSources) : base(subscribionSources)
+
+        protected override bool ReceivedInitialData() =>
+            TimeStampInitialized && receivedInitialTemperatureModel && receivedInitialStatus;
+
+        public TemperatureSimulatorActor(ITemperatureSimulator temperatureSimulator,
+            IEnumerable<string> subscriptionSources) : base(subscriptionSources)
         {
             this.temperatureSimulator = temperatureSimulator;
-            subsciptionManager = Context.ActorOf<SubscriptionActor>();
-            
             Become(Uninitialized);
         }
 
@@ -40,7 +35,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             {
                 temperatureSimulator.ReplaceTemperatureModel(model);
                 receivedInitialTemperatureModel = true;
-                if(ReceivedInitialData())
+                if (ReceivedInitialData())
                     Become(Initialized);
             });
 
@@ -49,12 +44,10 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                 receivedInitialStatus = true;
                 UpdateStatus(msg);
                 SetTemperature((double) msg.Parameters[SensorType.Temperature].Value);
-                if (ReceivedInitialData()) 
+                if (ReceivedInitialData())
                     Become(Initialized);
             });
-            
-            Receive<SubscribeMessage>(message => subsciptionManager.Forward(message));
-            Receive<UnsubscribeMessage>(message => subsciptionManager.Forward(message));
+
             base.Uninitialized();
         }
 
@@ -66,29 +59,20 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             );
 
             Receive<IRoomStatusMessage>(msg => UpdateStatus(msg));
-         
+
             Receive<ITemperatureModel>(model => temperatureSimulator.ReplaceTemperatureModel(model));
-            
-            Receive<SubscribeMessage>(message => subsciptionManager.Forward(message));
-            Receive<UnsubscribeMessage>(message => subsciptionManager.Forward(message));
+
             base.Initialized();
         }
 
-        protected override void OnTimeChangedMessage(TimeChangedMessage msg)
-        {                    
-            var timeDiff = msg.Now - Timestamp;
-            Timestamp = msg.Now;
-
+        protected override void OnTimeUpdated(Duration timeDiff) =>
             temperatureSimulator.ChangeTemperature(roomStatus, timeDiff);
-            ThresholdBuffer += timeDiff;
-            
-            if (ThresholdBuffer > Threshold)
-            {
-                var statusUpdateMessage = new ParameterValue(SensorType.Temperature, temperatureSimulator.Temperature);
-                ThresholdBuffer = Duration.Zero;
-                InformAboutInternalState();
-                subsciptionManager.Tell(new SendToSubscribersMessage(statusUpdateMessage));
-            }
+
+        protected override void OnThresholdCrossed()
+        {
+            var statusUpdateMessage = new ParameterValue(SensorType.Temperature, temperatureSimulator.Temperature);
+            SubsciptionManager.Tell(new SendToSubscribersMessage(statusUpdateMessage));
+            base.OnThresholdCrossed();
         }
 
         private void UpdateStatus(IRoomStatusMessage status)
@@ -96,26 +80,26 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             roomStatus = status;
             var temp = status.Parameters.SingleOrDefault(p => p.ParameterType == SensorType.Temperature);
 
-            subsciptionManager.Tell(new ParameterValue(SensorType.Temperature, temp));
+            SubsciptionManager.Tell(new ParameterValue(SensorType.Temperature, temp));
         }
 
         private void SetTemperature(double value)
         {
             temperatureSimulator.Temperature = value;
-            subsciptionManager.Tell(new ParameterValue(SensorType.Temperature, value));
+            SubsciptionManager.Tell(new ParameterValue(SensorType.Temperature, value));
         }
-        
-        protected override Status GenerateInternalState()
+
+        protected override TemperatureSimulatorActorStatus GenerateInternalState()
         {
-            return new Status
-            (   
-                Id, 
+            return new TemperatureSimulatorActorStatus
+            (
+                Id,
                 temperatureSimulator.Temperature,
                 ThresholdBuffer,
                 Timestamp
             );
         }
-        
+
         public static Props Props(RoomStatus initialStatus, string timeActorPath, string tempParamsActorPath)
         {
             double initialTemperature = 0;
@@ -123,24 +107,23 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                 initialTemperature = Convert.ToDouble(initialStatus.Parameters[SensorType.Temperature].Value);
 
             var props = Akka.Actor.Props.Create(
-                () => new TemperatureSimulatorActor(new TemperatureSimulator(initialTemperature, null), new []{tempParamsActorPath, timeActorPath})
+                () => new TemperatureSimulatorActor(new TemperatureSimulator(initialTemperature, null),
+                    new[] {tempParamsActorPath, timeActorPath})
             );
 
             return props;
         }
-        
-        public class Status : ComponentStatus<double>
-        {
-            public Status(string id, double temperature, Duration theresholdBuffer, Instant timestamp) : base(id, temperature, timestamp)
+    }
+
+    public class TemperatureSimulatorActorStatus : ComponentStatus<double>
+    {
+            public TemperatureSimulatorActorStatus(string id, double temperature, Duration theresholdBuffer, Instant timestamp) 
+                : base(id, temperature, timestamp)
             {
-                Temperature = temperature;
                 TheresholdBuffer = theresholdBuffer;
-                Timestamp = timestamp;
             }
     
-            public double Temperature { get; }
+            public double Temperature => ParameterValue;
             public Duration TheresholdBuffer { get; }
-            public Instant Timestamp { get; }
-        }
     }
 }
