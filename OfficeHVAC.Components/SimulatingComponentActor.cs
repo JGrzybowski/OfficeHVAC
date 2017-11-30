@@ -5,7 +5,7 @@ using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 
 namespace OfficeHVAC.Components {
-    public abstract class SensorSimulatorActor<TInternalStatus, TParameter> : SensorActor<TInternalStatus, TParameter> 
+    public abstract class SimulatingComponentActor<TInternalStatus, TParameter> : CyclicComponentActor<TInternalStatus, TParameter> 
         where TInternalStatus : ComponentStatus<TParameter>
     {
         protected IRoomStatusMessage RoomStatus;
@@ -14,7 +14,7 @@ namespace OfficeHVAC.Components {
         protected override bool ReceivedInitialData() =>
             TimeStampInitialized && ReceivedInitialRoomStatus;
         
-        protected SensorSimulatorActor(IEnumerable<string> subscriptionSources) : base(subscriptionSources) { }
+        protected SimulatingComponentActor(IEnumerable<string> subscriptionSources) : base(subscriptionSources) { }
 
         protected override void Uninitialized()
         {

@@ -56,8 +56,8 @@
   <ItemGroup>
     <Compile Include="ComponentActor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SensorActor.cs" />
-    <Compile Include="SensorSimulatorActor.cs" />
+    <Compile Include="CyclicComponentActor.cs" />
+    <Compile Include="SimulatingComponentActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

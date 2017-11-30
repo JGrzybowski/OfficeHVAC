@@ -7,7 +7,7 @@ using OfficeHVAC.Modules.TimeSimulation.Messages;
 
 namespace OfficeHVAC.Components
 {
-    public abstract class SensorActor<TInternalStatus, TParameter> : ComponentActor<TInternalStatus, TParameter> 
+    public abstract class CyclicComponentActor<TInternalStatus, TParameter> : ComponentActor<TInternalStatus, TParameter> 
         where TInternalStatus : ComponentStatus<TParameter>
     {
         protected IActorRef SubsciptionManager { get; }
@@ -15,11 +15,11 @@ namespace OfficeHVAC.Components
         protected Duration Threshold { get; set; } = Duration.FromSeconds(5);
         protected Duration ThresholdBuffer { get; set; } = Duration.Zero;
 
-        public SensorActor(IEnumerable<string> subscriptionSources) : base(subscriptionSources)
+        public CyclicComponentActor(IEnumerable<string> subscriptionSources) : base(subscriptionSources)
         {
             SubsciptionManager = Context.ActorOf<SubscriptionActor>();
         }
-        public SensorActor(string timeSourceActorPath) : this(new[] {timeSourceActorPath}) { }
+        public CyclicComponentActor(string timeSourceActorPath) : this(new[] {timeSourceActorPath}) { }
 
         protected override void Uninitialized()
         {

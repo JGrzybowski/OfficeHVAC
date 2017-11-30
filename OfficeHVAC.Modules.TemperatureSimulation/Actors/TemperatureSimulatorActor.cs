@@ -11,7 +11,7 @@ using OfficeHVAC.Models.Actors;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
-    public class TemperatureSimulatorActor : SensorSimulatorActor<TemperatureSimulatorActorStatus, double>
+    public class TemperatureSimulatorActor : SimulatingComponentActor<TemperatureSimulatorActorStatus, double>
     {
         private readonly ITemperatureSimulator temperatureSimulator;
 
