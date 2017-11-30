@@ -43,7 +43,11 @@ namespace OfficeHVAC.Components
         protected virtual void Initialized()
         {
             Receive<TimeChangedMessage>(
-                msg => OnTimeChangedMessage(msg), 
+                msg =>
+                {
+                    OnTimeChangedMessage(msg);
+                    InformAboutInternalState();
+                }, 
                 msg => msg.Now > Timestamp);
             
             RegisterDebugReceives();
@@ -55,6 +59,7 @@ namespace OfficeHVAC.Components
                 msg =>
                 {
                     Timestamp = msg.Now;
+                    InformAboutInternalState();
                     if(ReceivedInitialData()) Become(Initialized);
                 }, 
                 msg => msg.Now > Timestamp);
@@ -73,7 +78,6 @@ namespace OfficeHVAC.Components
         protected virtual void OnTimeChangedMessage(TimeChangedMessage msg)
         {
             UpdateTime(msg.Now);
-            InformAboutInternalState();
         }
 
         protected virtual void UpdateTime(Instant now)

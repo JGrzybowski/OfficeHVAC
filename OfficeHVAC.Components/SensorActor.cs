@@ -36,12 +36,11 @@ namespace OfficeHVAC.Components
         protected override void OnTimeChangedMessage(TimeChangedMessage msg)
         {
             UpdateTime(msg.Now);
-            if (ThresholdBuffer > Threshold)
+            if (ThresholdBuffer >= Threshold)
             {
                 OnThresholdCrossed();
                 ThresholdBuffer = Duration.Zero;
             }
-            InformAboutInternalState();
         }
         
         protected override void UpdateTime(Instant now)
@@ -67,15 +66,6 @@ namespace OfficeHVAC.Components
             public Status(string id, TParameter parameterValue, Instant timestamp) 
                 : base(id, parameterValue, timestamp) 
             { }
-        }
-    }
-
-    public abstract class SensorSimulatorActor<TInternalStatus, TParameter> : SensorActor<TInternalStatus, TParameter> 
-        where TInternalStatus : ComponentStatus<TParameter> 
-    {
-        protected SensorSimulatorActor(string timeSourceActorPath) : base(timeSourceActorPath)
-        {
-            
         }
     }
 }

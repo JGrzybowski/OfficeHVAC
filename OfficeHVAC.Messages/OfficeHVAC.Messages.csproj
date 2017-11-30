@@ -122,6 +122,7 @@
     <Compile Include="RoomAvaliabilityMessage.cs" />
     <Compile Include="ChangeTemperature.cs" />
     <Compile Include="SensorAvaliableMessage.cs" />
+    <Compile Include="SetParameterValueMessage.cs" />
     <Compile Include="SetTemperature.cs" />
     <Compile Include="TimeChangedMessage.cs" />
   </ItemGroup>

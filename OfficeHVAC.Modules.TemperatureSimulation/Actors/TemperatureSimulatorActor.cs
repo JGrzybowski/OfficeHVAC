@@ -11,16 +11,14 @@ using OfficeHVAC.Models.Actors;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
-    public class TemperatureSimulatorActor : SensorActor<TemperatureSimulatorActorStatus, double>
+    public class TemperatureSimulatorActor : SensorSimulatorActor<TemperatureSimulatorActorStatus, double>
     {
-        private IRoomStatusMessage roomStatus;
         private readonly ITemperatureSimulator temperatureSimulator;
 
         private bool receivedInitialTemperatureModel;
-        private bool receivedInitialStatus;
 
         protected override bool ReceivedInitialData() =>
-            TimeStampInitialized && receivedInitialTemperatureModel && receivedInitialStatus;
+            TimeStampInitialized && receivedInitialTemperatureModel && ReceivedInitialRoomStatus;
 
         public TemperatureSimulatorActor(ITemperatureSimulator temperatureSimulator,
             IEnumerable<string> subscriptionSources) : base(subscriptionSources)
@@ -39,16 +37,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                     Become(Initialized);
             });
 
-            Receive<IRoomStatusMessage>(msg =>
-            {
-                receivedInitialStatus = true;
-                UpdateStatus(msg);
-                SetTemperature((double) msg.Parameters[SensorType.Temperature].Value);
-                if (ReceivedInitialData())
-                    Become(Initialized);
-            });
-
-            base.Uninitialized();
+            base.Uninitialized(); 
         }
 
         protected override void Initialized()
@@ -58,15 +47,13 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                 msg => msg.ParameterType == SensorType.Temperature
             );
 
-            Receive<IRoomStatusMessage>(msg => UpdateStatus(msg));
-
             Receive<ITemperatureModel>(model => temperatureSimulator.ReplaceTemperatureModel(model));
 
             base.Initialized();
         }
 
         protected override void OnTimeUpdated(Duration timeDiff) =>
-            temperatureSimulator.ChangeTemperature(roomStatus, timeDiff);
+            temperatureSimulator.ChangeTemperature(RoomStatus, timeDiff);
 
         protected override void OnThresholdCrossed()
         {
@@ -75,15 +62,16 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             base.OnThresholdCrossed();
         }
 
-        private void UpdateStatus(IRoomStatusMessage status)
+        protected override void InitializeFromRoomStatus(IRoomStatusMessage roomStatus)
         {
-            roomStatus = status;
-            var temp = status.Parameters.SingleOrDefault(p => p.ParameterType == SensorType.Temperature);
-
-            SubsciptionManager.Tell(new ParameterValue(SensorType.Temperature, temp));
+            if (!roomStatus.Parameters.Contains(SensorType.Temperature))
+                return;
+            
+            SetParameterValue((double) roomStatus.Parameters[SensorType.Temperature].Value);
+            base.InitializeFromRoomStatus(roomStatus);
         }
 
-        private void SetTemperature(double value)
+        protected override void SetParameterValue(double value)
         {
             temperatureSimulator.Temperature = value;
             SubsciptionManager.Tell(new ParameterValue(SensorType.Temperature, value));
@@ -123,7 +111,6 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                 TheresholdBuffer = theresholdBuffer;
             }
     
-            public double Temperature => ParameterValue;
             public Duration TheresholdBuffer { get; }
     }
 }
