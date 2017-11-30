@@ -36,7 +36,7 @@ namespace OfficeHVAC.TestScenarios
         {
             hole = ActorOf<BlackHoleActor>();
 
-            date = Instant.FromDateTimeUtc(DateTime.UtcNow.AddDays(1).Date);
+            date = Instant.FromDateTimeUtc(DateTime.UtcNow.AddDays(2).Date);
             
             var testScheduler = Sys.Scheduler as TestScheduler;
             timeSource = new ControlledTimeSource(date, testScheduler);
@@ -101,8 +101,7 @@ namespace OfficeHVAC.TestScenarios
             timeSource.Reset(At(7, 30));
             //Initially it's 25'C in the room
             initialStatus.Parameters.Add(new ParameterValue(SensorType.Temperature, 25));
-            roomActorRef = ActorOfAsTestActorRef(() =>
-                new RoomSimulatorActor(initialStatus, hole.Path));
+            roomActorRef = ActorOfAsTestActorRef(() => new RoomSimulatorActor(initialStatus, hole.Path));
             //There is a meeting at 10:30 we want to have 21'C by then
             var firstMeeting = SetMeeting(At(10, 30), Temperature(21));
 

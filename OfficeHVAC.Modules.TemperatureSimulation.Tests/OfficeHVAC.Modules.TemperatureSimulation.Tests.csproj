@@ -94,6 +94,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleTemperatureModel\ModeFinding.cs" />
     <Compile Include="SimpleTemperatureModel\TemperatureChangeCalculation.cs" />
+    <Compile Include="TemperatureControllerActor\AddingDevice.cs" />
+    <Compile Include="TemperatureControllerActor\RemovingDevice.cs" />
     <Compile Include="TemperatureControllerActor\TemperatureControllerActorTest.cs" />
     <Compile Include="TemperatureControllerActor\OnTemperatureTask.cs" />
     <Compile Include="TemperatureDeviceFake.cs" />

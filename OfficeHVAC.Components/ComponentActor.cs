@@ -2,9 +2,9 @@
 using NodaTime;
 using OfficeHVAC.Models.Actors;
 using OfficeHVAC.Models.Subscription;
-using OfficeHVAC.Modules.TimeSimulation.Messages;
 using System.Collections.Generic;
 using System.Linq;
+using OfficeHVAC.Messages;
 
 
 namespace OfficeHVAC.Components
@@ -23,21 +23,20 @@ namespace OfficeHVAC.Components
 
         protected List<ICanTell> SubscriptionSources;
         
-        public ComponentActor(IEnumerable<string> subscribtionsSources, TInternalStatus initialStatus)
-        {
-            SetInternalStatus(initialStatus);
-            
-            SubscriptionSources = new List<ICanTell>(
-                subscribtionsSources.Select(path => Context.System.ActorSelection(path)));
-            
-            Become(Initialized);
-        }
+//        public ComponentActor(IEnumerable<string> subscribtionsSources, TInternalStatus initialStatus)
+//        {
+//            SetInternalStatus(initialStatus);
+//            
+//            SubscriptionSources = new List<ICanTell>(
+//                subscribtionsSources.Select(path => Context.System.ActorSelection(path)));
+//            
+//            Become(Initialized);
+//        }
         
         public ComponentActor(IEnumerable<string> subscribtionsSources)
         {
             SubscriptionSources = new List<ICanTell>(
                 subscribtionsSources.Select(path => Context.System.ActorSelection(path)));
-            Become(Uninitialized);
         }
 
         protected virtual void Initialized()
@@ -87,6 +86,7 @@ namespace OfficeHVAC.Components
         
         protected override void PreStart()
         {
+            Become(Uninitialized);
             foreach (var subscriptionSource in SubscriptionSources)
                 subscriptionSource.Tell(new SubscribeMessage(Self), Self);
         }

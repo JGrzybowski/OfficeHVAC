@@ -6,6 +6,7 @@ using OfficeHVAC.Modules.TimeSimulation.Messages;
 using System.Collections.Generic;
 using System.Diagnostics.PerformanceData;
 using NodaTime;
+using OfficeHVAC.Messages;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.Actors
 {

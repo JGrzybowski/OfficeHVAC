@@ -14,7 +14,6 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
     public class TemperatureSimulatorActor : SimulatingComponentActor<TemperatureSimulatorActorStatus, double>
     {
         private readonly ITemperatureSimulator temperatureSimulator;
-
         private bool receivedInitialTemperatureModel;
 
         protected override bool ReceivedInitialData() =>
@@ -24,7 +23,6 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             IEnumerable<string> subscriptionSources) : base(subscriptionSources)
         {
             this.temperatureSimulator = temperatureSimulator;
-            Become(Uninitialized);
         }
 
         protected override void Uninitialized()
@@ -67,7 +65,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             if (!roomStatus.Parameters.Contains(SensorType.Temperature))
                 return;
             
-            SetParameterValue((double) roomStatus.Parameters[SensorType.Temperature].Value);
+            SetParameterValue((double)(roomStatus.Parameters[SensorType.Temperature].Value));
             base.InitializeFromRoomStatus(roomStatus);
         }
 
@@ -83,9 +81,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             (
                 Id,
                 temperatureSimulator.Temperature,
-                ThresholdBuffer,
-                Timestamp
-            );
+                Timestamp, ThresholdBuffer);
         }
 
         public static Props Props(RoomStatus initialStatus, string timeActorPath, string tempParamsActorPath)
@@ -103,14 +99,9 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         }
     }
 
-    public class TemperatureSimulatorActorStatus : ComponentStatus<double>
+    public class TemperatureSimulatorActorStatus : SimulatingComponentStatus<double>
     {
-            public TemperatureSimulatorActorStatus(string id, double temperature, Duration theresholdBuffer, Instant timestamp) 
-                : base(id, temperature, timestamp)
-            {
-                TheresholdBuffer = theresholdBuffer;
-            }
-    
-            public Duration TheresholdBuffer { get; }
+            public TemperatureSimulatorActorStatus(string id, double temperature, Instant timestamp, Duration theresholdBuffer) 
+                : base(id, temperature, timestamp, theresholdBuffer) { }
     }
 }

@@ -92,7 +92,6 @@
     <Compile Include="Sensor.cs" />
     <Compile Include="SensorActorRef.cs" />
     <Compile Include="SensorType.cs" />
-    <Compile Include="ISimulatorModels.cs" />
     <Compile Include="Subscription\SendToSubscribersMessage.cs" />
     <Compile Include="Subscription\SubscribeMessage.cs" />
     <Compile Include="Subscription\Subscription.cs" />

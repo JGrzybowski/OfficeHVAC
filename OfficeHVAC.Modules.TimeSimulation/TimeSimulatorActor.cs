@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using NodaTime;
+using OfficeHVAC.Messages;
 using OfficeHVAC.Models.Subscription;
 using OfficeHVAC.Modules.TimeSimulation.Messages;
 using OfficeHVAC.Modules.TimeSimulation.TimeSources;
@@ -19,7 +20,7 @@ namespace OfficeHVAC.Modules.TimeSimulation
             Receive<SubscribeMessage>(msg =>
             {
                 timeUpdateSubscription.AddSubscriber(msg.Subscriber);
-                msg.Subscriber.Tell(new TimeChangedMessage(Duration.Zero,TimeSource.Now));
+                msg.Subscriber.Tell(new TimeChangedMessage(TimeSource.Now));
             });
             Receive<UnsubscribeMessage>(msg => timeUpdateSubscription.RemoveSubscriber(msg.Subscriber));
 
@@ -46,8 +47,7 @@ namespace OfficeHVAC.Modules.TimeSimulation
 
         public void NotifyAboutTimeChange(Instant oldInstant)
         {
-            var timeDelta = TimeSource.Now - oldInstant;
-            var timeMsg = new TimeChangedMessage(timeDelta, TimeSource.Now);
+            var timeMsg = new TimeChangedMessage(TimeSource.Now);
             timeUpdateSubscription.SendToAllSubscribers(timeMsg, Self);
         }
 

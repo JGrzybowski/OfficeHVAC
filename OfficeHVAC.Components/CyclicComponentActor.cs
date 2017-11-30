@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Akka.Actor;
 using NodaTime;
+using OfficeHVAC.Messages;
 using OfficeHVAC.Models.Subscription;
-using OfficeHVAC.Modules.TimeSimulation.Messages;
 
 namespace OfficeHVAC.Components
 {
@@ -19,18 +19,17 @@ namespace OfficeHVAC.Components
         {
             SubsciptionManager = Context.ActorOf<SubscriptionActor>();
         }
-        public CyclicComponentActor(string timeSourceActorPath) : this(new[] {timeSourceActorPath}) { }
 
         protected override void Uninitialized()
         {
-            base.Uninitialized();
             RegisterSubscribtionReceives();
+            base.Uninitialized();
         }
 
         protected override void Initialized()
         {
-            base.Initialized();
             RegisterSubscribtionReceives();
+            base.Initialized();
         }
 
         protected override void OnTimeChangedMessage(TimeChangedMessage msg)
