@@ -10,9 +10,14 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 {
     public class CompanyViewModel : BindableBase, ITreeElement
     {
+        private readonly ActorSystem actorSystem;
         public string Id { get; } = Guid.NewGuid().ToString();
+        public CompanyViewModel(ActorSystem actorSystem)
+        {
+            this.actorSystem = actorSystem;
+        }
 
-        private string name;
+        private string name;    
         public string Name
         {
             get => name;
@@ -29,7 +34,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 
         public async Task<RoomViewModel> AddRoom()
         {
-            var room = new RoomViewModel { Name = "New Room" };
+            var room = new RoomViewModel(actorSystem) { Name = "New Room" };
             
             var roomActorRef = Actor.Ask<IActorRef>(new CreateRoomMessage()
             {

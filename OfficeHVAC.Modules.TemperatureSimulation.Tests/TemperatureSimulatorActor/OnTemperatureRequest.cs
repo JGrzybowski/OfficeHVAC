@@ -25,7 +25,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
             var temperatureSimulatorFake = Substitute.For<ITemperatureSimulator>();
             temperatureSimulatorFake.Temperature = expectedTemperature;
             var actor = ActorOfAsTestActorRef<Actors.TemperatureSimulatorActor>(
-                Props.Create(() => new Actors.TemperatureSimulatorActor(temperatureSimulatorFake, blackHoleAddress)));
+                Props.Create(() => new Actors.TemperatureSimulatorActor(temperatureSimulatorFake, new []{blackHoleAddress})));
 
             var parameters = new ParameterValuesCollection()
             {

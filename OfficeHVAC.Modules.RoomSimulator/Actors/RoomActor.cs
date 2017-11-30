@@ -2,10 +2,9 @@
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
-using System;
+using OfficeHVAC.Models.Subscription;
 using System.Collections.Generic;
 using System.Linq;
-using OfficeHVAC.Models.Subscription;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -15,7 +14,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected HashSet<ISensorActorRef> Sensors { get; } = new HashSet<ISensorActorRef>();
 
-        protected HashSet<ISensorActorRef> Controllers { get; } = new HashSet<ISensorActorRef>();
+        protected HashSet<ISensorActorRef> Actuators { get; } = new HashSet<ISensorActorRef>();
 
         protected IActorRef SubscribersManager { get; private set; }
 
@@ -64,7 +63,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 //            Receive<Requirements>(message =>
 //            {
 //                Events.Add(message);
-//                Controllers.Single(s => s.Type == SensorType.Temperature).Actor.Tell(message);
+//                Actuators.Single(s => s.Type == SensorType.Temperature).Actor.Tell(message);
 //            });
 //
 //            Receive<TemperatureJob>(message =>
@@ -84,6 +83,13 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             sensorActorRef.Tell(new SubscribeMessage(Self)); 
         }
 
+        protected virtual void AddActuator(IActorRef actuatorRef, SensorType actuatorType, string actuatorId)
+        {
+            var actuatorDeviceRef = new SensorActorRef(actuatorId, actuatorType, actuatorRef);
+            Actuators.Add(actuatorDeviceRef);
+            actuatorRef.Tell(new SubscribeMessage(Self)); 
+        }
+
         protected virtual void SendSubscribtionNewsletter()
         {
             var status = GenerateRoomStatus();
@@ -92,13 +98,17 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected virtual void UpdateParameter(ParameterValue paramValue)
         {
-            Status.Parameters[paramValue.ParameterType].Value = paramValue.Value;
-            if (paramValue.ParameterType == SensorType.Temperature)
-            {
-                var temperature = Convert.ToDouble(paramValue.Value);
-                if (Jobs.Any() && Math.Abs(Jobs.First().DesiredTemperature - temperature) < StabilizationThreshold)
-                    ActivateTemperatureMode(TemperatureModeType.Stabilization, Jobs.First().DesiredTemperature);
-            }
+            if(Status.Parameters.Contains(paramValue.ParameterType))
+                Status.Parameters[paramValue.ParameterType].Value = paramValue.Value;
+            else 
+                Status.Parameters.Add(paramValue.Clone() as ParameterValue);
+
+            //if (paramValue.ParameterType == SensorType.Temperature)
+            //{
+            //    var temperature = Convert.ToDouble(paramValue.Value);
+            //    if (Jobs.Any() && Math.Abs(Jobs.First().DesiredTemperature - temperature) < StabilizationThreshold)
+            //        ActivateTemperatureMode(TemperatureModeType.Stabilization, Jobs.First().DesiredTemperature);
+            //}
             SendSubscribtionNewsletter();
         }
 

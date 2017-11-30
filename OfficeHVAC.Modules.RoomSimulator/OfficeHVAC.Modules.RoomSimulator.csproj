@@ -140,6 +140,8 @@
   <ItemGroup>
     <Compile Include="Actors\RoomActor.cs" />
     <Compile Include="Actors\RoomSimulatorActor.cs" />
+    <Compile Include="Actors\TemperatureActuatorActor.cs" />
+    <Compile Include="Messages\SetRoomVolume.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +149,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OfficeHVAC.Components\OfficeHVAC.Components.csproj">
+      <Project>{0d3cbf0d-7fcf-4366-a758-042c930fe9bb}</Project>
+      <Name>OfficeHVAC.Components</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OfficeHVAC.Messages\OfficeHVAC.Messages.csproj">
       <Project>{3ACF6AA9-1CB6-47E3-AEB7-1E5A95A2638B}</Project>
       <Name>OfficeHVAC.Messages</Name>

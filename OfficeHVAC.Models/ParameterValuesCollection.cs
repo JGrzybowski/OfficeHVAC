@@ -13,5 +13,12 @@ namespace OfficeHVAC.Models
                 clone.Add(parameter);
             return clone;
         }
+
+        public ParameterValue TryGet(SensorType key)
+        {
+            if (!Contains(key))
+                Add(new ParameterValue(key, null));
+            return this[key];
+        } 
     }
 }

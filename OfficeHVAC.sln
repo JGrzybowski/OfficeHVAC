@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.TestScenarios", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Applications.BuildingSimulator", "OfficeHVAC.Applications.BuildingSimulator\OfficeHVAC.Applications.BuildingSimulator.csproj", "{69AFDFB9-8E33-4F11-88D5-2C1D51E22279}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeHVAC.Components", "OfficeHVAC.Components\OfficeHVAC.Components.csproj", "{0D3CBF0D-7FCF-4366-A758-042C930FE9BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{69AFDFB9-8E33-4F11-88D5-2C1D51E22279}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69AFDFB9-8E33-4F11-88D5-2C1D51E22279}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69AFDFB9-8E33-4F11-88D5-2C1D51E22279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D3CBF0D-7FCF-4366-A758-042C930FE9BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D3CBF0D-7FCF-4366-A758-042C930FE9BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D3CBF0D-7FCF-4366-A758-042C930FE9BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D3CBF0D-7FCF-4366-A758-042C930FE9BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

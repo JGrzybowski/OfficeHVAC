@@ -4,6 +4,8 @@ using OfficeHVAC.Models.Subscription;
 using OfficeHVAC.Modules.RoomSimulator.Actors;
 using OfficeHVAC.Modules.TimeSimulation.Messages;
 using System.Collections.Generic;
+using System.Diagnostics.PerformanceData;
+using NodaTime;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.Actors
 {
@@ -13,17 +15,23 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Actors
         
         public Dictionary<string, IActorRef> RoomsActors { get; set; } = new Dictionary<string, IActorRef>();
         
+        public Instant lastTimeStamp = Instant.MinValue; 
+        
         public CompanyActor()
         {
+            Receive<TimeChangedMessage>(msg =>
+            {
+                lastTimeStamp = msg.Now;
+                SendToAllRooms(msg);
+            });
+
+            var selection = Context.System.ActorSelection($"user/{SystemInfo.TimeSimulatorActorName}");
+            selection.Tell(new SubscribeMessage(Self));
+
             Receive<CreateRoomMessage>(msg => Sender.Tell(CreateNewRoom(msg)));
             Receive<RemoveRoomMessage>(msg => RemoveRoom(msg.Id));
 
             Receive<ChangeNameMessage>(msg => Name = msg.NewValue);
-
-            Receive<TimeChangedMessage>(msg => SendToAllRooms(msg));
-
-            var selection = Context.System.ActorSelection($"user/{SystemInfo.TimeSimulatorActorName}");
-            selection.Tell(new SubscribeMessage(Self));
         }
 
         private void RemoveRoom(string id)
@@ -42,8 +50,9 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Actors
             
             var props = RoomSimulatorActor.Props(initialStatus, Self.Path.ToStringWithoutAddress());
             var actor = Context.ActorOf(props);
-            
             RoomsActors.Add(msg.Id, actor);
+            
+            actor.Tell(new TimeChangedMessage(lastTimeStamp));
             return actor;
         }
 

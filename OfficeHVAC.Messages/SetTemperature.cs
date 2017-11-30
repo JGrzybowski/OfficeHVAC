@@ -2,9 +2,9 @@
 {
     public class SetTemperature
     {
-        public float Temperature { get; }
+        public double Temperature { get; }
 
-        public SetTemperature(float temperature)
+        public SetTemperature(double temperature)
         {
             Temperature = temperature;
         }
