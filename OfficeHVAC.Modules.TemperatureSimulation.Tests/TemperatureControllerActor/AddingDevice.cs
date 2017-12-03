@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Akka.Actor;
 using NodaTime;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
@@ -58,8 +60,10 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerAc
             }.ToMessage();
 
             var testedActor = ActorOf(Actors.TemperatureControllerActor.Props(new string[0]));
-            testedActor.Tell(new TimeChangedMessage(now), TestActor);
-            testedActor.Tell(status, TestActor);
+            
+            testedActor.Tell(new TimeChangedMessage(now));
+            testedActor.Tell(status);
+            testedActor.Tell(new TemperatureSimulation.SimpleTemperatureModel());
             
             IgnoreMessages<TemperatureControllerStatus>();
             testedActor.Tell(new DebugSubscribeMessage(TestActor), TestActor);
@@ -69,7 +73,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerAc
             testedActor.Tell(new AddDevice<ITemperatureDeviceDefinition>(device.ToMessage()), TestActor);
             
             //Assert
-            var msg = ExpectMsg<Actors.TemperatureControllerStatus>();
+            var msg = FishForMessage<TemperatureControllerStatus>(s => s.Devices.Any());
             msg.Devices.ShouldHaveSingleItem().Id.ShouldBe(device.Id);
         }
     }

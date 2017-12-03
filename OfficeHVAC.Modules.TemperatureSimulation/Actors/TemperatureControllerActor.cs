@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Configuration;
 using System.Threading.Tasks;
 using Akka.Actor;
 using NodaTime;
 using OfficeHVAC.Components;
+using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
 
-namespace OfficeHVAC.Modules.TemperatureSimulation.Actors {
+namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
+{
     public class TemperatureControllerActor : SimulatingComponentActor<TemperatureControllerStatus, double>
     {
         protected ITemperatureModel TemperatureModel;
         protected bool ReceivedTemperatureModel => TemperatureModel != null;
 
-        protected IEnumerable<TemperatureDeviceDefinition> Devices { get; set; } = new List<TemperatureDeviceDefinition>();
-        
-        protected override bool ReceivedInitialData() => 
+        protected HashSet<TemperatureDeviceDefinition> Devices { get; set; } =
+            new HashSet<TemperatureDeviceDefinition>();
+
+        protected override bool ReceivedInitialData() =>
             TimeStampInitialized && ReceivedTemperatureModel && ReceivedInitialRoomStatus;
 
-        public TemperatureControllerActor(IEnumerable<string> subscriptionSources) 
+        public TemperatureControllerActor(IEnumerable<string> subscriptionSources)
             : base(subscriptionSources) { }
 
         protected override void Uninitialized()
@@ -28,20 +32,51 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors {
             {
                 TemperatureModel = model;
                 InformAboutInternalState();
-                if(ReceivedInitialData())
+                if (ReceivedInitialData())
                     Become(Initialized);
             });
+
+            RegisterDevicesManagementMessages();
             
             base.Uninitialized();
         }
 
         protected override void Initialized()
         {
+            RegisterDevicesManagementMessages();
+
             ReceiveAsync<Requirements>(
                 async msg => Sender.Tell(CalculateNextJob(msg, await RequestStatus())),
                 msg => msg.Parameters.Contains(SensorType.Temperature));
-            
+
             base.Initialized();
+        }
+
+        protected void RegisterDevicesManagementMessages()
+        {
+            Receive<AddDevice<ITemperatureDeviceDefinition>>(msg =>
+            {
+                Devices.Add(new TemperatureDeviceDefinition()
+                {
+                    Id = msg.Definition.Id,
+                    MaxPower = msg.Definition.MaxPower,
+                    Modes = msg.Definition.Modes.Select(m => m.Clone())
+                });
+
+                InformAboutInternalState();
+            });
+
+            Receive<RemoveDevice>(msg =>
+            {
+                Devices.RemoveWhere(dev => dev.Id == msg.Id);
+                InformAboutInternalState();
+            });
+        }
+
+        protected override void InitializeFromRoomStatus(IRoomStatusMessage roomStatus)
+        {
+            RoomStatus = roomStatus;
+            base.InitializeFromRoomStatus(roomStatus);
         }
 
         private TemperatureJob CalculateNextJob(Requirements requirements, IRoomStatusMessage status)
@@ -70,7 +105,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors {
 
             var bestModeName = TemperatureModel.FindMostEfficientCombination(task, status, temperatureDevices);
             var job = new TemperatureJob(bestModeName, desiredTemperature,
-                requirements.Deadline - TemperatureModel.CalculateNeededTime(task.InitialTemperature, task.DesiredTemperature, temperatureDevices, bestModeName, status.Volume),
+                requirements.Deadline - TemperatureModel.CalculateNeededTime(task.InitialTemperature,
+                    task.DesiredTemperature, temperatureDevices, bestModeName, status.Volume),
                 requirements.Deadline);
 
             return job;
@@ -81,17 +117,18 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors {
             return await Context.Sender.Ask<RoomStatus>(new RoomStatus.Request(), TimeSpan.FromSeconds(5));
         }
 
-        public static Props Props(IEnumerable<string> subscriptionSources) => 
+        public static Props Props(IEnumerable<string> subscriptionSources) =>
             Akka.Actor.Props.Create(() => new TemperatureControllerActor(subscriptionSources));
-        
-        protected override TemperatureControllerStatus GenerateInternalState() => 
-            new TemperatureControllerStatus(Id, ParameterValue, Timestamp, Threshold, 
+
+        protected override TemperatureControllerStatus GenerateInternalState() =>
+            new TemperatureControllerStatus(Id, ParameterValue, Timestamp, Threshold,
                 Devices.Select(d => d.ToMessage()).ToList());
     }
-    
+
     public class TemperatureControllerStatus : SimulatingComponentStatus<double>
     {
-        public TemperatureControllerStatus(string id, double parameter, Instant timestamp, Duration theresholdBuffer, IEnumerable<ITemperatureDeviceDefinition> devices) 
+        public TemperatureControllerStatus(string id, double parameter, Instant timestamp, Duration theresholdBuffer,
+            IEnumerable<ITemperatureDeviceDefinition> devices)
             : base(id, parameter, timestamp, theresholdBuffer)
         {
             Devices = devices;

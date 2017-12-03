@@ -48,12 +48,13 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
             actor.Tell(new TimeChangedMessage(now));
             actor.Tell(status.ToMessage());
             actor.Tell(new TemperatureSimulation.SimpleTemperatureModel());
+            temperatureSimulatorFake.Temperature = 27;
             
             //Act
             actor.Tell(new ParameterValue.Request(SensorType.Temperature));
             
             //Assert
-            var temperatureMsg = FishForMessage<IParameterValueMessage>(msg => msg.ParameterType ==SensorType.Temperature);
+            var temperatureMsg = FishForMessage<IParameterValueMessage>(msg => msg.ParameterType == SensorType.Temperature);
             temperatureMsg.ParameterType.ShouldBe(SensorType.Temperature);
             temperatureMsg.Value.ShouldBe(expectedTemperature);
         }
