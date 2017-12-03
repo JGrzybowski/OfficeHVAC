@@ -53,13 +53,13 @@ namespace OfficeHVAC.TestScenarios
             var initialStatus = new RoomStatus()
             {
                 Name = "Test Room",
-                Devices = new HashSet<IDevice>()
+                TemperatureDevices = new HashSet<ITemperatureDeviceStatus>()
                 {
-                    new TemperatureDevice()
-                    {
-                        Id = "Turbo AC",
-                        MaxPower = 1000,
-                        Modes = new ModesCollection
+                    new TemperatureDeviceStatus
+                    (
+                        id : "Test dev",
+                        maxPower : 1000,
+                        modes : new ModesCollection
                         {
                             new TemperatureMode()
                             {
@@ -91,8 +91,10 @@ namespace OfficeHVAC.TestScenarios
                                 PowerConsumption = 1.0,
                                 TemperatureRange = new Range<double>(-100, 100)
                             }
-                        }
-                    }
+                        },
+                        activeModeType: TemperatureModeType.Off,
+                        desiredTemperature: 0
+                    )
                 },
                 Volume = 72
             };
@@ -126,7 +128,7 @@ namespace OfficeHVAC.TestScenarios
             TemperatureShouldBe(21);
 
             //At 12:00 (After the last meeting)
-            //Devices should be turned off
+            //TemperatureDevices should be turned off
             SetTime(12, 00);
             DevicesShouldBeTurnedOff();
         }
@@ -134,7 +136,7 @@ namespace OfficeHVAC.TestScenarios
         private void DevicesShouldBeTurnedOff()
         {
             var status = GetStatus();
-            status.Devices.ShouldAllBe(dev => dev.IsTurnedOn == false);
+            status.TemperatureDevices.ShouldAllBe(dev => dev.ActiveModeType == TemperatureModeType.Off || dev.ActiveModeType == TemperatureModeType.StandBy);
         }
 
         private void TemperatureShouldBe(double expectedTemperature)

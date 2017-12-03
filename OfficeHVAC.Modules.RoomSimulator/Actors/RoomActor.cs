@@ -114,7 +114,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected virtual void ActivateTemperatureMode(TemperatureModeType mode, double desiredTemperature)
         {
-            foreach (var device in Status.Devices.Where(dev => dev is ITemperatureDevice).Cast<ITemperatureDevice>())
+            foreach (var device in Status.TemperatureDevices.Where(dev => dev is ITemperatureDevice).Cast<ITemperatureDevice>())
             {
                 device.SetActiveMode(mode);
                 device.DesiredTemperature = desiredTemperature;

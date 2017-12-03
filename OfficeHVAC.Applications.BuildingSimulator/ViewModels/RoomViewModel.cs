@@ -67,7 +67,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             SubItems = new ObservableCollection<ITreeElement>()
             {
                 new TreeElement(Sensors){Name = "Sensors"},
-                new TreeElement(Devices){Name = "Devices"}
+                new TreeElement(Devices){Name = "TemperatureDevices"}
             };
         }
         

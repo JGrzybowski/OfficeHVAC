@@ -1,4 +1,5 @@
-﻿using Akka.TestKit.Xunit2;
+﻿using System.Collections.Generic;
+using Akka.TestKit.Xunit2;
 using NSubstitute;
 using OfficeHVAC.Modules.TimeSimulation.TimeSources;
 using OfficeHVAC.Modules.TimeSimulation.ViewModels;
@@ -47,7 +48,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
             {
                 //Arrange
                 bool uiNotified = false;
-                PropertyChangedEventArgs notificationArgs = null;
+                List<PropertyChangedEventArgs> notificationArgs = new List<PropertyChangedEventArgs>();
 
                 var timeSourceMock = Substitute.For<IControlledTimeSource>();
                 var vm = new TimeControlViewModel(timeSourceMock, Sys);
@@ -55,7 +56,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
                 vm.PropertyChanged += (sender, args) =>
                 {
                     uiNotified = true;
-                    notificationArgs = args;
+                    notificationArgs.Add(args);
                 };
 
                 //Act
@@ -63,8 +64,7 @@ namespace OfficeHVAC.Modules.TimeSimulation.Tests.TimeControl
 
                 //Assert
                 uiNotified.ShouldBe(true);
-                notificationArgs.ShouldNotBeNull();
-                notificationArgs?.PropertyName.ShouldBe(nameof(TimeControlViewModel.IsRunning));
+                notificationArgs.ShouldContain(notif => notif.PropertyName == nameof(TimeControlViewModel.IsRunning));
             }
 
             [Fact]

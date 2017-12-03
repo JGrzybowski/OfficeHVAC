@@ -19,7 +19,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
         //    var temperatureModelFake = Substitute.For<ITemperatureModel>();
         //    var simulator = new TemperatureSimulator(StartingTemperature, temperatureModelFake);
         //    var status = Substitute.For<IRoomStatusMessage>();
-        //    status.Devices.Returns(new List<ITemperatureDevice>
+        //    status.TemperatureDevices.Returns(new List<ITemperatureDevice>
         //        {
         //            new TemperatureDeviceFake()
         //            {
@@ -55,7 +55,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
         //        }
         //    };
         //    var status = Substitute.For<IRoomStatusMessage>();
-        //    status.Devices.Returns(devicesList);
+        //    status.TemperatureDevices.Returns(devicesList);
         //    status.Volume.Returns(250);
         //    timeSourceFake.Now = FiveMinutesLater;
 
@@ -78,7 +78,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
         //    var simulator = new TemperatureSimulator(timeSourceFake, StartingTemperature, temperatureModelFake);
 
         //    var status = Substitute.For<IRoomStatusMessage>();
-        //    status.Devices.Returns(new List<ITemperatureDevice>
+        //    status.TemperatureDevices.Returns(new List<ITemperatureDevice>
         //        {
         //            new TemperatureDeviceFake()
         //            {
@@ -92,7 +92,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
 
         //    //Assert
         //    simulator.GetTemperature(status).ShouldBe(35);
-        //    status.Devices.ShouldAllBe(device => !device.IsTurnedOn);
+        //    status.TemperatureDevices.ShouldAllBe(device => !device.IsTurnedOn);
         //}
     }
 }

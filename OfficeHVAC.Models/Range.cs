@@ -2,7 +2,7 @@
 
 namespace OfficeHVAC.Models
 {
-    public class Range<T> : IRange<T> where T : IComparable<T>
+    public struct Range<T> : IRange<T> where T : IComparable<T>
     {
         private T min;
         private T max;

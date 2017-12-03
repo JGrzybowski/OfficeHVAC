@@ -20,8 +20,8 @@ namespace OfficeHVAC.Models
 
         public ParameterValuesCollection Parameters { get; set; } = new ParameterValuesCollection();
 
-        public HashSet<IDevice> Devices { get; set; } = new HashSet<IDevice>();
-        IEnumerable<IDevice> IRoomStatusMessage.Devices => Devices;
+        public HashSet<ITemperatureDeviceStatus> TemperatureDevices { get; set; } = new HashSet<ITemperatureDeviceStatus>();
+        IEnumerable<ITemperatureDeviceStatus> IRoomStatusMessage.TemperatureDevices => TemperatureDevices;
 
         public List<TemperatureJob> Jobs { get; set; } = new List<TemperatureJob>();
         IEnumerable<TemperatureJob> IRoomStatusMessage.Jobs => Jobs;
@@ -39,7 +39,7 @@ namespace OfficeHVAC.Models
                 Volume = Volume,
                 Name = Name,
                 Parameters = Parameters.Clone(),
-                Devices = new HashSet<IDevice>(Devices.Select(device => device.Clone())),
+                TemperatureDevices = new HashSet<ITemperatureDeviceStatus>(TemperatureDevices),
                 Sensors = Sensors.Select(param => param.Clone() as ISensorActorRef).ToList(),
 
                 Events = Events,
@@ -62,7 +62,7 @@ namespace OfficeHVAC.Models
 
         Instant TimeStamp { get; }
 
-        IEnumerable<IDevice> Devices { get; }
+        IEnumerable<ITemperatureDeviceStatus> TemperatureDevices { get; }
 
         IEnumerable<TemperatureJob> Jobs { get; }
 

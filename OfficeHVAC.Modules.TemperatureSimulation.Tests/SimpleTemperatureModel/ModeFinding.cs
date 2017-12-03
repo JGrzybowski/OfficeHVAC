@@ -29,7 +29,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.SimpleTemperatureModel
 
             var devices = new List<ITemperatureDeviceDefinition>()
             {
-                new TemperatureDeviceDefinition() { Id = "Id1", Modes = new[] { offMode, ecoMode, turboMode }, MaxPower = 2500 }
+                new TemperatureDeviceDefinition("Id1", 2500, new[] { offMode, ecoMode, turboMode })
             };
 
             var task = new TemperatureTask(initialTemperature, desiredTemperature, time);

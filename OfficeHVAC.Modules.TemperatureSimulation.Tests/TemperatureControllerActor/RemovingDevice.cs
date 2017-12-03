@@ -21,11 +21,11 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerAc
 
             var now = Instant.FromUtc(2017, 03, 25, 08, 00);
 
-            var device = new TemperatureDeviceDefinition()
-            {
-                Id = "Test dev",
-                MaxPower = 1000,
-                Modes = new List<ITemperatureMode>()
+            var device = new TemperatureDeviceDefinition
+            (
+                id : "Test dev",
+                maxPower : 1000,
+                modes : new List<ITemperatureMode>()
                 {
                     new TemperatureMode()
                     {
@@ -50,13 +50,13 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerAc
                         TemperatureRange = new Range<double>(-100, 100)
                     }
                 }
-            };
+            );
             
-            var device2 = new TemperatureDeviceDefinition()
-            {
-                Id = "Test dev2",
-                MaxPower = 1000,
-                Modes = new List<ITemperatureMode>()
+            var device2 =new TemperatureDeviceDefinition
+            (
+                id : "Test dev",
+                maxPower : 1000,
+                modes : new List<ITemperatureMode>()
                 {
                     new TemperatureMode()
                     {
@@ -81,7 +81,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerAc
                         TemperatureRange = new Range<double>(-100, 100)
                     }
                 }
-            };
+            );
             
             var status = new RoomStatus()
             {

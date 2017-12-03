@@ -27,7 +27,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
         public double ChangeTemperature(IRoomStatusMessage status, Duration timeDelta)
         {
             var temperatureDevices =
-                status.Devices
+                status.TemperatureDevices
                         .Where(dev => dev is ITemperatureDevice)
                         .Cast<ITemperatureDevice>()
                         .ToList();

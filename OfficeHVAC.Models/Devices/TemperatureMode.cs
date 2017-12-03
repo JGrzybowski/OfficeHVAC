@@ -21,7 +21,7 @@
                 Type = Type,
                 PowerConsumption = PowerConsumption,
                 PowerEfficiency = PowerEfficiency,
-                TemperatureRange = new Range<double>(TemperatureRange.Min, TemperatureRange.Max)
+                TemperatureRange = TemperatureRange
             };
     }
 }

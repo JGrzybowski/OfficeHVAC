@@ -66,6 +66,7 @@
     <Compile Include="Devices\ITemperatureMode.cs" />
     <Compile Include="Devices\ITemperatureDevice.cs" />
     <Compile Include="Devices\ModesCollection.cs" />
+    <Compile Include="Devices\TemperatureDeviceStatus.cs" />
     <Compile Include="Devices\TemperatureModeType.cs" />
     <Compile Include="Devices\TemperatureDeviceDefinition.cs" />
     <Compile Include="Devices\TemperatureMode.cs" />

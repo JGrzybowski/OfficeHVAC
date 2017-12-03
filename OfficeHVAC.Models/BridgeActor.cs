@@ -13,11 +13,5 @@ namespace OfficeHVAC.Models
             ViewModel = viewModel;
             Actor = actorRef;
         }
-
-        [Obsolete]
-        protected BridgeActor(TViewModel viewModel)
-        {
-            ViewModel = viewModel;
-        }
     }
 }

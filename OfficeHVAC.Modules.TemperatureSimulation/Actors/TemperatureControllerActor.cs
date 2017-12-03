@@ -56,19 +56,17 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         {
             Receive<AddDevice<ITemperatureDeviceDefinition>>(msg =>
             {
-                Devices.Add(new TemperatureDeviceDefinition()
-                {
-                    Id = msg.Definition.Id,
-                    MaxPower = msg.Definition.MaxPower,
-                    Modes = msg.Definition.Modes.Select(m => m.Clone())
-                });
-
+                if (Devices.Any(d => d.Id == msg.Definition.Id))
+                    Devices.RemoveWhere(dev => dev.Id == msg.Definition.Id);
+                Devices.Add(new TemperatureDeviceDefinition(msg.Definition.Id, msg.Definition.MaxPower, msg.Definition.Modes));
+                //TODO RECALCULATE JOBS!!
                 InformAboutInternalState();
             });
 
             Receive<RemoveDevice>(msg =>
             {
                 Devices.RemoveWhere(dev => dev.Id == msg.Id);
+                //TODO RECALCULATE JOBS!!
                 InformAboutInternalState();
             });
         }
@@ -98,7 +96,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                     preJob.EndTime - Timestamp);
 
             var temperatureDevices =
-                status.Devices
+                status.TemperatureDevices
                     .Where(dev => dev is ITemperatureDeviceDefinition)
                     .Cast<ITemperatureDeviceDefinition>()
                     .ToList();

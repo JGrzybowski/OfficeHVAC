@@ -32,7 +32,12 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerAc
 
             var devices = new List<ITemperatureDeviceDefinition>()
             {
-                new TemperatureDeviceDefinition() { Id = "Id1", Modes = new[] { offMode, ecoMode, turboMode } }
+                new TemperatureDeviceDefinition
+                (
+                    id : "Test dev",
+                    maxPower : 1000,
+                    modes : new[] { offMode, ecoMode, turboMode } 
+                )
             };
 
             //var models = new SimulatorModels(modelFake);

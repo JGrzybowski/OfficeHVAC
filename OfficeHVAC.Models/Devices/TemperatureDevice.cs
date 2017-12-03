@@ -7,7 +7,7 @@ using System.Linq;
 namespace OfficeHVAC.Models.Devices
 {
     public class TemperatureDevice : ITemperatureDevice
-    {
+    {  
         public TemperatureDevice()
         {
             var offMode = new TemperatureMode()
@@ -66,5 +66,11 @@ namespace OfficeHVAC.Models.Devices
             Modes[modeType].CalculateEffectivePower(MaxPower) * time.ToTimeSpan().TotalSeconds;
 
         IEnumerable<ITemperatureMode> ITemperatureDeviceDefinition.Modes => Modes;
+        
+        ITemperatureDeviceStatus ToStatus() => 
+            new TemperatureDeviceStatus(Id, MaxPower, Modes.Select(m => m.Clone()), activeMode, DesiredTemperature);
+
+        public ITemperatureDeviceDefinition ToDefinition() => 
+            new TemperatureDeviceDefinition(Id, MaxPower);
     }
 }
