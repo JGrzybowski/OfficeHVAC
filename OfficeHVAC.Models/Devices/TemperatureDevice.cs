@@ -67,7 +67,7 @@ namespace OfficeHVAC.Models.Devices
 
         IEnumerable<ITemperatureMode> ITemperatureDeviceDefinition.Modes => Modes;
         
-        ITemperatureDeviceStatus ToStatus() => 
+        public ITemperatureDeviceStatus ToStatus() => 
             new TemperatureDeviceStatus(Id, MaxPower, Modes.Select(m => m.Clone()), activeMode, DesiredTemperature);
 
         public ITemperatureDeviceDefinition ToDefinition() => 

@@ -5,11 +5,13 @@ using OfficeHVAC.Modules.RoomSimulator.Messages;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 using Prism.Mvvm;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using NodaTime;
 using OfficeHVAC.Applications.BuildingSimulator.Actors;
+using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 {
@@ -33,7 +35,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             set => SetProperty(ref status, value);
         }
         
-        public ObservableCollection<ITreeElement> Devices { get; } = new ObservableCollection<ITreeElement>();
+        public ObservableCollection<ITreeElement> Controllers { get; } = new ObservableCollection<ITreeElement>();
         public ObservableCollection<ITreeElement> Sensors { get; } = new ObservableCollection<ITreeElement>();
         public ObservableCollection<ITreeElement> SubItems { get; }
 
@@ -67,14 +69,14 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             SubItems = new ObservableCollection<ITreeElement>()
             {
                 new TreeElement(Sensors){Name = "Sensors"},
-                new TreeElement(Devices){Name = "TemperatureDevices"}
+                new TreeElement(Controllers){Name = "Controllers"}
             };
         }
-        
-        public void AddActuator(SensorViewModel device) => Devices.Add(device);
-        public void RemoveDevice(string id) => Devices.Remove(Devices.Single(dev => dev.Id == id));
 
-        public void AddSensor(SensorViewModel sensor) => Sensors.Add(sensor);
+        protected void AddActuator(SensorViewModel device) => Controllers.Add(device);
+        public void RemoveController(string id) => Controllers.Remove(Controllers.Single(dev => dev.Id == id));
+
+        protected void AddSensor(SensorViewModel sensor) => Sensors.Add(sensor);
         public void RemoveSensor(string id) => Sensors.Remove(Sensors.Single(snr => snr.Id == id));
 
         public async Task AddTemperatureSensor(TemperatureSensorViewModel sensor, string timeSimulatorActorPath, string tempSimulatorModelActorPath)
@@ -86,13 +88,18 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             AddSensor(sensor);
         }
 
-        public async Task AddTemperatureActuator(TemperatureActuatorViewModel viewModel, string timeSimulatorActorPath, string tempSimulatorModelActorPath)
+        public async Task AddTemperatureController(TemperatureControllerViewModel viewModel, string timeSimulatorActorPath, string tempSimulatorModelActorPath)
         {
-            var temperatureActuatorActor = await Actor.Ask<IActorRef>(new AddTemperatureActuatorMessage(viewModel.Id));
+            var temperatureActuatorActor = await Actor.Ask<IActorRef>(new AddTemperatureActuatorMessage(viewModel.Id, new[] {timeSimulatorActorPath, tempSimulatorModelActorPath}));
             var bridgeActor = actorSystem.ActorOf(TemperatureActuatorBridgeActor.Props(viewModel, temperatureActuatorActor));
 
             viewModel.Actor = bridgeActor;
             AddActuator(viewModel);
         }
+
+        public void AddTemperatureDevice(ITemperatureDeviceDefinition definition) => 
+            Actor.Tell(new AddDevice<ITemperatureDeviceDefinition>(definition));
+
+        public void RemoveDevice(string deviceId) => Actor.Tell(new RemoveDevice(deviceId));
     }
 }

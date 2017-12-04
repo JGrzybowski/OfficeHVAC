@@ -59,6 +59,18 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 Sender.Tell(status);
             });
 
+            Receive<AddDevice<ITemperatureDeviceDefinition>>(def =>
+            {
+                foreach (var actuator in Actuators)
+                    actuator.Actor.Forward(def);
+            });
+
+            Receive<RemoveDevice>(msg =>
+            {
+                foreach (var actuator in Actuators)
+                    actuator.Actor.Forward(msg);
+            });
+
             // JOB SCHEDULING SECTION
 //            Receive<Requirements>(message =>
 //            {

@@ -12,7 +12,8 @@
                          mc:Ignorable="d"
                          syncfusionskin:SfSkinManager.VisualStyle="Office2016White"
                          Title="HVAC Simulator" Height="600" Width="800" 
-                         d:DataContext="{viewModels:MainWindowViewModel}">
+                         
+                         >
     <DockPanel>
         <syncfusion:Ribbon DockPanel.Dock="Top" VerticalAlignment="Top" >
             <syncfusion:RibbonTab Caption="Building" DataContext="{Binding Building}">
@@ -21,19 +22,17 @@
                     <syncfusion:RibbonButton Label="-Company" SizeForm="Small" Command="{Binding DeleteCompanyCommand}"/>
                 </syncfusion:RibbonBar>
                 <syncfusion:RibbonBar Header="Rooms">
-                    <syncfusion:RibbonButton Label="+Room"    SizeForm="Small" Command="{Binding AddRoomCommand}"/>
-                    <syncfusion:RibbonButton Label="-Room"    SizeForm="Small" Command="{Binding RemoveRoomCommand}" />
+                    <syncfusion:RibbonButton Label="+Room" SizeForm="Small" Command="{Binding AddRoomCommand}"/>
+                    <syncfusion:RibbonButton Label="-Room" SizeForm="Small" Command="{Binding RemoveRoomCommand}" />
                 </syncfusion:RibbonBar>
                 <syncfusion:RibbonBar Header="Actuators">
-                    <syncfusion:SplitButton Label="+Actuator" SizeForm="Small" >
-                        <syncfusion:DropDownMenuItem Header="Temperature" Command="{Binding AddTemperatureActuatorCommand}"/>
-                    </syncfusion:SplitButton>
+                    <syncfusion:RibbonButton Label="+Temperature" SizeForm="Small" Command="{Binding AddTemperatureActuatorCommand}"/>
+                    <syncfusion:RibbonButton Label="-Device"      SizeForm="Small" Command="{Binding RemoveDeviceCommand}"/>
                 </syncfusion:RibbonBar>
                 <syncfusion:RibbonBar Header="Sensors">
-                    <syncfusion:SplitButton Label="+Sensor" SizeForm="Small" >
-                        <syncfusion:DropDownMenuItem Header="Temperature" Command="{Binding AddTemperatureSensorCommand}"/>
-                        <syncfusion:DropDownMenuItem Header="Location" IsEnabled="false"/>
-                    </syncfusion:SplitButton>
+                    <syncfusion:RibbonButton Label="+Temperature" SizeForm="Small" Command="{Binding AddTemperatureSensorCommand}"/>
+                    <syncfusion:RibbonButton Label="+Location"    SizeForm="Small" IsEnabled="false"/>
+                    
                 </syncfusion:RibbonBar>
                 <syncfusion:RibbonBar Header="Seed Data">
                     <syncfusion:RibbonButton Label="Set1"  SizeForm="Small" Click="SeedDataButton_Click"/>

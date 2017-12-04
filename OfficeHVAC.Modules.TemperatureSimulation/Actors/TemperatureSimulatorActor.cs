@@ -52,7 +52,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
         protected override void OnTimeUpdated(Duration timeDiff) =>
             temperatureSimulator.ChangeTemperature(RoomStatus, timeDiff);
-
+        
         protected override void OnThresholdCrossed()
         {
             var statusUpdateMessage = new ParameterValue(SensorType.Temperature, temperatureSimulator.Temperature);

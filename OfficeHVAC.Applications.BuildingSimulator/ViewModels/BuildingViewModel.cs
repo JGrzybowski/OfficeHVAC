@@ -1,11 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Akka.Actor;
+﻿using Akka.Actor;
 using OfficeHVAC.Applications.BuildingSimulator.Actors;
 using Prism.Commands;
 using Prism.Mvvm;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 {
@@ -42,13 +42,15 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             InitializeAddRoomCommand();
             InitializeRemoveRoomCommand();
 
-            InitializeAddDeviceCommand();
+            InitializeAddActuatorCommand();
+            //InitializeAddDeviceCommand();
             InitializeRemoveDeviceCommand();
             
             InitializeAddTemperatureSensorCommand();
             InitializeRemoveSensorCommand();
         }
         
+        //Company Commands
         public ICommand AddCompanyCommand { get; set; }
         public CompanyViewModel AddCompany()
         {
@@ -82,6 +84,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
                 .ObservesProperty(() => SelectedItem);
         }
 
+        //Room Commands
         public ICommand AddRoomCommand { get; set; }
         private void InitializeAddRoomCommand()
         {
@@ -108,14 +111,15 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
                 .ObservesProperty(() => SelectedItem);
         }
 
+        //Actuator Commands
         public ICommand AddTemperatureActuatorCommand { get; set; }
-        public async Task<TemperatureActuatorViewModel> AddTemperatureActuator(RoomViewModel room)
+        public async Task<TemperatureControllerViewModel> AddTemperatureActuator(RoomViewModel room)
         {
-            var actuator = new TemperatureActuatorViewModel {Name = "New Device"};
-            await room.AddTemperatureActuator(actuator, SystemInfo.TimeSimulatorActorPath, SystemInfo.TempSimulatorModelActorPath);
+            var actuator = new TemperatureControllerViewModel {Name = "New Device"};
+            await room.AddTemperatureController(actuator, SystemInfo.TimeSimulatorActorPath, SystemInfo.TempSimulatorModelActorPath);
             return actuator;
         }
-        private void InitializeAddDeviceCommand()
+        private void InitializeAddActuatorCommand()
         {
             AddTemperatureActuatorCommand = new DelegateCommand(
                     async () => await AddTemperatureActuator(SelectedRoom),
@@ -123,6 +127,20 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
                 )
                 .ObservesProperty(() => SelectedItem);
         }
+        
+        //Device Commands
+        //TODO add model for adding device
+        //public ICommand AddDeviceCommand { get; set; }
+        //private void AddDevice(RoomViewModel room, TemperatureDeviceDefinition temperatureDeviceDefinition) => 
+        //    room.AddTemperatureDevice(temperatureDeviceDefinition);
+        //private void InitializeAddDeviceCommand()
+        //{
+        //    AddDeviceCommand = new DelegateCommand(
+        //            () => AddDevice(SelectedRoom, temperatureDeviceDefinition),
+        //            () => RoomIsSelected
+        //        )
+        //        .ObservesProperty(() => SelectedItem);
+        //}
 
         public ICommand RemoveDeviceCommand { get; set; }
         public void RemoveDevice(DeviceViewModel deviceViewModel)
@@ -143,6 +161,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
                 .ObservesProperty(() => SelectedItem);
         }
         
+        //Sensor Commands
         public ICommand AddTemperatureSensorCommand { get; set; }
         public async Task<SensorViewModel> AddTemperatureSensor(RoomViewModel room)
         {
@@ -170,7 +189,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         }
         private void InitializeRemoveSensorCommand()
         {
-            RemoveDeviceCommand = new DelegateCommand
+            RemoveSensorCommand = new DelegateCommand
                 (
                     () => RemoveSensor(SelectedSensor),
                     () => SensorIsSelected

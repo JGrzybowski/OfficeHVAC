@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Configuration;
 using System.Threading.Tasks;
@@ -17,8 +18,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         protected ITemperatureModel TemperatureModel;
         protected bool ReceivedTemperatureModel => TemperatureModel != null;
 
-        protected HashSet<TemperatureDeviceDefinition> Devices { get; set; } =
-            new HashSet<TemperatureDeviceDefinition>();
+        protected HashSet<TemperatureDevice> Devices { get; set; } =
+            new HashSet<TemperatureDevice>();
 
         protected override bool ReceivedInitialData() =>
             TimeStampInitialized && ReceivedTemperatureModel && ReceivedInitialRoomStatus;
@@ -58,7 +59,14 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             {
                 if (Devices.Any(d => d.Id == msg.Definition.Id))
                     Devices.RemoveWhere(dev => dev.Id == msg.Definition.Id);
-                Devices.Add(new TemperatureDeviceDefinition(msg.Definition.Id, msg.Definition.MaxPower, msg.Definition.Modes));
+                
+                Devices.Add(new TemperatureDevice()
+                {
+                    Id = msg.Definition.Id,
+                    MaxPower = msg.Definition.MaxPower,
+                    Modes = new ModesCollection(msg.Definition.Modes)
+                });
+                
                 //TODO RECALCULATE JOBS!!
                 InformAboutInternalState();
             });
@@ -119,19 +127,19 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             Akka.Actor.Props.Create(() => new TemperatureControllerActor(subscriptionSources));
 
         protected override TemperatureControllerStatus GenerateInternalState() =>
-            new TemperatureControllerStatus(Id, ParameterValue, Timestamp, Threshold,
-                Devices.Select(d => d.ToMessage()).ToList());
+            new TemperatureControllerStatus(Id, ParameterValue, Timestamp, ThresholdBuffer,
+                Devices.Select(d => d.ToStatus()).ToList());
     }
 
     public class TemperatureControllerStatus : SimulatingComponentStatus<double>
     {
         public TemperatureControllerStatus(string id, double parameter, Instant timestamp, Duration theresholdBuffer,
-            IEnumerable<ITemperatureDeviceDefinition> devices)
+            IEnumerable<ITemperatureDeviceStatus> devices)
             : base(id, parameter, timestamp, theresholdBuffer)
         {
             Devices = devices;
         }
 
-        public IEnumerable<ITemperatureDeviceDefinition> Devices { get; }
+        public IEnumerable<ITemperatureDeviceStatus> Devices { get; }
     }
 }

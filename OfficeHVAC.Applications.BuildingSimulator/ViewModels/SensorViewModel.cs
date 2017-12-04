@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using Akka.Actor;
+﻿using Akka.Actor;
 using NodaTime;
 using OfficeHVAC.Models;
 using Prism.Mvvm;
+using System;
+using System.Collections.ObjectModel;
 
-namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels {
+namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
+{
     public class SensorViewModel : BindableBase, ITreeElement 
     {
         public string Id { get; } = Guid.NewGuid().ToString();
@@ -17,7 +18,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels {
             set => SetProperty(ref name, value);
         }
         
-        public ObservableCollection<ITreeElement> SubItems { get; } = new ObservableCollection<ITreeElement>();
+        public ObservableCollection<ITreeElement> SubItems { get; protected set; } = new ObservableCollection<ITreeElement>();
 
         protected SensorType sensorType = SensorType.Unknown;
         public SensorType SensorType
@@ -30,7 +31,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels {
         public Instant Timestamp
         {
             get => timestamp;
-            set => SetProperty(ref timestamp, value);
+            protected set => SetProperty(ref timestamp, value);
         }
 
         public IActorRef Actor { get; set; }

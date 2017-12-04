@@ -4,8 +4,8 @@ using OfficeHVAC.Models;
 using OfficeHVAC.Modules.RoomSimulator.Messages;
 using OfficeHVAC.Modules.TemperatureSimulation.Actors;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
-using OfficeHVAC.Modules.TimeSimulation.Messages;
 using System;
+using System.Collections.Generic;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -32,7 +32,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
             Receive<AddTemperatureActuatorMessage>(msg =>
             {
-                var actuatorProps = PrepareTemperatureActuatorProps();
+                var sources = new List<string>(msg.SubsriptionSources){Self.Path.ToStringWithoutAddress()}.ToArray();
+                var actuatorProps = PrepareTemperatureControllerProps(sources);
                 var acuatorRef = Context.ActorOf(actuatorProps, "temperatureActuator");
                 AddActuator(acuatorRef, SensorType.Temperature, msg.Id);
                 Sender.Tell(acuatorRef);
@@ -74,8 +75,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         protected Props PrepareTemperatureSimulatorActorProps(string id, string timeActorPath, string tempActorPath) => 
             TemperatureSimulatorActor.Props(Status, timeActorPath, tempActorPath);
 
-        protected Props PrepareTemperatureActuatorProps() => 
-            TemperatureActuatorActor.Props();
+        protected Props PrepareTemperatureControllerProps(IEnumerable<string> subscriptionSources) => 
+            TemperatureControllerActor.Props(subscriptionSources);
 
         public static Props Props(RoomStatus initialStatus, string companySupervisorActorPath) => 
             Akka.Actor.Props.Create(() => new RoomSimulatorActor(initialStatus.Clone(), companySupervisorActorPath));
