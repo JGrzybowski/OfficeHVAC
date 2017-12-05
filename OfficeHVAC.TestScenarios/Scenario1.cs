@@ -18,7 +18,7 @@ using Xunit;
 
 namespace OfficeHVAC.TestScenarios
 {
-    public class Scenario1 : TestKit
+    public abstract class Scenario1 : TestKit
     {
         private IActorRef hole;
 
@@ -105,12 +105,12 @@ namespace OfficeHVAC.TestScenarios
             initialStatus.Parameters.Add(new ParameterValue(SensorType.Temperature, 25));
             roomActorRef = ActorOfAsTestActorRef(() => new RoomSimulatorActor(initialStatus, hole.Path));
             //There is a meeting at 10:30 we want to have 21'C by then
-            var firstMeeting = SetMeeting(At(10, 30), Temperature(21));
+            SetMeeting(At(10, 30), Temperature(21));
 
             //At 8:30 
             //Someone arranges an important meeting on 9:00 and wants 18'C
             SetTime(8, 30);
-            var importantMeeting = SetMeeting(At(9, 00), Temperature(18));
+            SetMeeting(At(9, 00), Temperature(18));
 
             //At 9:00
             //We should have temperature around 18'C in the room
@@ -155,18 +155,18 @@ namespace OfficeHVAC.TestScenarios
             //return status;
         }
 
-        private Requirements SetMeeting(Instant time, params ParameterValue[] parameters)
-        {
-            var pars = new ParameterValuesCollection();
-            foreach (var parameter in parameters)
-                pars.Add(parameter);
-
-            var requirements = new Requirements(time, pars);
-
-            roomActorRef.Tell(requirements);
-            Thread.Sleep(2500);
-            return requirements;
-        }
+        protected abstract void SetMeeting(Instant time, params ParameterValue[] parameters);
+//        {
+//            var pars = new ParameterValuesCollection();
+//            foreach (var parameter in parameters)
+//                pars.Add(parameter);
+//
+//            var requirements = new Requirements(time, pars);
+//
+//            roomActorRef.Tell(requirements);
+//            Thread.Sleep(2500);
+//            return requirements;
+//        }
 
         private void SetTime(int hours, int minutes)
         {

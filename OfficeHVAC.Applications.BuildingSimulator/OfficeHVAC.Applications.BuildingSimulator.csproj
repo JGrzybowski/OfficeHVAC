@@ -122,7 +122,7 @@
     <Compile Include="Actors\CompanyBridgeActor.cs" />
     <Compile Include="Actors\CreateRoomMessage.cs" />
     <Compile Include="Actors\RemoveRoomMessage.cs" />
-    <Compile Include="Actors\TemperatureActuatorBridgeActor.cs" />
+    <Compile Include="Actors\TemperatureControllerBridgeActor.cs" />
     <Compile Include="Actors\TemperatureModelActor.cs" />
     <Compile Include="Actors\TemperatureSimulatorBridgeActor.cs" />
     <Compile Include="Actors\UpdateCompanyMessage.cs" />
@@ -146,6 +146,7 @@
     <Compile Include="ViewModels\TemperatureControllerViewModel.cs" />
     <Compile Include="ViewModels\TemperatureSensorViewModel.cs" />
     <Compile Include="ViewModels\TemperatureSimulatorParamsViewModel.cs" />
+    <Compile Include="ViewModels\TemperatureModeViewModel.cs" />
     <Compile Include="ViewModels\TreeElement.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -18,10 +18,6 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected IActorRef SubscribersManager { get; private set; }
 
-        protected List<TemperatureJob> Jobs { get; } = new List<TemperatureJob>();
-
-        protected HashSet<Requirements> Events { get; } = new HashSet<Requirements>();
-
         protected double StabilizationThreshold = 1.0;
 
         public RoomActor(RoomStatus initialStatus, ICanTell parentContact) : this()

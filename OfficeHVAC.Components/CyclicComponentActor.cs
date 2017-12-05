@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Akka.Actor;
 using NodaTime;
 using OfficeHVAC.Messages;
@@ -47,10 +46,10 @@ namespace OfficeHVAC.Components
             var timeDiff = now - Timestamp;
             Timestamp = now;
             ThresholdBuffer += timeDiff;
-            OnTimeUpdated(timeDiff);
+            OnTimeUpdated(timeDiff, now);
         }
 
-        protected virtual void OnTimeUpdated(Duration timeDiff) { }
+        protected virtual void OnTimeUpdated(Duration timeDiff, Instant newTime) { }
         
         protected void RegisterSubscribtionReceives()
         {

@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net.Http.Headers;
 using OfficeHVAC.Models.Devices;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
@@ -14,6 +16,8 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         public IEnumerable<ITemperatureMode> Modes { get; }
         public double DesiredTemperature { get; }
         public TemperatureModeType ActiveModeType { get; }
+        public ITemperatureMode ActiveMode => Modes.SingleOrDefault(m => m.Type == ActiveModeType);
+        public double CurrentPowerUsage => ActiveMode?.CalculateEffectivePower(MaxPower) ?? 0;
 
         public ObservableCollection<ITreeElement> SubItems { get; }
 
@@ -21,11 +25,13 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 
         public DeviceViewModel(ITemperatureDeviceStatus status)
         {
+            Name = "HVAC Device";
             Id = status.Id;
             MaxPower = status.MaxPower;
             Modes = status.Modes;
             ActiveModeType = status.ActiveModeType;
             DesiredTemperature = status.DesiredTemperature;
+            SubItems = new ObservableCollection<ITreeElement>(status.Modes.Select(m => new TemperatureModeViewModel(m)));
         }
     }
 }

@@ -71,6 +71,6 @@ namespace OfficeHVAC.Models.Devices
             new TemperatureDeviceStatus(Id, MaxPower, Modes.Select(m => m.Clone()), activeMode, DesiredTemperature);
 
         public ITemperatureDeviceDefinition ToDefinition() => 
-            new TemperatureDeviceDefinition(Id, MaxPower);
+            new TemperatureDeviceDefinition(Id, MaxPower, Modes.Select(m => m.Clone()));
     }
 }

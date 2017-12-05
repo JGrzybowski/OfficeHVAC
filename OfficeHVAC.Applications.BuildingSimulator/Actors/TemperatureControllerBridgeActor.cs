@@ -1,13 +1,15 @@
-﻿using Akka.Actor;
+﻿using System.Collections.Generic;
+using Akka.Actor;
 using OfficeHVAC.Applications.BuildingSimulator.ViewModels;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Subscription;
 using OfficeHVAC.Modules.TemperatureSimulation.Actors;
+using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.Actors {
-    public class TemperatureActuatorBridgeActor : BridgeActor<SensorViewModel<TemperatureControllerStatus,double>>
+    public class TemperatureControllerBridgeActor : BridgeActor<SensorViewModel<TemperatureControllerStatus,double>>
     {
-        public TemperatureActuatorBridgeActor(SensorViewModel<TemperatureControllerStatus, double> viewModel, IActorRef actorRef)
+        public TemperatureControllerBridgeActor(SensorViewModel<TemperatureControllerStatus, double> viewModel, IActorRef actorRef)
             : base(viewModel, actorRef)
         {
             Receive<TemperatureControllerStatus>(msg => UpdateViewModel(msg));
@@ -20,6 +22,6 @@ namespace OfficeHVAC.Applications.BuildingSimulator.Actors {
         }
 
         public static Props Props(TemperatureControllerViewModel viewModel, IActorRef temperatureActuatorActor) => 
-            Akka.Actor.Props.Create(() => new TemperatureActuatorBridgeActor(viewModel, temperatureActuatorActor));
+            Akka.Actor.Props.Create(() => new TemperatureControllerBridgeActor(viewModel, temperatureActuatorActor));
     }
 }

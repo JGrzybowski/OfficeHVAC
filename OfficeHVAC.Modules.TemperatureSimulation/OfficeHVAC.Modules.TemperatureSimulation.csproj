@@ -61,10 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actors\TemperatureControllerActor.cs" />
+    <Compile Include="Actors\TemperatureJobSheduler.cs" />
     <Compile Include="Actors\TemperatureSimulatorActor.cs" />
     <Compile Include="ITemperatureSimulator.cs" />
     <Compile Include="Messages\AddTemperatureActuatorMessage.cs" />
     <Compile Include="Messages\AddTemperatureSensorMessage.cs" />
+    <Compile Include="Messages\RequirementsSet.cs" />
     <Compile Include="Messages\TemperatureModelRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleTemperatureModel.cs" />

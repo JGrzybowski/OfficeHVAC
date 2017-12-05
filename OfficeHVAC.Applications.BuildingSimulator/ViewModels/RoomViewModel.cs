@@ -91,7 +91,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         public async Task AddTemperatureController(TemperatureControllerViewModel viewModel, string timeSimulatorActorPath, string tempSimulatorModelActorPath)
         {
             var temperatureActuatorActor = await Actor.Ask<IActorRef>(new AddTemperatureActuatorMessage(viewModel.Id, new[] {timeSimulatorActorPath, tempSimulatorModelActorPath}));
-            var bridgeActor = actorSystem.ActorOf(TemperatureActuatorBridgeActor.Props(viewModel, temperatureActuatorActor));
+            var bridgeActor = actorSystem.ActorOf(TemperatureControllerBridgeActor.Props(viewModel, temperatureActuatorActor));
 
             viewModel.Actor = bridgeActor;
             AddActuator(viewModel);

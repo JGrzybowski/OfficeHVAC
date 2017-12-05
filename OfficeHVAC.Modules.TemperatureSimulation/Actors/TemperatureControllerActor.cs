@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net.Configuration;
-using System.Threading.Tasks;
-using Akka.Actor;
+﻿using Akka.Actor;
 using NodaTime;
 using OfficeHVAC.Components;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
+using OfficeHVAC.Modules.TemperatureSimulation.Messages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
@@ -17,15 +15,21 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
     {
         protected ITemperatureModel TemperatureModel;
         protected bool ReceivedTemperatureModel => TemperatureModel != null;
-
-        protected HashSet<TemperatureDevice> Devices { get; set; } =
-            new HashSet<TemperatureDevice>();
-
+        
+        protected IActorRef JobShedulerActor { get; }         
+        
+        protected HashSet<TemperatureDevice> Devices { get; set; } = new HashSet<TemperatureDevice>();
+        
+        protected ExectionPlan ExecutionPlan { get; set; } = new ExectionPlan(new TemperatureJob[0]);
+        
         protected override bool ReceivedInitialData() =>
             TimeStampInitialized && ReceivedTemperatureModel && ReceivedInitialRoomStatus;
 
         public TemperatureControllerActor(IEnumerable<string> subscriptionSources)
-            : base(subscriptionSources) { }
+            : base(subscriptionSources)
+        {
+            JobShedulerActor = Context.ActorOf<TemperatureJobSheduler>();
+        }
 
         protected override void Uninitialized()
         {
@@ -46,11 +50,32 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         {
             RegisterDevicesManagementMessages();
 
-            ReceiveAsync<Requirements>(
-                async msg => Sender.Tell(CalculateNextJob(msg, await RequestStatus())),
-                msg => msg.Parameters.Contains(SensorType.Temperature));
+            Receive<IEnumerable<Requirement<double>>>(msg =>
+            {
+                var temperature = Convert.ToDouble(RoomStatus.Parameters[SensorType.Temperature].Value);
+                var requirementsSet = new RequirementsSet<double, ITemperatureDeviceDefinition, ITemperatureModel>
+                    (temperature, Timestamp, msg, Devices.Select(d => d.ToDefinition()).ToArray(), TemperatureModel, RoomStatus);
+                JobShedulerActor.Tell(requirementsSet);
+            });
+
+            Receive<ExectionPlan>(msg =>
+            {
+                ExecutionPlan = msg;
+                ControlDevices();
+                InformAboutInternalState();
+            });
 
             base.Initialized();
+        }
+
+        private void ControlDevices()
+        {
+            var nextJob = ExecutionPlan.Jobs.OrderBy(j => j.StartTime).FirstOrDefault();
+            if (nextJob == null || nextJob?.StartTime > Timestamp)
+                return;
+            
+            foreach (var device in Devices)
+                device.SetActiveMode(nextJob.ModeType);
         }
 
         protected void RegisterDevicesManagementMessages()
@@ -79,48 +104,16 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             });
         }
 
+        protected override void OnTimeUpdated(Duration timeDiff, Instant newTime)
+        {
+            base.OnTimeUpdated(timeDiff, newTime);
+            ControlDevices();
+        }
+
         protected override void InitializeFromRoomStatus(IRoomStatusMessage roomStatus)
         {
             RoomStatus = roomStatus;
             base.InitializeFromRoomStatus(roomStatus);
-        }
-
-        private TemperatureJob CalculateNextJob(Requirements requirements, IRoomStatusMessage status)
-        {
-            var desiredTemperature = Convert.ToDouble(requirements.Parameters[SensorType.Temperature].Value);
-            var preJob = status.Jobs
-                .Where(j => j.EndTime < requirements.Deadline)
-                .OrderBy(j => requirements.Deadline - j.EndTime)
-                .FirstOrDefault();
-
-            TemperatureTask task;
-            if (preJob == null)
-                task = new TemperatureTask(Convert.ToDouble(status.Parameters[SensorType.Temperature].Value),
-                    desiredTemperature,
-                    requirements.Deadline - Timestamp);
-            else
-                task = new TemperatureTask(preJob.DesiredTemperature,
-                    desiredTemperature,
-                    preJob.EndTime - Timestamp);
-
-            var temperatureDevices =
-                status.TemperatureDevices
-                    .Where(dev => dev is ITemperatureDeviceDefinition)
-                    .Cast<ITemperatureDeviceDefinition>()
-                    .ToList();
-
-            var bestModeName = TemperatureModel.FindMostEfficientCombination(task, status, temperatureDevices);
-            var job = new TemperatureJob(bestModeName, desiredTemperature,
-                requirements.Deadline - TemperatureModel.CalculateNeededTime(task.InitialTemperature,
-                    task.DesiredTemperature, temperatureDevices, bestModeName, status.Volume),
-                requirements.Deadline);
-
-            return job;
-        }
-
-        private async Task<RoomStatus> RequestStatus()
-        {
-            return await Context.Sender.Ask<RoomStatus>(new RoomStatus.Request(), TimeSpan.FromSeconds(5));
         }
 
         public static Props Props(IEnumerable<string> subscriptionSources) =>

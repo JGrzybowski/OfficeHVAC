@@ -1,13 +1,10 @@
 ﻿using Akka.Actor;
 using NodaTime;
+using OfficeHVAC.Components;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Subscription;
-using OfficeHVAC.Modules.TimeSimulation.Messages;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using OfficeHVAC.Components;
-using OfficeHVAC.Models.Actors;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
@@ -50,7 +47,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             base.Initialized();
         }
 
-        protected override void OnTimeUpdated(Duration timeDiff) =>
+        protected override void OnTimeUpdated(Duration timeDiff, Instant newTime) =>
             temperatureSimulator.ChangeTemperature(RoomStatus, timeDiff);
         
         protected override void OnThresholdCrossed()

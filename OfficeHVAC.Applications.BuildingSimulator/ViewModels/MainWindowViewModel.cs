@@ -6,6 +6,8 @@ using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using NodaTime;
+using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
 {
@@ -57,7 +59,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             room.AddTemperatureDevice(new TemperatureDeviceDefinition
                 (
                     id : "Test dev",
-                    maxPower : 1000,
+                    maxPower : 5000,
                     modes : new List<ITemperatureMode>()
                     {
                         new TemperatureMode()
@@ -85,8 +87,12 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
                     }
                 )
             );
-            
-            
+
+            var meetingA = new Requirement<double>(Time.Time + Duration.FromHours(2), Time.Time + Duration.FromHours(3), 21.0);
+            var meetingB = new Requirement<double>(meetingA.EndTime + Duration.FromMinutes(15), meetingA.EndTime + Duration.FromHours(2), 24.0);
+            var meetingC = new Requirement<double>(meetingB.EndTime + Duration.FromMinutes(60), meetingB.EndTime + Duration.FromHours(2), 18.0);
+            //controller.Tell(new {meetingA, meetingB, meetingC});
+
             //room = await company.AddRoom();
             //room.Name = "Room 102";
 

@@ -115,7 +115,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
         public ICommand AddTemperatureActuatorCommand { get; set; }
         public async Task<TemperatureControllerViewModel> AddTemperatureActuator(RoomViewModel room)
         {
-            var actuator = new TemperatureControllerViewModel {Name = "New Device"};
+            var actuator = new TemperatureControllerViewModel {Name = "Temperature Controller"};
             await room.AddTemperatureController(actuator, SystemInfo.TimeSimulatorActorPath, SystemInfo.TempSimulatorModelActorPath);
             return actuator;
         }
