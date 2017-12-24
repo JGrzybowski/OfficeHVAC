@@ -7,6 +7,7 @@ using OfficeHVAC.Models.Devices;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
@@ -19,7 +20,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         protected IActorRef JobShedulerActor { get; }         
         
         protected HashSet<TemperatureDevice> Devices { get; set; } = new HashSet<TemperatureDevice>();
-        
+
+        protected IEnumerable<Requirement<double>> Requirements { get; set; } = new List<Requirement<double>>(); 
         protected ExectionPlan ExecutionPlan { get; set; } = new ExectionPlan(new TemperatureJob[0]);
         
         protected override bool ReceivedInitialData() =>
@@ -52,10 +54,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
             Receive<IEnumerable<Requirement<double>>>(msg =>
             {
-                var temperature = Convert.ToDouble(RoomStatus.Parameters[SensorType.Temperature].Value);
-                var requirementsSet = new RequirementsSet<double, ITemperatureDeviceDefinition, ITemperatureModel>
-                    (temperature, Timestamp, msg, Devices.Select(d => d.ToDefinition()).ToArray(), TemperatureModel, RoomStatus);
-                JobShedulerActor.Tell(requirementsSet);
+                Requirements = msg; 
+                JobShedulerActor.Tell(GenerateRequirementsSet());
             });
 
             Receive<ExectionPlan>(msg =>
@@ -92,14 +92,17 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                     Modes = new ModesCollection(msg.Definition.Modes)
                 });
                 
-                //TODO RECALCULATE JOBS!!
+                if (Requirements.Any())
+                    JobShedulerActor.Tell(GenerateRequirementsSet());
+
                 InformAboutInternalState();
             });
 
             Receive<RemoveDevice>(msg =>
             {
                 Devices.RemoveWhere(dev => dev.Id == msg.Id);
-                //TODO RECALCULATE JOBS!!
+                if (Requirements.Any())
+                    JobShedulerActor.Tell(GenerateRequirementsSet());
                 InformAboutInternalState();
             });
         }
@@ -114,6 +117,27 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         {
             RoomStatus = roomStatus;
             base.InitializeFromRoomStatus(roomStatus);
+        }
+
+        protected override void UpdateRoomStatus(IRoomStatusMessage roomStatus)
+        {
+            Debug.WriteLine($"Status From: {Sender.Path}");
+            base.UpdateRoomStatus(roomStatus);
+        }
+
+        protected RequirementsSet<double, ITemperatureDeviceDefinition, ITemperatureModel> GenerateRequirementsSet()
+        {
+            var reqSet = new RequirementsSet<double, ITemperatureDeviceDefinition, ITemperatureModel>
+            (
+                Convert.ToDouble(RoomStatus.Parameters[SensorType.Temperature].Value),
+                Timestamp,
+                Requirements,
+                Devices.Select(d => d.ToDefinition()).ToArray(),
+                TemperatureModel,
+                RoomStatus
+            );
+
+            return reqSet;
         }
 
         public static Props Props(IEnumerable<string> subscriptionSources) =>

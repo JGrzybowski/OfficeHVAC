@@ -13,10 +13,10 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
         private const double AirsSpecificHeat = 1005;   //  W / kg*C*s
         private const double AirsDensity = 1.2;         // kg / m^3
 
-        public virtual double CalculateChange(double temperature, IEnumerable<ITemperatureDevice> devices, Duration timeDelta, double volume)
+        public virtual double CalculateChange(double temperature, IEnumerable<ITemperatureDeviceStatus> devices, Duration timeDelta, double volume)
         {
             var seconds = timeDelta.ToTimeSpan().TotalSeconds;
-            var power = devices.Sum(device => device.EffectivePower * Math.Sign(device.DesiredTemperature - temperature));
+            var power = devices.Sum(device => device.EffectivePower * Math.Sign(device.GetDesiredTemperature() - temperature));
 
             return (power * seconds) / (AirsDensity * volume * AirsSpecificHeat);
         }

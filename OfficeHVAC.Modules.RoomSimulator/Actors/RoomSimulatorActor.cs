@@ -1,11 +1,14 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
+using OfficeHVAC.Models.Devices;
+using OfficeHVAC.Models.Subscription;
 using OfficeHVAC.Modules.RoomSimulator.Messages;
 using OfficeHVAC.Modules.TemperatureSimulation.Actors;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -36,9 +39,13 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 var actuatorProps = PrepareTemperatureControllerProps(sources);
                 var acuatorRef = Context.ActorOf(actuatorProps, "temperatureActuator");
                 AddActuator(acuatorRef, SensorType.Temperature, msg.Id);
+                acuatorRef.Tell(new DebugSubscribeMessage(Context.Self));
                 Sender.Tell(acuatorRef);
             });
-            
+
+            Receive<AddDevice<ITemperatureDeviceDefinition>>(msg =>
+                Actuators.SingleOrDefault(ctrl => ctrl.Type == SensorType.Temperature)?.Actor.Tell(msg));
+
             Receive<TimeChangedMessage>(
                 msg =>
                 {

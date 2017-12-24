@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Configuration;
-using NodaTime;
+﻿using NodaTime;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
+using System.Collections.Generic;
 
-namespace OfficeHVAC.Components {
+namespace OfficeHVAC.Components
+{
     public abstract class SimulatingComponentActor<TInternalStatus, TParameter> : CyclicComponentActor<TInternalStatus, TParameter> 
         where TInternalStatus : ComponentStatus<TParameter>
     {
@@ -22,7 +21,8 @@ namespace OfficeHVAC.Components {
             Receive<IRoomStatusMessage>(msg =>
             {
                 UpdateRoomStatus(msg);
-                InitializeFromRoomStatus(msg);
+                if(!ReceivedInitialRoomStatus)
+                    InitializeFromRoomStatus(msg);
                 InformAboutInternalState();
                 if (ReceivedInitialData())
                     Become(Initialized);

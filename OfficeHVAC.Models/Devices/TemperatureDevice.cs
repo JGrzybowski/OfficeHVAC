@@ -45,7 +45,7 @@ namespace OfficeHVAC.Models.Devices
 
         public double EffectivePower => ActiveMode.CalculateEffectivePower(MaxPower);
 
-        public double PowerConsumption => MaxPower * Math.Abs(EffectivePower);
+        public double PowerConsumption => ActiveMode.PowerConsumption * MaxPower;
 
         public void TurnOff() => SetActiveMode(TemperatureModeType.Off);
 

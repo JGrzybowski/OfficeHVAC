@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Akka.Actor;
+﻿using Akka.Actor;
 using NodaTime;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
@@ -8,6 +6,8 @@ using OfficeHVAC.Models.Devices;
 using OfficeHVAC.Models.Subscription;
 using OfficeHVAC.Modules.TemperatureSimulation.Actors;
 using Shouldly;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerActor
@@ -54,7 +54,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureControllerAc
             
             var device2 =new TemperatureDeviceDefinition
             (
-                id : "Test dev",
+                id : "Test dev2",
                 maxPower : 1000,
                 modes : new List<ITemperatureMode>()
                 {

@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace OfficeHVAC.Models.Devices {
+namespace OfficeHVAC.Models.Devices
+{
     public interface ITemperatureDeviceStatus {
         string Id { get; }
         int MaxPower { get; }
         IEnumerable<ITemperatureMode> Modes { get; }
         TemperatureModeType ActiveModeType { get; }
         ITemperatureMode ActiveMode { get; }
-        Double DesiredTemperature { get; }
+        double EffectivePower { get; }
+        double GetDesiredTemperature();
     }
 
     public class TemperatureDeviceStatus : ITemperatureDeviceStatus
@@ -20,7 +21,7 @@ namespace OfficeHVAC.Models.Devices {
             MaxPower = maxPower;
             Modes = modes;
             ActiveModeType = activeModeType;
-            DesiredTemperature = desiredTemperature;
+            this.desiredTemperature = desiredTemperature;
         }
         
         public string Id { get; }
@@ -28,6 +29,14 @@ namespace OfficeHVAC.Models.Devices {
         public IEnumerable<ITemperatureMode> Modes { get; }
         public TemperatureModeType ActiveModeType { get; }
         public ITemperatureMode ActiveMode => Modes.Single(m => m.Type == ActiveModeType);
-        public Double DesiredTemperature { get; }
+
+        public double EffectivePower => ActiveMode.CalculateEffectivePower(MaxPower);
+
+        private readonly double desiredTemperature;
+
+        public double GetDesiredTemperature()
+        {
+            return desiredTemperature;
+        }
     }
 }

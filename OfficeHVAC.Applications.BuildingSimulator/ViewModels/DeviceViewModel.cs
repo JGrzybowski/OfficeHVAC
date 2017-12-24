@@ -30,7 +30,7 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
             MaxPower = status.MaxPower;
             Modes = status.Modes;
             ActiveModeType = status.ActiveModeType;
-            DesiredTemperature = status.DesiredTemperature;
+            DesiredTemperature = status.GetDesiredTemperature();
             SubItems = new ObservableCollection<ITreeElement>(status.Modes.Select(m => new TemperatureModeViewModel(m)));
         }
     }

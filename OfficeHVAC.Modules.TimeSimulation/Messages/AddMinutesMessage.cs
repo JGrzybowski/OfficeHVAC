@@ -1,6 +1,6 @@
 ﻿namespace OfficeHVAC.Modules.TimeSimulation.Messages
 {
-    internal class AddMinutesMessage
+    public class AddMinutesMessage
     {
         public AddMinutesMessage(long minutes)
         {

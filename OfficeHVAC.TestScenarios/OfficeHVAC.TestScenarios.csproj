@@ -165,6 +165,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OfficeHVAC.Applications.BuildingSimulator\OfficeHVAC.Applications.BuildingSimulator.csproj">
+      <Project>{69AFDFB9-8E33-4F11-88D5-2C1D51E22279}</Project>
+      <Name>OfficeHVAC.Applications.BuildingSimulator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OfficeHVAC.Messages\OfficeHVAC.Messages.csproj">
+      <Project>{3ACF6AA9-1CB6-47E3-AEB7-1E5A95A2638B}</Project>
+      <Name>OfficeHVAC.Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OfficeHVAC.Models\OfficeHVAC.Models.csproj">
       <Project>{584598C9-E1CD-4592-9A88-24F34D23D282}</Project>
       <Name>OfficeHVAC.Models</Name>
