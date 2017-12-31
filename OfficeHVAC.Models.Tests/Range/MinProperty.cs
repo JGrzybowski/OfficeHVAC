@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿#pragma warning disable xUnit1015 // MemberData must reference an existing member
+using Shouldly;
 using System;
 using Xunit;
 
@@ -49,3 +50,4 @@ namespace OfficeHVAC.Models.Tests.Range
         }
     }
 }
+#pragma warning restore xUnit1015 // MemberData must reference an existing member
