@@ -38,6 +38,8 @@ namespace OfficeHVAC.TestScenarios
 
         private TestActorRef<RoomSimulatorActor> roomActorRef;
 
+        private double TimeScaleInSeconds = 15;
+
         public Scenario1() : base(@"akka.scheduler.implementation = ""Akka.TestKit.TestScheduler, Akka.TestKit""")
         {
             hole = ActorOf<BlackHoleActor>();
@@ -48,6 +50,7 @@ namespace OfficeHVAC.TestScenarios
             timeSource = new ControlledTimeSource(date, testScheduler);
             timeSourceActor = Sys.ActorOf(TimeSimulatorActor.Props(timeSource), "time");
             timeSourceActorPath = timeSourceActor.Path.ToStringWithoutAddress();
+            timeSourceActor.Tell(new SetSpeedMessage(TimeScaleInSeconds));
 
             temperatureModel = new SimpleTemperatureModel();
             modelsActor = Sys.ActorOf<TemperatureModelActor>("models");
@@ -145,6 +148,7 @@ namespace OfficeHVAC.TestScenarios
             //At 12:00 (After the last meeting)
             //TemperatureDevices should be turned off
             MoveTimeTo(12, 00);
+            MoveTimeTo(12,10);
             DevicesShouldBeTurnedOff();
         }
 
@@ -164,7 +168,7 @@ namespace OfficeHVAC.TestScenarios
             Thread.Sleep(1500);
             var status = GetStatus();
             var temperature = Convert.ToDouble(status.Parameters[SensorType.Temperature].Value);
-            temperature.ShouldBe(expectedTemperature, tolerance: 1);
+            temperature.ShouldBe(expectedTemperature, tolerance: 2);
         }
 
         private IRoomStatusMessage GetStatus()
@@ -177,19 +181,20 @@ namespace OfficeHVAC.TestScenarios
 
         protected Expectation SetMeeting(Instant time, Instant endTime, params ParameterValue[] parameters)
         {
-            var expectattion = new Expectation(time, endTime, parameters);
-            roomActorRef.Tell(expectattion);
-            return expectattion;
+            var expectation = new Expectation(time, endTime, parameters);
+            roomActorRef.Tell(expectation);
+            return expectation;
         }
 
         private void MoveTimeTo(int hours, int minutes)
         {
-            int repetitions = (int)(At(hours, minutes) - timeSource.Now).TotalMinutes;
+            double repetitions = (At(hours, minutes) - timeSource.Now).TotalSeconds;
+            repetitions /= TimeScaleInSeconds;
 
             for (int i = 0; i < repetitions; i++)
             {
-                timeSourceActor.Tell(new AddMinutesMessage(1));
-                Thread.Sleep(25);
+                timeSourceActor.Tell(new TickClockMessage());
+                Thread.Sleep(5);
 
                 var T = Convert.ToDouble(roomActorRef.UnderlyingActor.Status.Parameters[SensorType.Temperature].Value);
                 Debug.WriteLine($"at {timeSource.Now} T is {T}");

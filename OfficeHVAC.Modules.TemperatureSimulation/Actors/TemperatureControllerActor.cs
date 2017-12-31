@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using MoreLinq;
 using NodaTime;
 using OfficeHVAC.Components;
 using OfficeHVAC.Messages;
@@ -14,6 +15,8 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
     public class TemperatureControllerActor : SimulatingComponentActor<TemperatureControllerStatus, double>
     {
+        public double StabilizationLimit { get; } = 1.0;
+
         protected ITemperatureModel TemperatureModel;
         protected bool ReceivedTemperatureModel => TemperatureModel != null;
         
@@ -21,7 +24,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         
         protected HashSet<TemperatureDevice> Devices { get; set; } = new HashSet<TemperatureDevice>();
 
-        protected IEnumerable<Requirement<double>> Requirements { get; set; } = new List<Requirement<double>>(); 
+        protected List<Requirement<double>> Requirements { get; set; } = new List<Requirement<double>>(); 
         protected ExectionPlan ExecutionPlan { get; set; } = new ExectionPlan(new TemperatureJob[0]);
         
         protected override bool ReceivedInitialData() =>
@@ -54,7 +57,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
             Receive<IEnumerable<Requirement<double>>>(msg =>
             {
-                Requirements = msg; 
+                Requirements = new List<Requirement<double>>(msg); 
                 JobShedulerActor.Tell(GenerateRequirementsSet());
             });
 
@@ -70,12 +73,37 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
         private void ControlDevices()
         {
-            var nextJob = ExecutionPlan.Jobs.OrderBy(j => j.StartTime).FirstOrDefault();
-            if (nextJob == null || nextJob?.StartTime > Timestamp)
+            if (!ExecutionPlan.Jobs.Any())
+            {
+                SetDevicesToMode(TemperatureModeType.Off);
                 return;
-            
+            }
+
+            var nextJob = ExecutionPlan.Jobs.OrderBy(j => j.StartTime).First();
+            if (nextJob.StartTime > Timestamp)
+                return;
+
+            SetDevicesToMode(nextJob.ModeType, nextJob.DesiredTemperature);
+        }
+
+        private void StabilizeDevices()
+        {
             foreach (var device in Devices)
-                device.SetActiveMode(nextJob.ModeType);
+            {
+                device.SetActiveMode(
+                    device.Modes.Contains(TemperatureModeType.Stabilization)
+                    ? TemperatureModeType.Stabilization
+                    : TemperatureModeType.Off);
+            }
+        }
+
+        private void SetDevicesToMode(TemperatureModeType mode, double? temperature = null)
+        {
+            foreach(var device in Devices)
+            {
+                device.SetActiveMode(mode);
+                device.DesiredTemperature = temperature ?? device.DesiredTemperature;
+            }
         }
 
         protected void RegisterDevicesManagementMessages()
@@ -109,8 +137,18 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
         protected override void OnTimeUpdated(Duration timeDiff, Instant newTime)
         {
-            base.OnTimeUpdated(timeDiff, newTime);
+            var removed = Requirements.RemoveAll(req => req.EndTime <= newTime);
+            if (removed > 0)
+            {
+                if(Requirements.Count > 0)
+                    JobShedulerActor.Tell(GenerateRequirementsSet());
+                else 
+                    ExecutionPlan = new ExectionPlan(new TemperatureJob[0]);
+            }
+
             ControlDevices();
+
+            base.OnTimeUpdated(timeDiff, newTime);
         }
 
         protected override void InitializeFromRoomStatus(IRoomStatusMessage roomStatus)
@@ -123,8 +161,18 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
         {
             Debug.WriteLine($"Status From: {Sender.Path}");
             base.UpdateRoomStatus(roomStatus);
-        }
 
+            var nextJob = ExecutionPlan.Jobs.OrderBy(j => j.StartTime).FirstOrDefault();
+            if (nextJob == null) return;
+
+            var tValue = roomStatus.Parameters.TryGet(SensorType.Temperature)?.Value;
+            if (tValue == null) return;
+
+            var T = Convert.ToDouble(tValue);
+            if (Math.Abs(nextJob.DesiredTemperature - T) < StabilizationLimit)
+                StabilizeDevices();
+        }
+        
         protected RequirementsSet<double, ITemperatureDeviceDefinition, ITemperatureModel> GenerateRequirementsSet()
         {
             var reqSet = new RequirementsSet<double, ITemperatureDeviceDefinition, ITemperatureModel>

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NodaTime;
+using OfficeHVAC.Modules.RoomSimulator.Actors;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 
 namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
@@ -87,11 +88,10 @@ namespace OfficeHVAC.Applications.BuildingSimulator.ViewModels
                     }
                 )
             );
-
-            var meetingA = new Requirement<double>(Time.Time + Duration.FromHours(2), Time.Time + Duration.FromHours(3), 21.0);
-            var meetingB = new Requirement<double>(meetingA.EndTime + Duration.FromMinutes(15), meetingA.EndTime + Duration.FromHours(2), 24.0);
-            var meetingC = new Requirement<double>(meetingB.EndTime + Duration.FromMinutes(60), meetingB.EndTime + Duration.FromHours(2), 18.0);
-            //controller.Tell(new {meetingA, meetingB, meetingC});
+            var meetingA = new Expectation(Time.Time + Duration.FromHours(1), Time.Time + Duration.FromHours(3), new List<ParameterValue>{new ParameterValue(SensorType.Temperature,21.0)});
+            //var meetingB = new Requirement<double>(meetingA.EndTime + Duration.FromMinutes(15), meetingA.EndTime + Duration.FromHours(2), 24.0);
+            //var meetingC = new Requirement<double>(meetingB.EndTime + Duration.FromMinutes(60), meetingB.EndTime + Duration.FromHours(2), 18.0);
+            room.Actor.Tell(meetingA);
 
             //room = await company.AddRoom();
             //room.Name = "Room 102";
