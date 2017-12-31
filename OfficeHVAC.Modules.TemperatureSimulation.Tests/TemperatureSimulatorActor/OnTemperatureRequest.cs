@@ -1,7 +1,10 @@
-﻿using Akka.Actor;
+﻿using System;
+using Akka.Actor;
 using Akka.TestKit.TestActors;
 using Akka.TestKit.Xunit2;
+using NodaTime;
 using NSubstitute;
+using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using Shouldly;
 using Xunit;
@@ -24,27 +27,34 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.TemperatureSimulatorAct
             int expectedTemperature = 27;
             var temperatureSimulatorFake = Substitute.For<ITemperatureSimulator>();
             temperatureSimulatorFake.Temperature = expectedTemperature;
-            var actor = ActorOfAsTestActorRef<Actors.TemperatureSimulatorActor>(
-                Props.Create(() => new Actors.TemperatureSimulatorActor(temperatureSimulatorFake, new []{blackHoleAddress})));
 
+            var now = Instant.FromDateTimeUtc(DateTime.UtcNow);
+            
             var parameters = new ParameterValuesCollection()
             {
-                new ParameterValue(SensorType.Temperature, 25)
+                new ParameterValue(SensorType.Temperature, 25.0)
             };
 
             var status = new RoomStatus()
             {
                 Parameters = parameters,
-                Volume = 20,
+                Volume = 20.0,
+                TimeStamp = now
             };
+            
+            var actor = ActorOfAsTestActorRef<Actors.TemperatureSimulatorActor>(
+                Props.Create(() => new Actors.TemperatureSimulatorActor(temperatureSimulatorFake, new string[0])));
 
+            actor.Tell(new TimeChangedMessage(now));
+            actor.Tell(status.ToMessage());
+            actor.Tell(new TemperatureSimulation.SimpleTemperatureModel());
+            temperatureSimulatorFake.Temperature = 27;
+            
             //Act
             actor.Tell(new ParameterValue.Request(SensorType.Temperature));
-            var roomStatusRequest = ReceiveOne();
-            LastSender.Tell(status.ToMessage());
-
+            
             //Assert
-            var temperatureMsg = ExpectMsg<IParameterValueMessage>();
+            var temperatureMsg = FishForMessage<IParameterValueMessage>(msg => msg.ParameterType == SensorType.Temperature);
             temperatureMsg.ParameterType.ShouldBe(SensorType.Temperature);
             temperatureMsg.Value.ShouldBe(expectedTemperature);
         }

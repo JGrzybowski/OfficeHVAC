@@ -1,6 +1,5 @@
 ﻿using NodaTime;
 using OfficeHVAC.Models;
-using OfficeHVAC.Models.Devices;
 using System.Linq;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation
@@ -27,9 +26,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
         public double ChangeTemperature(IRoomStatusMessage status, Duration timeDelta)
         {
             var temperatureDevices =
-                status.Devices
-                        .Where(dev => dev is ITemperatureDevice)
-                        .Cast<ITemperatureDevice>()
+                status.TemperatureDevices
                         .ToList();
 
             LastTemperature += Model?.CalculateChange(LastTemperature, temperatureDevices, timeDelta, status.Volume) ?? 0; 

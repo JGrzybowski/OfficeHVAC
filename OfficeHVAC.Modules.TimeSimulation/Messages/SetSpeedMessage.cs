@@ -1,6 +1,6 @@
 ﻿namespace OfficeHVAC.Modules.TimeSimulation.Messages
 {
-    internal class SetSpeedMessage
+    public class SetSpeedMessage
     {
         public SetSpeedMessage(double speed)
         {

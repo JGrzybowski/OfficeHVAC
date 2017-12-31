@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Configuration;
+﻿using NodaTime;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
+using System.Collections.Generic;
 
-namespace OfficeHVAC.Components {
+namespace OfficeHVAC.Components
+{
     public abstract class SimulatingComponentActor<TInternalStatus, TParameter> : CyclicComponentActor<TInternalStatus, TParameter> 
         where TInternalStatus : ComponentStatus<TParameter>
     {
@@ -21,7 +21,8 @@ namespace OfficeHVAC.Components {
             Receive<IRoomStatusMessage>(msg =>
             {
                 UpdateRoomStatus(msg);
-                InitializeFromRoomStatus(msg);
+                if(!ReceivedInitialRoomStatus)
+                    InitializeFromRoomStatus(msg);
                 InformAboutInternalState();
                 if (ReceivedInitialData())
                     Become(Initialized);
@@ -41,6 +42,7 @@ namespace OfficeHVAC.Components {
             Receive<IRoomStatusMessage>(
                 msg => UpdateRoomStatus(msg), 
                 msg => RoomStatus.TimeStamp < msg.TimeStamp);
+            
             base.Initialized();
         }
 
@@ -55,8 +57,16 @@ namespace OfficeHVAC.Components {
         {
             RoomStatus = roomStatus;
         }
-        
-            
-        
+    }
+
+    public class SimulatingComponentStatus<TParameter> : ComponentStatus<TParameter>
+    {
+        public SimulatingComponentStatus(string id, TParameter parameter, Instant timestamp, Duration theresholdBuffer) 
+        : base(id, parameter, timestamp)
+        {
+            TheresholdBuffer = theresholdBuffer;
+        }
+    
+        public Duration TheresholdBuffer { get; }
     }
 }

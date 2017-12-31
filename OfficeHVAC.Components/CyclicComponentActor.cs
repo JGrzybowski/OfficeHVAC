@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Akka.Actor;
 using NodaTime;
+using OfficeHVAC.Messages;
 using OfficeHVAC.Models.Subscription;
-using OfficeHVAC.Modules.TimeSimulation.Messages;
 
 namespace OfficeHVAC.Components
 {
@@ -19,18 +18,17 @@ namespace OfficeHVAC.Components
         {
             SubsciptionManager = Context.ActorOf<SubscriptionActor>();
         }
-        public CyclicComponentActor(string timeSourceActorPath) : this(new[] {timeSourceActorPath}) { }
 
         protected override void Uninitialized()
         {
-            base.Uninitialized();
             RegisterSubscribtionReceives();
+            base.Uninitialized();
         }
 
         protected override void Initialized()
         {
-            base.Initialized();
             RegisterSubscribtionReceives();
+            base.Initialized();
         }
 
         protected override void OnTimeChangedMessage(TimeChangedMessage msg)
@@ -48,10 +46,10 @@ namespace OfficeHVAC.Components
             var timeDiff = now - Timestamp;
             Timestamp = now;
             ThresholdBuffer += timeDiff;
-            OnTimeUpdated(timeDiff);
+            OnTimeUpdated(timeDiff, now);
         }
 
-        protected virtual void OnTimeUpdated(Duration timeDiff) { }
+        protected virtual void OnTimeUpdated(Duration timeDiff, Instant newTime) { }
         
         protected void RegisterSubscribtionReceives()
         {

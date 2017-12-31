@@ -11,9 +11,4 @@ namespace OfficeHVAC.Messages
             Definition = definition;
         }
     }
-
-    public class AddTemperatureDevice : AddDevice<ITemperatureDeviceDefinition>
-    {
-        public AddTemperatureDevice(ITemperatureDeviceDefinition definition) : base(definition) { }
-    }
 }

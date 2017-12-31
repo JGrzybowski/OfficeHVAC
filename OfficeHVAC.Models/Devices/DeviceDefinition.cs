@@ -2,10 +2,13 @@
 {
     public class DeviceDefinition
     {
-        public string Id { get; set; }
+        public DeviceDefinition(string id, int maxPower)
+        {
+            Id = id;
+            MaxPower = maxPower;
+        }
+        public string Id { get; }
 
-        public bool IsTurnedOn { get; }
-
-        public int MaxPower { get; set; }
+        public int MaxPower { get; }
     }
 }

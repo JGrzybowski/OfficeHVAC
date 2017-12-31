@@ -6,13 +6,14 @@ using System.Linq;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
 {
-    public class TemperatureDeviceFake : ITemperatureDevice
+    public class TemperatureDeviceFake : ITemperatureDeviceStatus
     {
         public string Id { get; set; }
 
         public bool IsTurnedOn => PowerConsumption != 0.0;
 
         public int MaxPower { get; set; }
+        public TemperatureModeType ActiveModeType { get; }
 
         public double PowerConsumption { get; set; }
 
@@ -27,7 +28,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
             ActiveMode = Modes.Single(m => m.Type == modeType);
         }
 
-        public ICollection<ITemperatureMode> Modes { get; set; }
+        public IEnumerable<ITemperatureMode> Modes { get; set; }
 
         public double DesiredTemperature { get; set; }
 
@@ -35,9 +36,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests
 
         public double CalculatePowerConsumption(TemperatureModeType modeType, Duration time) => CalculatePowerConsumptionFunction(modeType, time);
 
-        IEnumerable<ITemperatureMode> ITemperatureDeviceDefinition.Modes => Modes;
-
-        public IDevice Clone() => new TemperatureDeviceFake()
+        public ITemperatureDeviceStatus Clone() => new TemperatureDeviceFake()
         {
             Id = Id,
             DesiredTemperature = DesiredTemperature,

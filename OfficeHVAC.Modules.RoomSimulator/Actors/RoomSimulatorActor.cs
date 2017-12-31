@@ -1,11 +1,14 @@
 ﻿using Akka.Actor;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
+using OfficeHVAC.Models.Devices;
+using OfficeHVAC.Models.Subscription;
 using OfficeHVAC.Modules.RoomSimulator.Messages;
 using OfficeHVAC.Modules.TemperatureSimulation.Actors;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
-using OfficeHVAC.Modules.TimeSimulation.Messages;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -32,18 +35,23 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
             Receive<AddTemperatureActuatorMessage>(msg =>
             {
-                var actuatorProps = PrepareTemperatureActuatorProps();
+                var sources = new List<string>(msg.SubsriptionSources){Self.Path.ToStringWithoutAddress()}.ToArray();
+                var actuatorProps = PrepareTemperatureControllerProps(sources);
                 var acuatorRef = Context.ActorOf(actuatorProps, "temperatureActuator");
                 AddActuator(acuatorRef, SensorType.Temperature, msg.Id);
+                acuatorRef.Tell(new DebugSubscribeMessage(Context.Self));
                 Sender.Tell(acuatorRef);
             });
-            
+
+            Receive<AddDevice<ITemperatureDeviceDefinition>>(msg =>
+                Actuators.SingleOrDefault(ctrl => ctrl.Type == SensorType.Temperature)?.Actor.Tell(msg));
+
             Receive<TimeChangedMessage>(
                 msg =>
                 {
                     Status.TimeStamp = msg.Now;
-                    foreach (var sensor in Sensors)
-                        sensor.Actor.Tell(msg);
+                    //foreach (var sensor in Sensors)
+                    //    sensor.Actor.Tell(msg);
                 },
                 msg => msg.Now > Status.TimeStamp
             );
@@ -60,7 +68,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         protected override void AddSensor(IActorRef sensorRef, SensorType sensorType, string sensorId)
         {
             base.AddSensor(sensorRef, sensorType, sensorId);
-            sensorRef.Tell(new TimeChangedMessage(Status.TimeStamp));
+            SubscribersManager.Tell(new SubscribeMessage(sensorRef));
             sensorRef.Tell(GenerateRoomStatus());
         }
 
@@ -74,8 +82,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         protected Props PrepareTemperatureSimulatorActorProps(string id, string timeActorPath, string tempActorPath) => 
             TemperatureSimulatorActor.Props(Status, timeActorPath, tempActorPath);
 
-        protected Props PrepareTemperatureActuatorProps() => 
-            TemperatureActuatorActor.Props();
+        protected Props PrepareTemperatureControllerProps(IEnumerable<string> subscriptionSources) => 
+            TemperatureControllerActor.Props(subscriptionSources);
 
         public static Props Props(RoomStatus initialStatus, string companySupervisorActorPath) => 
             Akka.Actor.Props.Create(() => new RoomSimulatorActor(initialStatus.Clone(), companySupervisorActorPath));

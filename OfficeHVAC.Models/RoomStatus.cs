@@ -20,14 +20,11 @@ namespace OfficeHVAC.Models
 
         public ParameterValuesCollection Parameters { get; set; } = new ParameterValuesCollection();
 
-        public HashSet<IDevice> Devices { get; set; } = new HashSet<IDevice>();
-        IEnumerable<IDevice> IRoomStatusMessage.Devices => Devices;
+        public HashSet<ITemperatureDeviceStatus> TemperatureDevices { get; set; } = new HashSet<ITemperatureDeviceStatus>();
+        IEnumerable<ITemperatureDeviceStatus> IRoomStatusMessage.TemperatureDevices => TemperatureDevices;
 
-        public List<TemperatureJob> Jobs { get; set; } = new List<TemperatureJob>();
-        IEnumerable<TemperatureJob> IRoomStatusMessage.Jobs => Jobs;
-
-        public List<Requirements> Events { get; set; } = new List<Requirements>();
-        IEnumerable<Requirements> IRoomStatusMessage.Events => Events;
+        public List<Requirement<double>> Events { get; set; } = new List<Requirement<double>>();
+        IEnumerable<Requirement<double>> IRoomStatusMessage.Events => Events;
 
         public IRoomStatusMessage ToMessage() => Clone();
 
@@ -39,11 +36,12 @@ namespace OfficeHVAC.Models
                 Volume = Volume,
                 Name = Name,
                 Parameters = Parameters.Clone(),
-                Devices = new HashSet<IDevice>(Devices.Select(device => device.Clone())),
-                Sensors = Sensors.Select(param => param.Clone() as ISensorActorRef).ToList(),
 
+                TemperatureDevices = new HashSet<ITemperatureDeviceStatus>(TemperatureDevices),
+                Sensors = Sensors.Select(param => param.Clone() as ISensorActorRef).ToList(),
+                
                 Events = Events,
-                Jobs = Jobs
+                TimeStamp = TimeStamp
             };
         }
 
@@ -62,12 +60,10 @@ namespace OfficeHVAC.Models
 
         Instant TimeStamp { get; }
 
-        IEnumerable<IDevice> Devices { get; }
+        IEnumerable<ITemperatureDeviceStatus> TemperatureDevices { get; }
 
-        IEnumerable<TemperatureJob> Jobs { get; }
+        IEnumerable<Requirement<double>> Events { get; }
 
         ParameterValuesCollection Parameters { get; }
-
-        IEnumerable<Requirements> Events { get; }
     }
 }

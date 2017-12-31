@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using NodaTime;
+﻿using NodaTime;
 using OfficeHVAC.Models.Devices;
 using Shouldly;
+using System.Collections.Generic;
 using Xunit;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.SimpleTemperatureModel
@@ -16,7 +16,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.SimpleTemperatureModel
         {
             //Arrange
             var temperatureModel = new TemperatureSimulation.SimpleTemperatureModel();
-            var devices = new List<ITemperatureDevice> { new TemperatureDeviceFake() { MaxPower = 40 } };
+            var devices = new List<ITemperatureDeviceStatus> { new TemperatureDeviceFake() { MaxPower = 40 } };
 
             //Act
             var temperatureDelta = temperatureModel.CalculateChange(StartingTemperature, devices, FiveMinutes, 250);
@@ -32,7 +32,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.SimpleTemperatureModel
         {
             //Arrange
             var temperatureModel = new TemperatureSimulation.SimpleTemperatureModel();
-            var devices = new List<ITemperatureDevice>
+            var devices = new List<ITemperatureDeviceStatus>
             {
                 new TemperatureDeviceFake()
                 {
@@ -57,7 +57,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Tests.SimpleTemperatureModel
         {
             //Arrange
             var temperatureModel = new TemperatureSimulation.SimpleTemperatureModel();
-            var devices = new List<ITemperatureDevice>
+            var devices = new List<ITemperatureDeviceStatus>
             {
                 new TemperatureDeviceFake()
                 {

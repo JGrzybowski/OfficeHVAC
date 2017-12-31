@@ -6,7 +6,7 @@ namespace OfficeHVAC.Models
 {
     public interface ITemperatureModel
     {
-        double CalculateChange(double temperature, IEnumerable<ITemperatureDevice> devices,
+        double CalculateChange(double temperature, IEnumerable<ITemperatureDeviceStatus> devices,
                                 Duration timeDelta, double volume);
 
         Duration CalculateNeededTime(double initialTemperature, double desiredTemperature,
