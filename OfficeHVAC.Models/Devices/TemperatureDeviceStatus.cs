@@ -10,7 +10,7 @@ namespace OfficeHVAC.Models.Devices
         TemperatureModeType ActiveModeType { get; }
         ITemperatureMode ActiveMode { get; }
         double EffectivePower { get; }
-        double GetDesiredTemperature();
+        double DesiredTemperature { get; }
     }
 
     public class TemperatureDeviceStatus : ITemperatureDeviceStatus
@@ -21,7 +21,7 @@ namespace OfficeHVAC.Models.Devices
             MaxPower = maxPower;
             Modes = modes;
             ActiveModeType = activeModeType;
-            this.desiredTemperature = desiredTemperature;
+            DesiredTemperature = desiredTemperature;
         }
         
         public string Id { get; }
@@ -32,11 +32,6 @@ namespace OfficeHVAC.Models.Devices
 
         public double EffectivePower => ActiveMode.CalculateEffectivePower(MaxPower);
 
-        private readonly double desiredTemperature;
-
-        public double GetDesiredTemperature()
-        {
-            return desiredTemperature;
-        }
+        public double DesiredTemperature { get; }
     }
 }

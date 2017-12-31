@@ -50,8 +50,8 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 msg =>
                 {
                     Status.TimeStamp = msg.Now;
-                    foreach (var sensor in Sensors)
-                        sensor.Actor.Tell(msg);
+                    //foreach (var sensor in Sensors)
+                    //    sensor.Actor.Tell(msg);
                 },
                 msg => msg.Now > Status.TimeStamp
             );
@@ -68,7 +68,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
         protected override void AddSensor(IActorRef sensorRef, SensorType sensorType, string sensorId)
         {
             base.AddSensor(sensorRef, sensorType, sensorId);
-            sensorRef.Tell(new TimeChangedMessage(Status.TimeStamp));
+            SubscribersManager.Tell(new SubscribeMessage(sensorRef));
             sensorRef.Tell(GenerateRoomStatus());
         }
 

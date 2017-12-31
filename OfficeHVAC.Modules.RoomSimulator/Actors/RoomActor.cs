@@ -133,22 +133,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             else 
                 Status.Parameters.Add(paramValue.Clone() as ParameterValue);
 
-            //if (paramValue.ParameterType == SensorType.Temperature)
-            //{
-            //    var temperature = Convert.ToDouble(paramValue.Value);
-            //    if (Jobs.Any() && Math.Abs(Jobs.First().DesiredTemperature - temperature) < StabilizationThreshold)
-            //        ActivateTemperatureMode(TemperatureModeType.Stabilization, Jobs.First().DesiredTemperature);
-            //}
             SendSubscribtionNewsletter();
-        }
-
-        protected virtual void ActivateTemperatureMode(TemperatureModeType mode, double desiredTemperature)
-        {
-            foreach (var device in Status.TemperatureDevices.Where(dev => dev is ITemperatureDevice).Cast<ITemperatureDevice>())
-            {
-                device.SetActiveMode(mode);
-                device.DesiredTemperature = desiredTemperature;
-            }
         }
 
         protected virtual IRoomStatusMessage GenerateRoomStatus()

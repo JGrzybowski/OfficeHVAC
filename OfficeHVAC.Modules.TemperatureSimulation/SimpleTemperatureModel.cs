@@ -16,7 +16,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
         public virtual double CalculateChange(double temperature, IEnumerable<ITemperatureDeviceStatus> devices, Duration timeDelta, double volume)
         {
             var seconds = timeDelta.ToTimeSpan().TotalSeconds;
-            var power = devices.Sum(device => device.EffectivePower * Math.Sign(device.GetDesiredTemperature() - temperature));
+            var power = devices.Sum(device => device.EffectivePower * Math.Sign(device.DesiredTemperature- temperature));
 
             return (power * seconds) / (AirsDensity * volume * AirsSpecificHeat);
         }

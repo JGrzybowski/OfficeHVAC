@@ -40,7 +40,8 @@ namespace OfficeHVAC.Models
                 TemperatureDevices = new HashSet<ITemperatureDeviceStatus>(TemperatureDevices),
                 Sensors = Sensors.Select(param => param.Clone() as ISensorActorRef).ToList(),
                 
-                Events = Events
+                Events = Events,
+                TimeStamp = TimeStamp
             };
         }
 

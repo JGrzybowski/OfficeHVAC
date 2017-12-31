@@ -99,6 +99,7 @@
     <Compile Include="TemperatureControllerActor\TemperatureControllerActorTest.cs" />
     <Compile Include="TemperatureControllerActor\OnTemperatureTask.cs" />
     <Compile Include="TemperatureDeviceFake.cs" />
+    <Compile Include="TemperatureSimulatorActor\OnTimeSignal.cs" />
     <Compile Include="TemperatureSimulatorActor\OnTemperatureRequest.cs" />
     <Compile Include="TemperatureSimulatorTests.cs" />
     <Compile Include="TimeSourceFake.cs" />

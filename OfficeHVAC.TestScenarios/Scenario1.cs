@@ -7,6 +7,7 @@ using OfficeHVAC.Applications.BuildingSimulator.Actors;
 using OfficeHVAC.Messages;
 using OfficeHVAC.Models;
 using OfficeHVAC.Models.Devices;
+using OfficeHVAC.Models.Subscription;
 using OfficeHVAC.Modules.RoomSimulator.Actors;
 using OfficeHVAC.Modules.TemperatureSimulation;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
@@ -105,6 +106,8 @@ namespace OfficeHVAC.TestScenarios
             initialStatus.Parameters.Add(new ParameterValue(SensorType.Temperature, 25));
 
             roomActorRef = ActorOfAsTestActorRef(() => new RoomSimulatorActor(initialStatus, hole.Path), "room");
+            timeSourceActor.Tell(new SubscribeMessage(roomActorRef));
+
             roomActorRef.Tell(new AddTemperatureSensorMessage(
                 timeSourceActor.Path.ToStringWithoutAddress(), 
                 modelsActor.Path.ToStringWithoutAddress(),
@@ -158,7 +161,7 @@ namespace OfficeHVAC.TestScenarios
 
         private void TemperatureShouldBe(double expectedTemperature)
         {
-            Thread.Sleep(15000);
+            Thread.Sleep(1500);
             var status = GetStatus();
             var temperature = Convert.ToDouble(status.Parameters[SensorType.Temperature].Value);
             temperature.ShouldBe(expectedTemperature, tolerance: 1);
