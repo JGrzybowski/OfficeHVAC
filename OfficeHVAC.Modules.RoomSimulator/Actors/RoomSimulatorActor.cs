@@ -47,16 +47,15 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
                 Actuators.SingleOrDefault(ctrl => ctrl.Type == SensorType.Temperature)?.Actor.Tell(msg));
 
             Receive<TimeChangedMessage>(
-                msg =>
-                {
-                    Status.TimeStamp = msg.Now;
-                    //foreach (var sensor in Sensors)
-                    //    sensor.Actor.Tell(msg);
-                },
+                msg => Status.TimeStamp = msg.Now,
                 msg => msg.Now > Status.TimeStamp
             );
 
-            Receive<SetTemperature>(msg => UpdateParameter(new ParameterValue(SensorType.Temperature, msg.Temperature)));
+            Receive<SetTemperature>(msg =>
+            {
+                Sensors.SingleOrDefault(s => s.Type == SensorType.Temperature)?.Actor?.Tell(new SetParameterValueMessage<double>(msg.Temperature));
+                //UpdateParameter(new ParameterValue(SensorType.Temperature, msg.Temperature));
+            });
 
             Receive<SetRoomVolume>(msg =>
             {

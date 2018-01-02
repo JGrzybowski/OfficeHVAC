@@ -5,6 +5,7 @@ using OfficeHVAC.Models;
 using OfficeHVAC.Models.Subscription;
 using System;
 using System.Collections.Generic;
+using OfficeHVAC.Messages;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
@@ -43,6 +44,12 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             );
 
             Receive<ITemperatureModel>(model => temperatureSimulator.ReplaceTemperatureModel(model));
+
+            Receive<SetParameterValueMessage<double>>(msg =>
+            {
+                temperatureSimulator.Temperature = msg.Value;
+                InformAboutInternalState();
+            });
 
             base.Initialized();
         }

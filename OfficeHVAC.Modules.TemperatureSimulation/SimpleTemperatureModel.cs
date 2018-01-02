@@ -39,19 +39,23 @@ namespace OfficeHVAC.Modules.TemperatureSimulation
             var modeTypes = devices.Select(dev => dev.Modes.Select(d => d.Type))
                                     .Aggregate((resultModes, newModes) => resultModes.Intersect(newModes));
 
-            var bestMode = modeTypes
+            var candidates = modeTypes
                 .Select(modeType => new
                 {
                     Time = CalculateNeededTime(task.InitialTemperature, task.DesiredTemperature, devices, modeType, status.Volume),
                     ModeType = modeType
                 })
-                .Where(timeMode => (timeMode.Time < task.TimeLimit))
                 .Select(timeMode => new
                 {
+                    Time = timeMode.Time,
                     Power = devices.Sum(dev => dev.CalculatePowerConsumption(timeMode.ModeType, timeMode.Time)),
                     ModeType = timeMode.ModeType
-                })
-                .MinBy(powerMode => powerMode.Power);
+                });
+
+            var candidatesFittingInTime = candidates.Where(timeMode => (timeMode.Time < task.TimeLimit));
+            var bestMode = candidatesFittingInTime.Any()
+                ? candidatesFittingInTime.MinBy(timePowerMode => timePowerMode.Power)
+                : candidates.MinBy(timePowerMode => timePowerMode.Time);
             return bestMode.ModeType;
         }
     }
