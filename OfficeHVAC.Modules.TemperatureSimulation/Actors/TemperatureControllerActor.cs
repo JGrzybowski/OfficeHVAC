@@ -58,7 +58,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             Receive<IEnumerable<Requirement<double>>>(msg =>
             {
                 Requirements = new List<Requirement<double>>(msg); 
-                JobShedulerActor.Tell(GenerateRequirementsSet());
+                RequestUpdatedExecutionPlan();
             });
 
             Receive<ExectionPlan>(msg =>
@@ -70,6 +70,9 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
             base.Initialized();
         }
+
+        private void RequestUpdatedExecutionPlan() => JobShedulerActor.Tell(GenerateRequirementsSet());
+
 
         private void ControlDevices()
         {
@@ -121,7 +124,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
                 });
                 
                 if (Requirements.Any())
-                    JobShedulerActor.Tell(GenerateRequirementsSet());
+                    RequestUpdatedExecutionPlan();
 
                 InformAboutInternalState();
             });
@@ -130,7 +133,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             {
                 Devices.RemoveWhere(dev => dev.Id == msg.Id);
                 if (Requirements.Any())
-                    JobShedulerActor.Tell(GenerateRequirementsSet());
+                    RequestUpdatedExecutionPlan();
                 InformAboutInternalState();
             });
         }
@@ -141,7 +144,7 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             if (removed > 0)
             {
                 if(Requirements.Count > 0)
-                    JobShedulerActor.Tell(GenerateRequirementsSet());
+                    RequestUpdatedExecutionPlan();
                 else 
                     ExecutionPlan = new ExectionPlan(new TemperatureJob[0]);
             }
@@ -171,6 +174,9 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             var T = Convert.ToDouble(tValue);
             if (Math.Abs(nextJob.DesiredTemperature - T) < StabilizationLimit)
                 StabilizeDevices();
+            else
+                RequestUpdatedExecutionPlan();
+
         }
         
         protected RequirementsSet<double, ITemperatureDeviceDefinition, ITemperatureModel> GenerateRequirementsSet()

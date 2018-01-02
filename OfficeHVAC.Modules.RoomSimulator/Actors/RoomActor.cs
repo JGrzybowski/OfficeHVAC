@@ -19,7 +19,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
 
         protected HashSet<ISensorActorRef> Actuators { get; } = new HashSet<ISensorActorRef>();
 
-        protected List<Expectation> Expectations { get; } = new List<Expectation>();
+        protected List<Expectation> Expectations { get; set; } = new List<Expectation>();
 
         protected IActorRef SubscribersManager { get; private set; }
 
@@ -73,9 +73,15 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             });
 
             // JOB SCHEDULING SECTION
-            Receive<Expectation>(expect =>
+            //Receive<Expectation>(expect =>
+            //{
+            //    Expectations.Add(expect);
+            //    SplitExpectations(Expectations);
+            //});
+
+            Receive<IEnumerable<Expectation>>(expectations =>
             {
-                Expectations.Add(expect);
+                Expectations = new List<Expectation>(expectations);
                 SplitExpectations(Expectations);
             });
 

@@ -160,7 +160,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Scenario1.cs" />
+    <Compile Include="DealingWithTemperatureAnomalies.cs" />
+    <Compile Include="ExtendingMeeting.cs" />
+    <Compile Include="PostponingMeeting.cs" />
+    <Compile Include="CancelingMeeting.cs" />
+    <Compile Include="ScenarioBase.cs" />
+    <Compile Include="AddSuddenMeeting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
