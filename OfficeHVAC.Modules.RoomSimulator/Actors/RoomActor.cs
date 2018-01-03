@@ -8,6 +8,7 @@ using OfficeHVAC.Modules.TemperatureSimulation.Actors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Akka.Event;
 
 namespace OfficeHVAC.Modules.RoomSimulator.Actors
 {
@@ -82,6 +83,13 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             Receive<IEnumerable<Expectation>>(expectations =>
             {
                 Expectations = new List<Expectation>(expectations);
+                Context.GetLogger().Info($"{Status.TimeStamp.ToDateTimeUtc().ToShortTimeString()} - Received {Expectations.Count} expectations:");
+                for (int i = 0; i < Expectations.Count; i++)
+                {
+                    Context.GetLogger().Info($"\t\t   Expectation #{i+1} " +
+                                             $"{String.Join(",", Expectations[i].ExpectedParametersValues.Select(epv => $"{epv.ParameterType.ToString()} {epv.Value.ToString()}"))}");
+                }
+
                 SplitExpectations(Expectations);
             });
 

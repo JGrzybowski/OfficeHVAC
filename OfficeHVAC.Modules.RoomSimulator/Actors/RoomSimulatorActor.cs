@@ -37,7 +37,7 @@ namespace OfficeHVAC.Modules.RoomSimulator.Actors
             {
                 var sources = new List<string>(msg.SubsriptionSources){Self.Path.ToStringWithoutAddress()}.ToArray();
                 var actuatorProps = PrepareTemperatureControllerProps(sources);
-                var acuatorRef = Context.ActorOf(actuatorProps, "temperatureActuator");
+                var acuatorRef = Context.ActorOf(actuatorProps, "temperatureController");
                 AddActuator(acuatorRef, SensorType.Temperature, msg.Id);
                 acuatorRef.Tell(new DebugSubscribeMessage(Context.Self));
                 Sender.Tell(acuatorRef);

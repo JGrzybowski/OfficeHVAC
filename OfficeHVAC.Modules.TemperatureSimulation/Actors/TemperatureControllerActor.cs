@@ -8,14 +8,15 @@ using OfficeHVAC.Models.Devices;
 using OfficeHVAC.Modules.TemperatureSimulation.Messages;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using Akka.Event;
+using Debug = System.Diagnostics.Debug;
 
 namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 {
     public class TemperatureControllerActor : SimulatingComponentActor<TemperatureControllerStatus, double>
     {
-        public double StabilizationLimit { get; } = 1.0;
+        public double StabilizationLimit { get; } = 0.3;
 
         protected ITemperatureModel TemperatureModel;
         protected bool ReceivedTemperatureModel => TemperatureModel != null;
@@ -86,14 +87,21 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
             if (nextJob.StartTime > Timestamp)
                 return;
 
-            SetDevicesToMode(nextJob.ModeType, nextJob.DesiredTemperature);
+            var tValue = RoomStatus.Parameters.TryGet(SensorType.Temperature)?.Value;
+            if (tValue == null) return;
+
+            var T = Convert.ToDouble(tValue);
+            if (Math.Abs(nextJob.DesiredTemperature - T) < StabilizationLimit)
+                StabilizeDevices();
+            else 
+                SetDevicesToMode(nextJob.ModeType, nextJob.DesiredTemperature);
         }
 
         private void StabilizeDevices()
         {
             foreach (var device in Devices)
             {
-                device.SetActiveMode(
+                SetDevicesToMode(
                     device.Modes.Contains(TemperatureModeType.Stabilization)
                     ? TemperatureModeType.Stabilization
                     : TemperatureModeType.Off);
@@ -102,7 +110,13 @@ namespace OfficeHVAC.Modules.TemperatureSimulation.Actors
 
         private void SetDevicesToMode(TemperatureModeType mode, double? temperature = null)
         {
-            foreach(var device in Devices)
+            if (!Devices.Any()) return;
+
+            var oldMode = Devices.First().ActiveMode.Type;
+            if (oldMode != mode)
+                Context.GetLogger().Info($"{Timestamp.ToDateTimeUtc().ToShortTimeString()} - Switching mode from {oldMode} to {mode}");
+
+            foreach (var device in Devices)
             {
                 device.SetActiveMode(mode);
                 device.DesiredTemperature = temperature ?? device.DesiredTemperature;
