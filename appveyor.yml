@@ -5,6 +5,10 @@ install:
     nuget sources Add -Name "SyncfusionNuGet" -Source http://nuget.syncfusion.com/wpf
 
     nuget restore
+
+    choco install "msbuild-sonarqube-runner" -y
+    
+    SonarQube.Scanner.MSBuild.exe begin /k:"OfficeHVACSonar" /d:sonar.organization="jgrzybowski-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="7ffd5887ebc59b776a04b539014e31a56c6add78"
 build:
   project: OfficeHVAC.sln
   verbosity: minimal
@@ -17,3 +21,6 @@ test_script:
     C:\Python35-x64\python.exe -m pip install codecov
 
     C:\Python35-x64\Scripts\codecov -f "OfficeHVAC_coverage.xml" -X gcov
+    
+    SonarQube.Scanner.MSBuild.exe end /d:sonar.login="7ffd5887ebc59b776a04b539014e31a56c6add78"   
+    
